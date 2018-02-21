@@ -1,0 +1,15 @@
+{
+  "name": "rubix-cube",
+  "version": "0.0.1",
+  "description": "Rubix cube solver",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Jonathan Taylor",
+  "license": "MIT",
+  "dependencies": {
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "crap": "^5.1.0",
+    "eslint": "^4.18.1"
+  }
+}
