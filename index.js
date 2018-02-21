@@ -33,6 +33,78 @@ const solvedCube = [
   { id: 27, x: 2, y: 0, z: 2, colours: "---OWG", orientation: "U" }
 ];
 
+const topCoordsList = [
+  [0, 2, 0],
+  [1, 2, 0],
+  [2, 2, 0],
+  [0, 2, 1],
+  [1, 2, 1],
+  [2, 2, 1],
+  [0, 2, 2],
+  [1, 2, 2],
+  [2, 2, 2]
+];
+
+const leftCoordsList = [
+  [0, 2, 2],
+  [0, 2, 1],
+  [0, 2, 0],
+  [0, 1, 2],
+  [0, 1, 1],
+  [0, 1, 0],
+  [0, 0, 2],
+  [0, 0, 1],
+  [0, 0, 0]
+];
+
+const frontCoordsList = [
+  [0, 2, 0],
+  [1, 2, 0],
+  [2, 2, 0],
+  [0, 1, 0],
+  [1, 1, 0],
+  [2, 1, 0],
+  [0, 0, 0],
+  [1, 0, 0],
+  [2, 0, 0]
+];
+
+const rightCoordsList = [
+  [2, 2, 0],
+  [2, 2, 1],
+  [2, 2, 2],
+  [2, 1, 0],
+  [2, 1, 1],
+  [2, 1, 2],
+  [2, 0, 0],
+  [2, 0, 1],
+  [2, 0, 2]
+];
+
+const backCoordsList = [
+  [2, 2, 2],
+  [1, 2, 2],
+  [0, 2, 2],
+  [2, 1, 2],
+  [1, 1, 2],
+  [0, 1, 2],
+  [2, 0, 2],
+  [1, 0, 2],
+  [0, 0, 2]
+];
+
+const bottomCoordsList = [
+  [0, 0, 0],
+  [1, 0, 0],
+  [2, 0, 0],
+  [0, 0, 1],
+  [1, 0, 1],
+  [2, 0, 1],
+  [0, 0, 2],
+  [1, 0, 2],
+  [2, 0, 2]
+];
+
 const getPieces = (cube, coordsList) =>
   coordsList.map(coords =>
     cube.find(piece =>
@@ -40,110 +112,68 @@ const getPieces = (cube, coordsList) =>
       piece.y === coords[1] &&
       piece.z === coords[2]));
 
-const top = cube => {
-  const coordsList = [
-    [0, 2, 0],
-    [1, 2, 0],
-    [2, 2, 0],
-    [0, 2, 1],
-    [1, 2, 1],
-    [2, 2, 1],
-    [0, 2, 2],
-    [1, 2, 2],
-    [2, 2, 2]
-  ];
-  const pieces = getPieces(cube, coordsList);
-  return pieces.map(piece => piece.colours[0]);
+const getTopFace = cube =>
+  getPieces(cube, topCoordsList).map(piece => piece.colours[0]);
+
+const getLeftFace = cube => 
+  getPieces(cube, leftCoordsList).map(piece => piece.colours[1]);
+
+const getFrontFace = cube =>
+  getPieces(cube, frontCoordsList).map(piece => piece.colours[2]);
+
+const getRightFace = cube =>
+  getPieces(cube, rightCoordsList).map(piece => piece.colours[3]);
+
+const getBackFace = cube =>
+  getPieces(cube, backCoordsList).map(piece => piece.colours[4]);
+
+const getBottomFace = cube =>
+  getPieces(cube, bottomCoordsList).map(piece => piece.colours[5]);
+
+const yawTop90 = cube => {
+  return cube;
 };
 
-const left = cube => {
-  const coordsList = [
-    [0, 2, 2],
-    [0, 2, 1],
-    [0, 2, 0],
-    [0, 1, 2],
-    [0, 1, 1],
-    [0, 1, 0],
-    [0, 0, 2],
-    [0, 0, 1],
-    [0, 0, 0]
-  ];
-  const pieces = getPieces(cube, coordsList);
-  return pieces.map(piece => piece.colours[1]);
+const yawMiddle90 = cube => {
+  return cube;
 };
 
-const front = cube => {
-  const coordsList = [
-    [0, 2, 0],
-    [1, 2, 0],
-    [2, 2, 0],
-    [0, 1, 0],
-    [1, 1, 0],
-    [2, 1, 0],
-    [0, 0, 0],
-    [1, 0, 0],
-    [2, 0, 0]
-  ];
-  const pieces = getPieces(cube, coordsList);
-  return pieces.map(piece => piece.colours[2]);
+const yawBottom90 = cube => {
+  return cube;
 };
 
-const right = cube => {
-  const coordsList = [
-    [2, 2, 0],
-    [2, 2, 1],
-    [2, 2, 2],
-    [2, 1, 0],
-    [2, 1, 1],
-    [2, 1, 2],
-    [2, 0, 0],
-    [2, 0, 1],
-    [2, 0, 2]
-  ];
-  const pieces = getPieces(cube, coordsList);
-  return pieces.map(piece => piece.colours[3]);
+const pitchLeft90 = cube => {
+  return cube;
 };
 
-const back = cube => {
-  const coordsList = [
-    [2, 2, 2],
-    [1, 2, 2],
-    [0, 2, 2],
-    [2, 1, 2],
-    [1, 1, 2],
-    [0, 1, 2],
-    [2, 0, 2],
-    [1, 0, 2],
-    [0, 0, 2]
-  ];
-  const pieces = getPieces(cube, coordsList);
-  return pieces.map(piece => piece.colours[4]);
+const pitchMiddle90 = cube => {
+  return cube;
 };
 
-const bottom = cube => {
-  const coordsList = [
-    [0, 0, 0],
-    [1, 0, 0],
-    [2, 0, 0],
-    [0, 0, 1],
-    [1, 0, 1],
-    [2, 0, 1],
-    [0, 0, 2],
-    [1, 0, 2],
-    [2, 0, 2]
-  ];
-  const pieces = getPieces(cube, coordsList);
-  return pieces.map(piece => piece.colours[5]);
+const pitchRight90 = cube => {
+  return cube;
+};
+
+const rollFront90 = cube => {
+  return cube;
+};
+
+const rollMiddle90 = cube => {
+  return cube;
+};
+
+const rollBack90 = cube => {
+  return cube;
 };
 
 const dumpCube = cube => {
 
-  const topFace = top(cube);
-  const leftFace = left(cube);
-  const frontFace = front(cube);
-  const rightFace = right(cube);
-  const backFace = back(cube);
-  const bottomFace = bottom(cube);
+  const topFace = getTopFace(cube);
+  const leftFace = getLeftFace(cube);
+  const frontFace = getFrontFace(cube);
+  const rightFace = getRightFace(cube);
+  const backFace = getBackFace(cube);
+  const bottomFace = getBottomFace(cube);
 
   const three = (x, from, to) => x.slice(from, to).join('');
   const line = (f, t) => {
