@@ -1,3 +1,5 @@
+import math, { matrix } from 'mathjs';
+
 const solvedCube = [
   // top layer
   { id: 1, x: 0, y: 2, z: 0, colours: "BRY---", orientation: "U" },
@@ -105,17 +107,29 @@ const bottomCoordsList = [
   [2, 0, 2]
 ];
 
+const pieceHasCoords = coords => piece =>
+  piece.x === coords[0] &&
+  piece.y === coords[1] &&
+  piece.z === coords[2];
+
 const getPieces = (cube, coordsList) =>
   coordsList.map(coords =>
-    cube.find(piece =>
-      piece.x === coords[0] &&
-      piece.y === coords[1] &&
-      piece.z === coords[2]));
+    cube.find(pieceHasCoords(coords)));
+
+const getNotPieces = (cube, coordsList) =>
+  coordsList.map(coords =>
+    !cube.find(pieceHasCoords(coords)));
+
+const isPieceInCoordsList = (coordsList, piece) =>
+  coordsList.findIndex(coords =>
+    coords[0] === piece.x &&
+    coords[1] === piece.y &&
+    coords[2] === piece.z) >= 0;
 
 const getTopFace = cube =>
   getPieces(cube, topCoordsList).map(piece => piece.colours[0]);
 
-const getLeftFace = cube => 
+const getLeftFace = cube =>
   getPieces(cube, leftCoordsList).map(piece => piece.colours[1]);
 
 const getFrontFace = cube =>
@@ -130,8 +144,35 @@ const getBackFace = cube =>
 const getBottomFace = cube =>
   getPieces(cube, bottomCoordsList).map(piece => piece.colours[5]);
 
+const partition = (cube, coordsList) => {
+  const pieces1 = getPieces(cube, coordsList);
+  const pieces2 = getNotPieces(cube, coordsList);
+  return {
+    pieces1,
+    pieces2
+  };
+};
+
+const transpose = arr => arr;
+
 const yawTop90 = cube => {
-  return cube;
+  // const transform = piece => {
+  //   const coords = new Coords(piece.x, piece.y, piece.z);
+  //   const rotatedCoords = M.MATRIX_Y90CW.multiplyCoords(coords);
+  //   return {
+  //     id: piece.id,
+  //     x: rotatedCoords.x,
+  //     y: rotatedCoords.y,
+  //     z: rotatedCoords.z,
+  //     colours: piece.colours,
+  //     orientation: piece.orientation
+  //   };
+  // };
+  // return cube.map(piece => isPieceInCoordsList(topCoordsList, piece) ? transform(piece) : piece);
+
+  const { pieces1, pieces2 } = partition(cube, topCoordsList);
+  const pieces3 = pieces1.map(transpose);
+  return pieces2.concat(pieces3);
 };
 
 const yawMiddle90 = cube => {
@@ -187,3 +228,36 @@ const dumpCube = cube => {
 };
 
 dumpCube(solvedCube);
+
+const v1 = [2, 0, 2, 1];
+
+
+// const ry270cw = matrix([
+//   [0, 0, 1],
+//   [0, 1, 0],
+//   [-1, 0, 0]
+// ]);
+
+const ry90cw = matrix([
+  [0, 0, -1],
+  [0, 1, 0,],
+  [1, 0, 0]
+]);
+
+const p1 = [-1, 0, -1];
+const p2 = [1, 0, 1];
+console.log(`p1: ${p1}`);
+console.log(`p2: ${p2}`);
+
+const r = ry90cw;
+
+const p = math.add(math.multiply(p1, r), p2);
+const m = math.eye(4)
+  .subset(math.index([0, 1, 2], [0, 1, 2]), r)
+  .subset(math.index(3, [0, 1, 2]), p);
+
+const v2 = math.multiply(v1, m);
+
+console.log(`v1: ${v1}`);
+console.log(`m: ${m}`);
+console.log(`v2: ${v2}`);
