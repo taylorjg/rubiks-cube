@@ -1,3 +1,4 @@
+import { Coords } from './coords';
 import math, { matrix } from 'mathjs';
 
 const solvedCube = [
@@ -229,16 +230,10 @@ const dumpCube = cube => {
 
 dumpCube(solvedCube);
 
-const v1 = [2, 0, 2, 1];
+const c1 = new Coords(2, 0, 2);
+const v1 = [c1.x, c1.y, c1.z, 1];
 
-
-// const ry270cw = matrix([
-//   [0, 0, 1],
-//   [0, 1, 0],
-//   [-1, 0, 0]
-// ]);
-
-const ry90cw = matrix([
+const r = matrix([
   [0, 0, -1],
   [0, 1, 0,],
   [1, 0, 0]
@@ -246,10 +241,6 @@ const ry90cw = matrix([
 
 const p1 = [-1, 0, -1];
 const p2 = [1, 0, 1];
-console.log(`p1: ${p1}`);
-console.log(`p2: ${p2}`);
-
-const r = ry90cw;
 
 const p = math.add(math.multiply(p1, r), p2);
 const m = math.eye(4)
@@ -257,7 +248,10 @@ const m = math.eye(4)
   .subset(math.index(3, [0, 1, 2]), p);
 
 const v2 = math.multiply(v1, m);
+const v2arr = v2.toArray();
+const c2 = new Coords(v2arr[0], v2arr[1], v2arr[2]);
 
-console.log(`v1: ${v1}`);
 console.log(`m: ${m}`);
-console.log(`v2: ${v2}`);
+
+console.dir(c1);
+console.dir(c2);
