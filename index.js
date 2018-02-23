@@ -2,109 +2,109 @@ import math, { matrix } from 'mathjs';
 
 export const solvedCube = [
   // top layer
-  { x: 0, y: 2, z: 0, colours: "BRY---" },
-  { x: 1, y: 2, z: 0, colours: "B-Y---" },
-  { x: 2, y: 2, z: 0, colours: "B-YO--" },
-  { x: 0, y: 2, z: 1, colours: "BR----" },
-  { x: 1, y: 2, z: 1, colours: "B-----" },
-  { x: 2, y: 2, z: 1, colours: "B--O--" },
-  { x: 0, y: 2, z: 2, colours: "BR--W-" },
-  { x: 1, y: 2, z: 2, colours: "B---W-" },
-  { x: 2, y: 2, z: 2, colours: "B--OW-" },
+  { x: -1, y: 1, z: -1, colours: "BRY---" },
+  { x: 0, y: 1, z: -1, colours: "B-Y---" },
+  { x: 1, y: 1, z: -1, colours: "B-YO--" },
+  { x: -1, y: 1, z: 0, colours: "BR----" },
+  { x: 0, y: 1, z: 0, colours: "B-----" },
+  { x: 1, y: 1, z: 0, colours: "B--O--" },
+  { x: -1, y: 1, z: 1, colours: "BR--W-" },
+  { x: 0, y: 1, z: 1, colours: "B---W-" },
+  { x: 1, y: 1, z: 1, colours: "B--OW-" },
 
   // middle layer
-  { x: 0, y: 1, z: 0, colours: "-RY---" },
-  { x: 1, y: 1, z: 0, colours: "--Y---" },
-  { x: 2, y: 1, z: 0, colours: "--YO--" },
-  { x: 0, y: 1, z: 1, colours: "-R----" },
-  { x: 1, y: 1, z: 1, colours: "------" },
-  { x: 2, y: 1, z: 1, colours: "---O--" },
-  { x: 0, y: 1, z: 2, colours: "-R--W-" },
-  { x: 1, y: 1, z: 2, colours: "----W-" },
-  { x: 2, y: 1, z: 2, colours: "---OW-" },
+  { x: -1, y: 0, z: -1, colours: "-RY---" },
+  { x: 0, y: 0, z: -1, colours: "--Y---" },
+  { x: 1, y: 0, z: -1, colours: "--YO--" },
+  { x: -1, y: 0, z: 0, colours: "-R----" },
+  { x: 0, y: 0, z: 0, colours: "------" },
+  { x: 1, y: 0, z: 0, colours: "---O--" },
+  { x: -1, y: 0, z: 1, colours: "-R--W-" },
+  { x: 0, y: 0, z: 1, colours: "----W-" },
+  { x: 1, y: 0, z: 1, colours: "---OW-" },
 
   // bottom layer
-  { x: 0, y: 0, z: 0, colours: "-RY--G" },
-  { x: 1, y: 0, z: 0, colours: "--Y--G" },
-  { x: 2, y: 0, z: 0, colours: "--YO-G" },
-  { x: 0, y: 0, z: 1, colours: "-R---G" },
-  { x: 1, y: 0, z: 1, colours: "-----G" },
-  { x: 2, y: 0, z: 1, colours: "---O-G" },
-  { x: 0, y: 0, z: 2, colours: "-R--WG" },
-  { x: 1, y: 0, z: 2, colours: "----WG" },
-  { x: 2, y: 0, z: 2, colours: "---OWG" }
+  { x: -1, y: -1, z: -1, colours: "-RY--G" },
+  { x: 0, y: -1, z: -1, colours: "--Y--G" },
+  { x: 1, y: -1, z: -1, colours: "--YO-G" },
+  { x: -1, y: -1, z: 0, colours: "-R---G" },
+  { x: 0, y: -1, z: 0, colours: "-----G" },
+  { x: 1, y: -1, z: 0, colours: "---O-G" },
+  { x: -1, y: -1, z: 1, colours: "-R--WG" },
+  { x: 0, y: -1, z: 1, colours: "----WG" },
+  { x: 1, y: -1, z: 1, colours: "---OWG" }
 ];
 
 const topCoordsList = [
-  [0, 2, 0],
-  [1, 2, 0],
-  [2, 2, 0],
-  [0, 2, 1],
-  [1, 2, 1],
-  [2, 2, 1],
-  [0, 2, 2],
-  [1, 2, 2],
-  [2, 2, 2]
+  [-1, 1, -1],
+  [0, 1, -1],
+  [1, 1, -1],
+  [-1, 1, 0],
+  [0, 1, 0],
+  [1, 1, 0],
+  [-1, 1, 1],
+  [0, 1, 1],
+  [1, 1, 1]
 ];
 
 const leftCoordsList = [
-  [0, 2, 2],
-  [0, 2, 1],
-  [0, 2, 0],
-  [0, 1, 2],
-  [0, 1, 1],
-  [0, 1, 0],
-  [0, 0, 2],
-  [0, 0, 1],
-  [0, 0, 0]
+  [-1, 1, 1],
+  [-1, 1, 0],
+  [-1, 1, -1],
+  [-1, 0, 1],
+  [-1, 0, 0],
+  [-1, 0, -1],
+  [-1, -1, 1],
+  [-1, -1, 0],
+  [-1, -1, -1]
 ];
 
 const frontCoordsList = [
-  [0, 2, 0],
-  [1, 2, 0],
-  [2, 2, 0],
-  [0, 1, 0],
-  [1, 1, 0],
-  [2, 1, 0],
-  [0, 0, 0],
-  [1, 0, 0],
-  [2, 0, 0]
+  [-1, 1, -1],
+  [0, 1, -1],
+  [1, 1, -1],
+  [-1, 0, -1],
+  [0, 0, -1],
+  [1, 0, -1],
+  [-1, -1, -1],
+  [0, -1, -1],
+  [1, -1, -1]
 ];
 
 const rightCoordsList = [
-  [2, 2, 0],
-  [2, 2, 1],
-  [2, 2, 2],
-  [2, 1, 0],
-  [2, 1, 1],
-  [2, 1, 2],
-  [2, 0, 0],
-  [2, 0, 1],
-  [2, 0, 2]
+  [1, 1, -1],
+  [1, 1, 0],
+  [1, 1, 1],
+  [1, 0, -1],
+  [1, 0, 0],
+  [1, 0, 1],
+  [1, -1, -1],
+  [1, -1, 0],
+  [1, -1, 1]
 ];
 
 const backCoordsList = [
-  [2, 2, 2],
-  [1, 2, 2],
-  [0, 2, 2],
-  [2, 1, 2],
-  [1, 1, 2],
-  [0, 1, 2],
-  [2, 0, 2],
-  [1, 0, 2],
-  [0, 0, 2]
+  [1, 1, 1],
+  [0, 1, 1],
+  [-1, 1, 1],
+  [1, 0, 1],
+  [0, 0, 1],
+  [-1, 0, 1],
+  [1, -1, 1],
+  [0, -1, 1],
+  [-1, -1, 1]
 ];
 
 const bottomCoordsList = [
-  [0, 0, 0],
-  [1, 0, 0],
-  [2, 0, 0],
-  [0, 0, 1],
-  [1, 0, 1],
-  [2, 0, 1],
-  [0, 0, 2],
-  [1, 0, 2],
-  [2, 0, 2]
+  [-1, -1, -1],
+  [0, -1, -1],
+  [1, -1, -1],
+  [-1, -1, 0],
+  [0, -1, 0],
+  [1, -1, 0],
+  [-1, -1, 1],
+  [0, -1, 1],
+  [1, -1, 1]
 ];
 
 // TODO: we need three more coords lists:
@@ -117,10 +117,6 @@ const RY90 = matrix([
   [0, 1, 0,],
   [1, 0, 0]
 ]);
-
-const X_AXIS = "X";
-const Y_AXIS = "Y";
-const Z_AXIS = "Z";
 
 const TOP = 0;
 const LEFT = 1;
@@ -162,14 +158,6 @@ export const getBackFace = cube =>
 export const getBottomFace = cube =>
   getPieces(cube, bottomCoordsList).map(piece => piece.colours[BOTTOM]);
 
-const axisToTranslation = axis => {
-  switch (axis) {
-    case X_AXIS: return matrix([0, -1, -1]);
-    case Y_AXIS: return matrix([-1, 0, -1]);
-    case Z_AXIS: return matrix([-1, -1, 0]);
-  }
-};
-
 const ZERO = 48;
 const reorderColours = (colours, newColoursOrder) => {
   const chs1 = Array.from(colours);
@@ -178,15 +166,9 @@ const reorderColours = (colours, newColoursOrder) => {
   return chs2.join("");
 };
 
-const transform = (r, axis, newColoursOrder) => piece => {
-  const p1 = axisToTranslation(axis);
-  const p2 = p1.map(x => -x);
-  const p = math.add(math.multiply(p1, r), p2);
-  const m = math.eye(4)
-    .subset(math.index([0, 1, 2], [0, 1, 2]), r)
-    .subset(math.index(3, [0, 1, 2]), p);
-  const v1 = matrix([piece.x, piece.y, piece.z, 1]);
-  const v2 = math.multiply(v1, m);
+const transform = (r, newColoursOrder) => piece => {
+  const v1 = matrix([piece.x, piece.y, piece.z]);
+  const v2 = math.multiply(v1, r);
   return {
     id: piece.id,
     x: v2.get([0]),
@@ -202,7 +184,7 @@ const transformPieces = (cube, coordsList, transform) =>
     : piece);
 
 export const yawTop90 = cube =>
-  transformPieces(cube, topCoordsList, transform(RY90, Y_AXIS, "023415"));
+  transformPieces(cube, topCoordsList, transform(RY90, "023415"));
 
 export const yawMiddle90 = cube => {
   return cube;
