@@ -108,14 +108,37 @@ const bottomCoordsList = [
 ];
 
 // TODO: we need three more coords lists:
-// - yawMiddleCoordsList
 // - pitchMiddleCoordsList
 // - rollMiddleCoordsList
+
+const yawMiddleCoordsList = [
+  [-1, 0, -1],
+  [0, 0, -1],
+  [1, 0, -1],
+  [-1, 0, 0],
+  [0, 0, 0],
+  [1, 0, 0],
+  [-1, 0, 1],
+  [0, 0, 1],
+  [1, 0, 1]
+];
 
 const RY90 = matrix([
   [0, 0, -1],
   [0, 1, 0,],
   [1, 0, 0]
+]);
+
+const RY180 = matrix([
+  [-1, 0, 0],
+  [0, 1, 0],
+  [0, 0, -1]
+]);
+
+const RY270 = matrix([
+  [0, 0, 1],
+  [0, 1, 0],
+  [-1, 0, 0]
 ]);
 
 const TOP = 0;
@@ -186,13 +209,29 @@ const transformPieces = (cube, coordsList, transform) =>
 export const yawTop90 = cube =>
   transformPieces(cube, topCoordsList, transform(RY90, "023415"));
 
-export const yawMiddle90 = cube => {
-  return cube;
-};
+export const yawTop180 = cube =>
+  transformPieces(cube, topCoordsList, transform(RY180, "034125"));
 
-export const yawBottom90 = cube => {
-  return cube;
-};
+export const yawTop270 = cube =>
+  transformPieces(cube, topCoordsList, transform(RY270, "041235"));
+
+export const yawMiddle90 = cube =>
+  transformPieces(cube, yawMiddleCoordsList, transform(RY90, "023415"));
+
+export const yawMiddle180 = cube =>
+  transformPieces(cube, yawMiddleCoordsList, transform(RY180, "034125"));
+
+export const yawMiddle270 = cube =>
+  transformPieces(cube, yawMiddleCoordsList, transform(RY270, "041235"));
+
+export const yawBottom90 = cube =>
+  transformPieces(cube, bottomCoordsList, transform(RY90, "023415"));
+
+export const yawBottom180 = cube =>
+  transformPieces(cube, bottomCoordsList, transform(RY180, "034125"));
+
+export const yawBottom270 = cube =>
+  transformPieces(cube, bottomCoordsList, transform(RY270, "041235"));
 
 export const pitchLeft90 = cube => {
   return cube;
