@@ -2,37 +2,37 @@ import math, { matrix } from 'mathjs';
 
 export const solvedCube = [
   // top layer
-  { id: 1, x: 0, y: 2, z: 0, colours: "BRY---" },
-  { id: 2, x: 1, y: 2, z: 0, colours: "B-Y---" },
-  { id: 3, x: 2, y: 2, z: 0, colours: "B-YO--" },
-  { id: 4, x: 0, y: 2, z: 1, colours: "BR----" },
-  { id: 5, x: 1, y: 2, z: 1, colours: "B-----" },
-  { id: 6, x: 2, y: 2, z: 1, colours: "B--O--" },
-  { id: 7, x: 0, y: 2, z: 2, colours: "BR--W-" },
-  { id: 8, x: 1, y: 2, z: 2, colours: "B---W-" },
-  { id: 9, x: 2, y: 2, z: 2, colours: "B--OW-" },
+  { x: 0, y: 2, z: 0, colours: "BRY---" },
+  { x: 1, y: 2, z: 0, colours: "B-Y---" },
+  { x: 2, y: 2, z: 0, colours: "B-YO--" },
+  { x: 0, y: 2, z: 1, colours: "BR----" },
+  { x: 1, y: 2, z: 1, colours: "B-----" },
+  { x: 2, y: 2, z: 1, colours: "B--O--" },
+  { x: 0, y: 2, z: 2, colours: "BR--W-" },
+  { x: 1, y: 2, z: 2, colours: "B---W-" },
+  { x: 2, y: 2, z: 2, colours: "B--OW-" },
 
   // middle layer
-  { id: 10, x: 0, y: 1, z: 0, colours: "-RY---" },
-  { id: 11, x: 1, y: 1, z: 0, colours: "--Y---" },
-  { id: 12, x: 2, y: 1, z: 0, colours: "--YO--" },
-  { id: 13, x: 0, y: 1, z: 1, colours: "-R----" },
-  { id: 14, x: 1, y: 1, z: 1, colours: "------" },
-  { id: 15, x: 2, y: 1, z: 1, colours: "---O--" },
-  { id: 16, x: 0, y: 1, z: 2, colours: "-R--W-" },
-  { id: 17, x: 1, y: 1, z: 2, colours: "----W-" },
-  { id: 18, x: 2, y: 1, z: 2, colours: "---OW-" },
+  { x: 0, y: 1, z: 0, colours: "-RY---" },
+  { x: 1, y: 1, z: 0, colours: "--Y---" },
+  { x: 2, y: 1, z: 0, colours: "--YO--" },
+  { x: 0, y: 1, z: 1, colours: "-R----" },
+  { x: 1, y: 1, z: 1, colours: "------" },
+  { x: 2, y: 1, z: 1, colours: "---O--" },
+  { x: 0, y: 1, z: 2, colours: "-R--W-" },
+  { x: 1, y: 1, z: 2, colours: "----W-" },
+  { x: 2, y: 1, z: 2, colours: "---OW-" },
 
   // bottom layer
-  { id: 19, x: 0, y: 0, z: 0, colours: "-RY--G" },
-  { id: 20, x: 1, y: 0, z: 0, colours: "--Y--G" },
-  { id: 21, x: 2, y: 0, z: 0, colours: "--YO-G" },
-  { id: 22, x: 0, y: 0, z: 1, colours: "-R---G" },
-  { id: 23, x: 1, y: 0, z: 1, colours: "-----G" },
-  { id: 24, x: 2, y: 0, z: 1, colours: "---O-G" },
-  { id: 25, x: 0, y: 0, z: 2, colours: "-R--WG" },
-  { id: 26, x: 1, y: 0, z: 2, colours: "----WG" },
-  { id: 27, x: 2, y: 0, z: 2, colours: "---OWG" }
+  { x: 0, y: 0, z: 0, colours: "-RY--G" },
+  { x: 1, y: 0, z: 0, colours: "--Y--G" },
+  { x: 2, y: 0, z: 0, colours: "--YO-G" },
+  { x: 0, y: 0, z: 1, colours: "-R---G" },
+  { x: 1, y: 0, z: 1, colours: "-----G" },
+  { x: 2, y: 0, z: 1, colours: "---O-G" },
+  { x: 0, y: 0, z: 2, colours: "-R--WG" },
+  { x: 1, y: 0, z: 2, colours: "----WG" },
+  { x: 2, y: 0, z: 2, colours: "---OWG" }
 ];
 
 const topCoordsList = [
