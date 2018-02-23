@@ -122,6 +122,13 @@ const X_AXIS = "X";
 const Y_AXIS = "Y";
 const Z_AXIS = "Z";
 
+const TOP = 0;
+const LEFT = 1;
+const FRONT = 2;
+const RIGHT = 3;
+const BACK = 4;
+const BOTTOM = 5;
+
 const pieceHasCoords = coords => piece =>
   piece.x === coords[0] &&
   piece.y === coords[1] &&
@@ -138,22 +145,22 @@ const isPieceInCoordsList = (coordsList, piece) =>
     coords[2] === piece.z) >= 0;
 
 const getTopFace = cube =>
-  getPieces(cube, topCoordsList).map(piece => piece.colours[0]);
+  getPieces(cube, topCoordsList).map(piece => piece.colours[TOP]);
 
 const getLeftFace = cube =>
-  getPieces(cube, leftCoordsList).map(piece => piece.colours[1]);
+  getPieces(cube, leftCoordsList).map(piece => piece.colours[LEFT]);
 
 const getFrontFace = cube =>
-  getPieces(cube, frontCoordsList).map(piece => piece.colours[2]);
+  getPieces(cube, frontCoordsList).map(piece => piece.colours[FRONT]);
 
 const getRightFace = cube =>
-  getPieces(cube, rightCoordsList).map(piece => piece.colours[3]);
+  getPieces(cube, rightCoordsList).map(piece => piece.colours[RIGHT]);
 
 const getBackFace = cube =>
-  getPieces(cube, backCoordsList).map(piece => piece.colours[4]);
+  getPieces(cube, backCoordsList).map(piece => piece.colours[BACK]);
 
 const getBottomFace = cube =>
-  getPieces(cube, bottomCoordsList).map(piece => piece.colours[5]);
+  getPieces(cube, bottomCoordsList).map(piece => piece.colours[BOTTOM]);
 
 const axisToTranslation = axis => {
   switch (axis) {
@@ -163,9 +170,13 @@ const axisToTranslation = axis => {
   }
 };
 
-const reorderColours = (colours, newColoursOrder) =>
-    // TODO: reorder piece.colours using newColoursOrder
-    colours;
+const ZERO = 48;
+const reorderColours = (colours, newColoursOrder) => {
+    const chs1 = Array.from(colours);
+    const idxs = Array.from(newColoursOrder).map(ch => ch.charCodeAt(0) - ZERO);
+    const chs2 = idxs.map(idx => chs1[idx]);
+    return chs2.join("");
+};
 
 const transform = (r, axis, newColoursOrder) => piece => {
   const p1 = axisToTranslation(axis);
@@ -248,5 +259,4 @@ const dumpCube = cube => {
 dumpCube(solvedCube);
 
 const cube1 = yawTop90(solvedCube);
-console.log(`cube1: ${JSON.stringify(cube1.slice(0, 9))}`);
 dumpCube(cube1);
