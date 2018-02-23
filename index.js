@@ -1,4 +1,7 @@
 import math, { matrix } from 'mathjs';
+import * as CL from './coordsLists';
+import * as R from './rotations';
+import * as C from './constants';
 
 export const solvedCube = [
   // top layer
@@ -35,119 +38,6 @@ export const solvedCube = [
   { x: 1, y: -1, z: 1, colours: "---OWG" }
 ];
 
-const topCoordsList = [
-  [-1, 1, -1],
-  [0, 1, -1],
-  [1, 1, -1],
-  [-1, 1, 0],
-  [0, 1, 0],
-  [1, 1, 0],
-  [-1, 1, 1],
-  [0, 1, 1],
-  [1, 1, 1]
-];
-
-const leftCoordsList = [
-  [-1, 1, 1],
-  [-1, 1, 0],
-  [-1, 1, -1],
-  [-1, 0, 1],
-  [-1, 0, 0],
-  [-1, 0, -1],
-  [-1, -1, 1],
-  [-1, -1, 0],
-  [-1, -1, -1]
-];
-
-const frontCoordsList = [
-  [-1, 1, -1],
-  [0, 1, -1],
-  [1, 1, -1],
-  [-1, 0, -1],
-  [0, 0, -1],
-  [1, 0, -1],
-  [-1, -1, -1],
-  [0, -1, -1],
-  [1, -1, -1]
-];
-
-const rightCoordsList = [
-  [1, 1, -1],
-  [1, 1, 0],
-  [1, 1, 1],
-  [1, 0, -1],
-  [1, 0, 0],
-  [1, 0, 1],
-  [1, -1, -1],
-  [1, -1, 0],
-  [1, -1, 1]
-];
-
-const backCoordsList = [
-  [1, 1, 1],
-  [0, 1, 1],
-  [-1, 1, 1],
-  [1, 0, 1],
-  [0, 0, 1],
-  [-1, 0, 1],
-  [1, -1, 1],
-  [0, -1, 1],
-  [-1, -1, 1]
-];
-
-const bottomCoordsList = [
-  [-1, -1, -1],
-  [0, -1, -1],
-  [1, -1, -1],
-  [-1, -1, 0],
-  [0, -1, 0],
-  [1, -1, 0],
-  [-1, -1, 1],
-  [0, -1, 1],
-  [1, -1, 1]
-];
-
-// TODO: we need three more coords lists:
-// - pitchMiddleCoordsList
-// - rollMiddleCoordsList
-
-const yawMiddleCoordsList = [
-  [-1, 0, -1],
-  [0, 0, -1],
-  [1, 0, -1],
-  [-1, 0, 0],
-  [0, 0, 0],
-  [1, 0, 0],
-  [-1, 0, 1],
-  [0, 0, 1],
-  [1, 0, 1]
-];
-
-const RY90 = matrix([
-  [0, 0, -1],
-  [0, 1, 0,],
-  [1, 0, 0]
-]);
-
-const RY180 = matrix([
-  [-1, 0, 0],
-  [0, 1, 0],
-  [0, 0, -1]
-]);
-
-const RY270 = matrix([
-  [0, 0, 1],
-  [0, 1, 0],
-  [-1, 0, 0]
-]);
-
-const TOP = 0;
-const LEFT = 1;
-const FRONT = 2;
-const RIGHT = 3;
-const BACK = 4;
-const BOTTOM = 5;
-
 const pieceHasCoords = coords => piece =>
   piece.x === coords[0] &&
   piece.y === coords[1] &&
@@ -164,22 +54,22 @@ const isPieceInCoordsList = (coordsList, piece) =>
     coords[2] === piece.z) >= 0;
 
 export const getTopFace = cube =>
-  getPieces(cube, topCoordsList).map(piece => piece.colours[TOP]);
+  getPieces(cube, CL.topCoordsList).map(piece => piece.colours[C.TOP]);
 
 export const getLeftFace = cube =>
-  getPieces(cube, leftCoordsList).map(piece => piece.colours[LEFT]);
+  getPieces(cube, CL.leftCoordsList).map(piece => piece.colours[C.LEFT]);
 
 export const getFrontFace = cube =>
-  getPieces(cube, frontCoordsList).map(piece => piece.colours[FRONT]);
+  getPieces(cube, CL.frontCoordsList).map(piece => piece.colours[C.FRONT]);
 
 export const getRightFace = cube =>
-  getPieces(cube, rightCoordsList).map(piece => piece.colours[RIGHT]);
+  getPieces(cube, CL.rightCoordsList).map(piece => piece.colours[C.RIGHT]);
 
 export const getBackFace = cube =>
-  getPieces(cube, backCoordsList).map(piece => piece.colours[BACK]);
+  getPieces(cube, CL.backCoordsList).map(piece => piece.colours[C.BACK]);
 
 export const getBottomFace = cube =>
-  getPieces(cube, bottomCoordsList).map(piece => piece.colours[BOTTOM]);
+  getPieces(cube, CL.bottomCoordsList).map(piece => piece.colours[C.BOTTOM]);
 
 const ZERO = 48;
 const reorderColours = (colours, newColoursOrder) => {
@@ -207,31 +97,31 @@ const transformPieces = (cube, coordsList, transform) =>
     : piece);
 
 export const yawTop90 = cube =>
-  transformPieces(cube, topCoordsList, transform(RY90, "023415"));
+  transformPieces(cube, CL.topCoordsList, transform(R.Y90, "023415"));
 
 export const yawTop180 = cube =>
-  transformPieces(cube, topCoordsList, transform(RY180, "034125"));
+  transformPieces(cube, CL.topCoordsList, transform(R.Y180, "034125"));
 
 export const yawTop270 = cube =>
-  transformPieces(cube, topCoordsList, transform(RY270, "041235"));
+  transformPieces(cube, CL.topCoordsList, transform(R.Y270, "041235"));
 
 export const yawMiddle90 = cube =>
-  transformPieces(cube, yawMiddleCoordsList, transform(RY90, "023415"));
+  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y90, "023415"));
 
 export const yawMiddle180 = cube =>
-  transformPieces(cube, yawMiddleCoordsList, transform(RY180, "034125"));
+  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y180, "034125"));
 
 export const yawMiddle270 = cube =>
-  transformPieces(cube, yawMiddleCoordsList, transform(RY270, "041235"));
+  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y270, "041235"));
 
 export const yawBottom90 = cube =>
-  transformPieces(cube, bottomCoordsList, transform(RY90, "023415"));
+  transformPieces(cube, CL.bottomCoordsList, transform(R.Y90, "023415"));
 
 export const yawBottom180 = cube =>
-  transformPieces(cube, bottomCoordsList, transform(RY180, "034125"));
+  transformPieces(cube, CL.bottomCoordsList, transform(R.Y180, "034125"));
 
 export const yawBottom270 = cube =>
-  transformPieces(cube, bottomCoordsList, transform(RY270, "041235"));
+  transformPieces(cube, CL.bottomCoordsList, transform(R.Y270, "041235"));
 
 export const pitchLeft90 = cube => {
   return cube;

@@ -1,7 +1,7 @@
 {
-  "name": "rubix-cube",
+  "name": "rubiks-cube",
   "version": "0.0.1",
-  "description": "Rubix cube solver",
+  "description": "Rubik's cube solver",
   "main": "index.js",
   "scripts": {
     "test": "mocha -r babel-register"
