@@ -3,13 +3,17 @@
   "version": "0.0.1",
   "description": "Rubix cube solver",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "mocha -r babel-register --slow 200"
+  },
   "author": "Jonathan Taylor",
   "license": "MIT",
   "dependencies": {
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
     "eslint": "^4.18.1",
-    "mathjs": "^3.20.2"
+    "mathjs": "^3.20.2",
+    "mocha": "^5.0.1"
   }
 }

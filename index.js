@@ -1,6 +1,6 @@
 import math, { matrix } from 'mathjs';
 
-const solvedCube = [
+export const solvedCube = [
   // top layer
   { id: 1, x: 0, y: 2, z: 0, colours: "BRY---" },
   { id: 2, x: 1, y: 2, z: 0, colours: "B-Y---" },
@@ -144,22 +144,22 @@ const isPieceInCoordsList = (coordsList, piece) =>
     coords[1] === piece.y &&
     coords[2] === piece.z) >= 0;
 
-const getTopFace = cube =>
+export const getTopFace = cube =>
   getPieces(cube, topCoordsList).map(piece => piece.colours[TOP]);
 
-const getLeftFace = cube =>
+export const getLeftFace = cube =>
   getPieces(cube, leftCoordsList).map(piece => piece.colours[LEFT]);
 
-const getFrontFace = cube =>
+export const getFrontFace = cube =>
   getPieces(cube, frontCoordsList).map(piece => piece.colours[FRONT]);
 
-const getRightFace = cube =>
+export const getRightFace = cube =>
   getPieces(cube, rightCoordsList).map(piece => piece.colours[RIGHT]);
 
-const getBackFace = cube =>
+export const getBackFace = cube =>
   getPieces(cube, backCoordsList).map(piece => piece.colours[BACK]);
 
-const getBottomFace = cube =>
+export const getBottomFace = cube =>
   getPieces(cube, bottomCoordsList).map(piece => piece.colours[BOTTOM]);
 
 const axisToTranslation = axis => {
@@ -172,10 +172,10 @@ const axisToTranslation = axis => {
 
 const ZERO = 48;
 const reorderColours = (colours, newColoursOrder) => {
-    const chs1 = Array.from(colours);
-    const idxs = Array.from(newColoursOrder).map(ch => ch.charCodeAt(0) - ZERO);
-    const chs2 = idxs.map(idx => chs1[idx]);
-    return chs2.join("");
+  const chs1 = Array.from(colours);
+  const idxs = Array.from(newColoursOrder).map(ch => ch.charCodeAt(0) - ZERO);
+  const chs2 = idxs.map(idx => chs1[idx]);
+  return chs2.join("");
 };
 
 const transform = (r, axis, newColoursOrder) => piece => {
@@ -201,38 +201,38 @@ const transformPieces = (cube, coordsList, transform) =>
     ? transform(piece)
     : piece);
 
-const yawTop90 = cube =>
+export const yawTop90 = cube =>
   transformPieces(cube, topCoordsList, transform(RY90, Y_AXIS, "023415"));
 
-const yawMiddle90 = cube => {
+export const yawMiddle90 = cube => {
   return cube;
 };
 
-const yawBottom90 = cube => {
+export const yawBottom90 = cube => {
   return cube;
 };
 
-const pitchLeft90 = cube => {
+export const pitchLeft90 = cube => {
   return cube;
 };
 
-const pitchMiddle90 = cube => {
+export const pitchMiddle90 = cube => {
   return cube;
 };
 
-const pitchRight90 = cube => {
+export const pitchRight90 = cube => {
   return cube;
 };
 
-const rollFront90 = cube => {
+export const rollFront90 = cube => {
   return cube;
 };
 
-const rollMiddle90 = cube => {
+export const rollMiddle90 = cube => {
   return cube;
 };
 
-const rollBack90 = cube => {
+export const rollBack90 = cube => {
   return cube;
 };
 
@@ -256,7 +256,6 @@ const dumpCube = cube => {
   line(6, 9);
 };
 
-dumpCube(solvedCube);
-
-const cube1 = yawTop90(solvedCube);
-dumpCube(cube1);
+// dumpCube(solvedCube);
+// const cube1 = yawTop90(solvedCube);
+// dumpCube(cube1);
