@@ -4,39 +4,33 @@ import * as R from '../index';
 
 describe("solve tests", () => {
 
-  const shuffleCube = moves =>
-    moves.reduce((cube, move) => move(cube), solvedCube);
+  const confirmSolution = (shuffledCube, solution) => {
+    expect(solution).not.to.be.null;
+    const finalCube = R.makeMoves(shuffledCube, solution);
+    expect(R.areCubesSame(finalCube, solvedCube)).to.be.true;
+  };
 
   it("zero moves", () => {
-    const shuffledCube = shuffleCube([]);
-    const result = solve(shuffledCube);
-    expect(result).not.to.be.null;
-    expect(R.areCubesSame(result.cube, solvedCube)).to.be.true;
-    expect(result.parent).to.be.null;
+    const shuffledCube = R.makeMoves(solvedCube, []);
+    const solution = solve(shuffledCube);
+    confirmSolution(shuffledCube, solution);
   });
 
   it("one move", () => {
-    const shuffledCube = shuffleCube([R.yawTop90]);
-    const result = solve(shuffledCube);
-    expect(result).not.to.be.null;
-    expect(R.areCubesSame(result.cube, solvedCube)).to.be.true;
-    expect(result.parent).not.to.be.null;
-    expect(result.move).to.equal(R.yawTop270);
+    const shuffledCube = R.makeMoves(solvedCube, [R.yawTop90]);
+    const solution = solve(shuffledCube);
+    confirmSolution(shuffledCube, solution);
   });
 
   it("two moves", () => {
-    const shuffledCube = shuffleCube([R.yawTop90, R.rollFront180]);
-    const result = solve(shuffledCube);
-    expect(result).not.to.be.null;
-    expect(result.parent).not.to.be.null;
-    expect(R.areCubesSame(result.cube, solvedCube)).to.be.true;
+    const shuffledCube = R.makeMoves(solvedCube, [R.yawTop90, R.rollFront180]);
+    const solution = solve(shuffledCube);
+    confirmSolution(shuffledCube, solution);
   });
 
   it("three moves", () => {
-    const shuffledCube = shuffleCube([R.yawTop90, R.rollFront180, R.pitchLeft90]);
-    const result = solve(shuffledCube);
-    expect(result).not.to.be.null;
-    expect(result.parent).not.to.be.null;
-    expect(R.areCubesSame(result.cube, solvedCube)).to.be.true;
+    const shuffledCube = R.makeMoves(solvedCube, [R.yawTop90, R.rollFront180, R.pitchLeft90]);
+    const solution = solve(shuffledCube);
+    confirmSolution(shuffledCube, solution);
   });
 });

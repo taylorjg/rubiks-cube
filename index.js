@@ -338,31 +338,31 @@ const rootNodeToSolution = rootNode => {
 export const solve = shuffledCube => {
   const initialNode = new Node(shuffledCube, null, null, 0, 0);
   const openSet = new Set([initialNode]);
-  return aStar(openSet);
-};
-
-export const solve2 = shuffledCube => {
-  const rootNode = solve(shuffledCube);
+  const rootNode = aStar(openSet);
   return rootNode ? rootNodeToSolution(rootNode).reverse() : null;
 };
 
-const shuffleCube = moves =>
-  moves.reduce((cube, move) => move(cube), solvedCube);
+export const makeMoves = (initialCube, moves) =>
+  moves.reduce((cube, move) => move(cube), initialCube);
 
-const shuffledCube = shuffleCube([yawTop90, rollFront180, pitchLeft90]);
-const solution = solve2(shuffledCube);
+const demo = () => {
+  const shuffledCube = makeMoves(solvedCube, [yawTop90, rollFront180, pitchLeft90]);
+  const solution = solve(shuffledCube);
 
-if (solution) {
-  console.log(`solution.length: ${solution.length}`);
-  const finalCube = solution.reduce(
-    (cube, move) => {
-      dumpCube(cube);
-      console.log();
-      return move(cube);
-    },
-    shuffledCube);
-  dumpCube(finalCube);
-}
-else {
-  console.log('No solution found!');
-}
+  if (solution) {
+    console.log(`solution.length: ${solution.length}`);
+    const finalCube = solution.reduce(
+      (cube, move) => {
+        dumpCube(cube);
+        console.log();
+        return move(cube);
+      },
+      shuffledCube);
+    dumpCube(finalCube);
+  }
+  else {
+    console.log('No solution found!');
+  }
+};
+
+// demo();
