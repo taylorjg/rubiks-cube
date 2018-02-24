@@ -11,7 +11,7 @@ describe("solve tests", () => {
     const shuffledCube = shuffleCube([]);
     const result = solve(shuffledCube);
     expect(result).not.to.be.null;
-    expect(result.cube).to.deep.equal(solvedCube);
+    expect(R.areCubesSame(result.cube, solvedCube)).to.be.true;
     expect(result.parent).to.be.null;
   });
 
@@ -19,7 +19,7 @@ describe("solve tests", () => {
     const shuffledCube = shuffleCube([R.yawTop90]);
     const result = solve(shuffledCube);
     expect(result).not.to.be.null;
-    expect(result.cube).to.deep.equal(solvedCube);
+    expect(R.areCubesSame(result.cube, solvedCube)).to.be.true;
     expect(result.parent).not.to.be.null;
     expect(result.move).to.equal(R.yawTop270);
   });
@@ -29,5 +29,14 @@ describe("solve tests", () => {
     const result = solve(shuffledCube);
     expect(result).not.to.be.null;
     expect(result.parent).not.to.be.null;
+    expect(R.areCubesSame(result.cube, solvedCube)).to.be.true;
+  });
+
+  it("three moves", () => {
+    const shuffledCube = shuffleCube([R.yawTop90, R.rollFront180, R.pitchLeft90]);
+    const result = solve(shuffledCube);
+    expect(result).not.to.be.null;
+    expect(result.parent).not.to.be.null;
+    expect(R.areCubesSame(result.cube, solvedCube)).to.be.true;
   });
 });

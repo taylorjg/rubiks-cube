@@ -262,7 +262,7 @@ const heuristic = cube => {
   return (9 * 6) - total;
 };
 
-const areCubesSame = (cube1, cube2) => {
+export const areCubesSame = (cube1, cube2) => {
   const s1 = JSON.stringify(cube1);
   const s2 = JSON.stringify(cube2);
   return s1 === s2;
@@ -285,7 +285,6 @@ const minBy = (set, fn) => {
   return currentMin ? currentMin.element : null;
 };
 
-// Keep going until currentNode.cube is the solved cube or openSet is empty.
 const aStar = (openSet, seenCubes) => {
 
   const isCubeInOpenSet = cube =>
@@ -326,19 +325,3 @@ export const solve = shuffledCube => {
   const initialNode = new Node(shuffledCube, null, null, 0, 0);
   return aStar(new Set([initialNode]), []);
 };
-
-// const rotations = [
-//   rollFront90,
-//   rollFront90,
-//   rollFront90,
-//   rollFront90
-// ];
-
-// const finalCube = rotations.reduce((cube, rotation) => {
-//   dumpCube(cube);
-//   console.log(`heuristic: ${heuristic(cube)}`);
-//   return rotation(cube);
-// }, solvedCube);
-
-// dumpCube(finalCube);
-// console.log(`heuristic: ${heuristic(finalCube)}`);
