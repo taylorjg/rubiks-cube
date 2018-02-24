@@ -38,20 +38,17 @@ export const solvedCube = [
   { x: 1, y: -1, z: 1, colours: "---OWG" }
 ];
 
-const pieceHasCoords = coords => piece =>
+const pieceHasCoords = (piece, coords) =>
   piece.x === coords[0] &&
   piece.y === coords[1] &&
   piece.z === coords[2];
 
 const getPieces = (cube, coordsList) =>
   coordsList.map(coords =>
-    cube.find(pieceHasCoords(coords)));
+    cube.find(piece => pieceHasCoords(piece, coords)));
 
-const isPieceInCoordsList = (coordsList, piece) =>
-  coordsList.findIndex(coords =>
-    coords[0] === piece.x &&
-    coords[1] === piece.y &&
-    coords[2] === piece.z) >= 0;
+const isPieceInCoordsList = (piece, coordsList) =>
+  coordsList.findIndex(coords => pieceHasCoords(piece, coords)) >= 0;
 
 export const getTopFace = cube =>
   getPieces(cube, CL.topCoordsList).map(piece => piece.colours[C.TOP]);
@@ -71,28 +68,28 @@ export const getBackFace = cube =>
 export const getBottomFace = cube =>
   getPieces(cube, CL.bottomCoordsList).map(piece => piece.colours[C.BOTTOM]);
 
-const ZERO = 48;
+const DIGIT_ZERO_CHAR_CODE = 48;
 const reorderColours = (colours, newColoursOrder) => {
   const chs1 = Array.from(colours);
-  const idxs = Array.from(newColoursOrder).map(ch => ch.charCodeAt(0) - ZERO);
+  const idxs = Array.from(newColoursOrder).map(ch => ch.charCodeAt(0) - DIGIT_ZERO_CHAR_CODE);
   const chs2 = idxs.map(idx => chs1[idx]);
   return chs2.join("");
 };
 
-const transform = (r, newColoursOrder) => piece => {
-  const v1 = matrix([piece.x, piece.y, piece.z]);
-  const v2 = math.multiply(v1, r);
+const transform = (rotationMatrix, newColoursOrder) => piece => {
+  const vector = matrix([piece.x, piece.y, piece.z]);
+  const rotatedVector = math.multiply(vector, rotationMatrix);
   return {
     id: piece.id,
-    x: v2.get([0]),
-    y: v2.get([1]),
-    z: v2.get([2]),
+    x: rotatedVector.get([0]),
+    y: rotatedVector.get([1]),
+    z: rotatedVector.get([2]),
     colours: reorderColours(piece.colours, newColoursOrder)
   };
 };
 
 const transformPieces = (cube, coordsList, transform) =>
-  cube.map(piece => isPieceInCoordsList(coordsList, piece)
+  cube.map(piece => isPieceInCoordsList(piece, coordsList)
     ? transform(piece)
     : piece);
 
@@ -132,13 +129,23 @@ export const pitchLeft180 = cube =>
 export const pitchLeft270 = cube =>
   transformPieces(cube, CL.leftCoordsList, transform(R.X270, "410352"));
 
-// export const pitchMiddle90 = cube =>
-// export const pitchMiddle180 = cube =>
-// export const pitchMiddle270 = cube =>
+export const pitchMiddle90 = cube =>
+  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X90, "215304"));
 
-// export const pitchRight90 = cube =>
-// export const pitchRight180 = cube =>
-// export const pitchRight270 = cube =>
+export const pitchMiddle180 = cube =>
+  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X180, "514320"));
+
+export const pitchMiddle270 = cube =>
+  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X270, "410352"));
+
+export const pitchRight90 = cube =>
+  transformPieces(cube, CL.rightCoordsList, transform(R.X90, "215304"));
+
+export const pitchRight180 = cube =>
+  transformPieces(cube, CL.rightCoordsList, transform(R.X180, "514320"));
+
+export const pitchRight270 = cube =>
+  transformPieces(cube, CL.rightCoordsList, transform(R.X270, "410352"));
 
 export const rollFront90 = cube =>
   transformPieces(cube, CL.frontCoordsList, transform(R.Z90, "302541"));
@@ -149,13 +156,23 @@ export const rollFront180 = cube =>
 export const rollFront270 = cube =>
   transformPieces(cube, CL.frontCoordsList, transform(R.Z270, "152043"));
 
-// export const rollMiddle90 = cube =>
-// export const rollMiddle180 = cube =>
-// export const rollMiddle270 = cube =>
+export const rollMiddle90 = cube =>
+  transformPieces(cube, CL.rollMiddleCoordsList, transform(R.Z90, "302541"));
 
-// export const rollBack90 = cube =>
-// export const rollBack180 = cube =>
-// export const rollBack270 = cube =>
+export const rollMiddle180 = cube =>
+  transformPieces(cube, CL.rollMiddleCoordsList, transform(R.Z180, "532140"));
+
+export const rollMiddle270 = cube =>
+  transformPieces(cube, CL.rollMiddleCoordsList, transform(R.Z270, "152043"));
+
+export const rollBack90 = cube =>
+  transformPieces(cube, CL.backCoordsList, transform(R.Z90, "302541"));
+
+export const rollBack180 = cube =>
+  transformPieces(cube, CL.backCoordsList, transform(R.Z180, "532140"));
+
+export const rollBack270 = cube =>
+  transformPieces(cube, CL.backCoordsList, transform(R.Z270, "152043"));
 
 const dumpCube = cube => {
 
