@@ -123,29 +123,39 @@ export const yawBottom180 = cube =>
 export const yawBottom270 = cube =>
   transformPieces(cube, CL.bottomCoordsList, transform(R.Y270, "041235"));
 
-export const pitchLeft90 = cube => {
-  return cube;
-};
+export const pitchLeft90 = cube =>
+  transformPieces(cube, CL.leftCoordsList, transform(R.X90, "215304"));
 
-export const pitchMiddle90 = cube => {
-  return cube;
-};
+export const pitchLeft180 = cube =>
+  transformPieces(cube, CL.leftCoordsList, transform(R.X180, "514320"));
 
-export const pitchRight90 = cube => {
-  return cube;
-};
+export const pitchLeft270 = cube =>
+  transformPieces(cube, CL.leftCoordsList, transform(R.X270, "410352"));
 
-export const rollFront90 = cube => {
-  return cube;
-};
+// export const pitchMiddle90 = cube =>
+// export const pitchMiddle180 = cube =>
+// export const pitchMiddle270 = cube =>
 
-export const rollMiddle90 = cube => {
-  return cube;
-};
+// export const pitchRight90 = cube =>
+// export const pitchRight180 = cube =>
+// export const pitchRight270 = cube =>
 
-export const rollBack90 = cube => {
-  return cube;
-};
+export const rollFront90 = cube =>
+  transformPieces(cube, CL.frontCoordsList, transform(R.Z90, "302541"));
+
+export const rollFront180 = cube =>
+  transformPieces(cube, CL.frontCoordsList, transform(R.Z180, "532140"));
+
+export const rollFront270 = cube =>
+  transformPieces(cube, CL.frontCoordsList, transform(R.Z270, "152043"));
+
+// export const rollMiddle90 = cube =>
+// export const rollMiddle180 = cube =>
+// export const rollMiddle270 = cube =>
+
+// export const rollBack90 = cube =>
+// export const rollBack180 = cube =>
+// export const rollBack270 = cube =>
 
 const dumpCube = cube => {
 
@@ -168,5 +178,5 @@ const dumpCube = cube => {
 };
 
 // dumpCube(solvedCube);
-// const cube1 = yawTop90(solvedCube);
+// const cube1 = rollFront90(solvedCube);
 // dumpCube(cube1);
