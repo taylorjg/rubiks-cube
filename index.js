@@ -204,16 +204,6 @@ const dumpCube = cube => {
   line(6, 9);
 };
 
-class Node {
-  constructor(cube, parent, g, h) {
-    this.cube = cube;
-    this.parent = parent;
-    this.g = g;
-    this.h = h;
-    this.f = g + h;
-  }
-}
-
 const MOVES = [
   yawTop90,
   yawTop180,
@@ -243,6 +233,17 @@ const MOVES = [
   rollBack180,
   rollBack270
 ];
+
+class Node {
+  constructor(cube, move, parent, g, h) {
+    this.cube = cube;
+    this.move = move;
+    this.parent = parent;
+    this.g = g;
+    this.h = h;
+    this.f = g + h;
+  }
+}
 
 const heuristic = cube => {
 
@@ -304,14 +305,14 @@ const aStar = (openSet, seenCubes) => {
         seenCubes.push(currentNode.cube);
       }
 
-      const nextCubes = MOVES.map(move => move(currentNode.cube))
-        .filter(cube => !isCubeInOpenSet(cube))
-        .filter(cube => !isCubeInSeenCubes(cube));
+      const nextCubes = MOVES.map(move => [move(currentNode.cube), move])
+        .filter(([cube]) => !isCubeInOpenSet(cube))
+        .filter(([cube]) => !isCubeInSeenCubes(cube));
 
-      const nextNodes = nextCubes.map(nextCube => {
+      const nextNodes = nextCubes.map(([cube, move]) => {
         const g = 0;
-        const h = 0;
-        return new Node(nextCube, currentNode, g, h);
+        const h = heuristic(cube);
+        return new Node(cube, move, currentNode, g, h);
       });
 
       nextNodes.forEach(nextNode => openSet.add(nextNode));
@@ -322,7 +323,7 @@ const aStar = (openSet, seenCubes) => {
 };
 
 export const solve = shuffledCube => {
-  const initialNode = new Node(shuffledCube, null, 0, 0);
+  const initialNode = new Node(shuffledCube, null, null, 0, 0);
   return aStar(new Set([initialNode]), []);
 };
 

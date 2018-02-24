@@ -16,5 +16,7 @@ describe("solve tests", () => {
     const result = solve(shuffledCube);
     expect(result).not.to.be.null;
     expect(result.cube).to.deep.equal(solvedCube);
+    expect(result.parent).not.to.be.null;
+    expect(result.move).to.equal(R.yawTop270);
   });
 });
