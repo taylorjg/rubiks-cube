@@ -50,6 +50,17 @@ const getPieces = (cube, coordsList) =>
 const isPieceInCoordsList = (piece, coordsList) =>
   coordsList.findIndex(coords => pieceHasCoords(piece, coords)) >= 0;
 
+export const getFace = (cube, face) => {
+  switch (face) {
+    case C.TOP: return getTopFace(cube);
+    case C.LEFT: return getLeftFace(cube);
+    case C.FRONT: return getFrontFace(cube);
+    case C.RIGHT: return getRightFace(cube);
+    case C.BACK: return getBackFace(cube);
+    case C.BOTTOM: return getBottomFace(cube);
+  }
+};
+
 export const getTopFace = cube =>
   getPieces(cube, CL.topCoordsList).map(piece => piece.colours[C.TOP]);
 
@@ -194,6 +205,137 @@ const dumpCube = cube => {
   line(6, 9);
 };
 
-// dumpCube(solvedCube);
-// const cube1 = rollFront90(solvedCube);
-// dumpCube(cube1);
+class Node {
+  constructor(cube, parent, g, h) {
+    this.cube = cube;
+    this.parent = parent;
+    this.g = g;
+    this.h = h;
+    this.f = g + h;
+  }
+}
+
+const MOVES = [
+  yawTop90,
+  yawTop180,
+  yawTop270,
+  yawMiddle90,
+  yawMiddle180,
+  yawMiddle270,
+  yawBottom90,
+  yawBottom180,
+  yawBottom270,
+  pitchLeft90,
+  pitchLeft180,
+  pitchLeft270,
+  pitchMiddle90,
+  pitchMiddle180,
+  pitchMiddle270,
+  pitchRight90,
+  pitchRight180,
+  pitchRight270,
+  rollFront90,
+  rollFront180,
+  rollFront270,
+  rollMiddle90,
+  rollMiddle180,
+  rollMiddle270,
+  rollBack90,
+  rollBack180,
+  rollBack270
+];
+
+const heuristic = cube => {
+
+  const faceCount = (face, colour) =>
+    getFace(cube, face).filter(ch => ch === colour).length;
+
+  const counts = [
+    faceCount(C.TOP, "B"),
+    faceCount(C.LEFT, "R"),
+    faceCount(C.FRONT, "Y"),
+    faceCount(C.RIGHT, "O"),
+    faceCount(C.BACK, "W"),
+    faceCount(C.BOTTOM, "G")
+  ];
+  const total = counts.reduce((a, b) => a + b, 0);
+  return (9 * 6) - total;
+};
+
+const areCubesSame = (cube1, cube2) => {
+  const s1 = JSON.stringify(cube1);
+  const s2 = JSON.stringify(cube2);
+  return s1 === s2;
+};
+
+const minBy = (set, fn) => {
+  let currentMin = null;
+  set.forEach(element => {
+    const value = fn(element);
+    if (currentMin) {
+      currentMin.value = Math.min(currentMin.value, value);
+    }
+    else {
+      currentMin = { value };
+    }
+  });
+  return currentMin.value;
+};
+
+// Keep going until currentNode.cube is the solved cube or openSet is empty.
+const aStar = (openSet, seenCubes) => {
+
+  const isCubeInOpenSet = cube =>
+    !!Array.from(openSet.values()).find(element => areCubesSame(element.cube, cube));
+
+  const isCubeInSeenCubes = cube =>
+    !!seenCubes.find(element => areCubesSame(element, cube));
+
+  while (openSet.size > 0) {
+    const currentNode = minBy(openSet, el => el.f);
+    if (areCubesSame(currentNode.cube, solvedCube)) {
+      return currentNode;
+    }
+    else {
+      openSet.delete(currentNode);
+      if (!isCubeInSeenCubes(currentNode.cube)) {
+        seenCubes.push(currentNode.cube);
+      }
+
+      const nextCubes = MOVES.map(move => move(currentNode.cube))
+        .filter(cube => !isCubeInOpenSet(cube))
+        .filter(cube => !isCubeInSeenCubes(cube));
+
+      const nextNodes = nextCubes.map(nextCube => {
+        const g = 0;
+        const h = 0;
+        return new Node(nextCube, currentNode, g, h);
+      });
+
+      nextNodes.forEach(nextNode => openSet.add(nextNode));
+    }
+  }
+
+  return null;
+};
+
+const solve = shuffledCube => {
+  const initialNode = new Node(shuffledCube, null, 0, 0);
+  return aStar(new Set([initialNode]), []);
+};
+
+const rotations = [
+  rollFront90,
+  rollFront90,
+  rollFront90,
+  rollFront90
+];
+
+const finalCube = rotations.reduce((cube, rotation) => {
+  dumpCube(cube);
+  console.log(`heuristic: ${heuristic(cube)}`);
+  return rotation(cube);
+}, solvedCube);
+
+dumpCube(finalCube);
+console.log(`heuristic: ${heuristic(finalCube)}`);
