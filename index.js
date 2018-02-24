@@ -91,7 +91,6 @@ const transform = (rotationMatrix, newColoursOrder) => piece => {
   const vector = matrix([piece.x, piece.y, piece.z]);
   const rotatedVector = math.multiply(vector, rotationMatrix);
   return {
-    id: piece.id,
     x: rotatedVector.get([0]),
     y: rotatedVector.get([1]),
     z: rotatedVector.get([2]),
@@ -273,13 +272,16 @@ const minBy = (set, fn) => {
   set.forEach(element => {
     const value = fn(element);
     if (currentMin) {
-      currentMin.value = Math.min(currentMin.value, value);
+      if (value < currentMin.value) {
+        currentMin.element = element;
+        currentMin.value = value;
+      }
     }
     else {
-      currentMin = { value };
+      currentMin = { element, value };
     }
   });
-  return currentMin.value;
+  return currentMin ? currentMin.element : null;
 };
 
 // Keep going until currentNode.cube is the solved cube or openSet is empty.
@@ -319,23 +321,23 @@ const aStar = (openSet, seenCubes) => {
   return null;
 };
 
-const solve = shuffledCube => {
+export const solve = shuffledCube => {
   const initialNode = new Node(shuffledCube, null, 0, 0);
   return aStar(new Set([initialNode]), []);
 };
 
-const rotations = [
-  rollFront90,
-  rollFront90,
-  rollFront90,
-  rollFront90
-];
+// const rotations = [
+//   rollFront90,
+//   rollFront90,
+//   rollFront90,
+//   rollFront90
+// ];
 
-const finalCube = rotations.reduce((cube, rotation) => {
-  dumpCube(cube);
-  console.log(`heuristic: ${heuristic(cube)}`);
-  return rotation(cube);
-}, solvedCube);
+// const finalCube = rotations.reduce((cube, rotation) => {
+//   dumpCube(cube);
+//   console.log(`heuristic: ${heuristic(cube)}`);
+//   return rotation(cube);
+// }, solvedCube);
 
-dumpCube(finalCube);
-console.log(`heuristic: ${heuristic(finalCube)}`);
+// dumpCube(finalCube);
+// console.log(`heuristic: ${heuristic(finalCube)}`);

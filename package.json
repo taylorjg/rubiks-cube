@@ -4,7 +4,7 @@
   "description": "Rubik's cube solver",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r babel-register"
+    "test": "mocha -r babel-register --slow 200"
   },
   "author": "Jonathan Taylor",
   "license": "MIT",
