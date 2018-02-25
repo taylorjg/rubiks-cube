@@ -7,7 +7,7 @@ const COLOUR_TABLE = {
   'B': new THREE.Color('blue'),
   'R': new THREE.Color('red'),
   'Y': new THREE.Color('yellow'),
-  'O': new THREE.Color('orange'),
+  'O': new THREE.Color('darkorange'),
   'W': new THREE.Color('ghostwhite'),
   'G': new THREE.Color('green'),
   'H': new THREE.Color('black')
@@ -20,10 +20,10 @@ const material = new THREE.MeshBasicMaterial({
   vertexColors: THREE.FaceColors
 });
 
-const createCube = (colours, position) => {
+const createPiece = piece => {
 
   const setFaceColour = (face, coloursIndex) => {
-    const ch = colours[coloursIndex];
+    const ch = piece.colours[coloursIndex];
     face.color = COLOUR_TABLE[ch !== "-" ? ch : "H"];
   };
 
@@ -38,13 +38,13 @@ const createCube = (colours, position) => {
     face.normal.z === -1 && setFaceColour(face, C.FRONT);
   });
 
-  const cube = new THREE.Mesh(geometry, material);
+  const mesh = new THREE.Mesh(geometry, material);
 
-  cube.position.x = position.x;
-  cube.position.y = position.y;
-  cube.position.z = position.z;
+  mesh.position.x = piece.x;
+  mesh.position.y = piece.y;
+  mesh.position.z = piece.z;
 
-  return cube;
+  return mesh;
 };
 
 const container = document.getElementById('container');
@@ -92,25 +92,30 @@ controls.minDistance = 5.0;
 controls.maxDistance = 40.0;
 controls.noPan = true;
 
-const render = () => {
-  controls.update();
-  renderer.render(scene, camera);
-  window.requestAnimationFrame(render);
-};
-
 window.addEventListener('resize', () => {
   renderer.setSize(container.offsetWidth, container.offsetHeight);
   camera.aspect = container.offsetWidth / container.offsetHeight;
   camera.updateProjectionMatrix();
 });
 
-S.solvedCube.forEach(cube => {
-  const position = {
-    x: cube.x,
-    y: cube.y,
-    z: cube.z
-  };
-  mainGroup.add(createCube(cube.colours, position));
-});
+const moves = [
+  S.yawBottom270,
+  S.pitchLeft180,
+  S.rollBack180,
+  S.pitchLeft90,
+  S.rollMiddle270,
+  S.yawBottom180,
+  S.yawTop270,
+  S.pitchRight90
+];
 
-render();
+const shuffledCube = S.makeMoves(S.solvedCube, moves);
+shuffledCube.forEach(piece => mainGroup.add(createPiece(piece)));
+
+const animate = () => {
+  window.requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+};
+
+animate();
