@@ -352,24 +352,3 @@ export const makeMoves = (initialCube, moves, display = false) => {
   display && dumpCube(finalCube);
   return finalCube;
 };
-
-const demo = () => {
-  const moves = [
-    yawTop90,
-    rollFront180,
-    pitchLeft90,
-    yawMiddle90
-  ];
-  const shuffledCube = makeMoves(solvedCube, moves);
-  const solution = solve(shuffledCube);
-
-  if (solution) {
-    console.log(`solution.length: ${solution.length}`);
-    makeMoves(shuffledCube, solution, true);
-  }
-  else {
-    console.log('No solution found!');
-  }
-};
-
-// demo();
