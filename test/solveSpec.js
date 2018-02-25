@@ -11,25 +11,50 @@ describe("solve tests", () => {
   };
 
   it("zero moves", () => {
-    const shuffledCube = R.makeMoves(solvedCube, []);
+    const moves = [];
+    const shuffledCube = R.makeMoves(solvedCube, moves);
     const solution = solve(shuffledCube);
     confirmSolution(shuffledCube, solution);
   });
 
   it("one move", () => {
-    const shuffledCube = R.makeMoves(solvedCube, [R.yawTop90]);
+    const moves = [
+      R.yawTop90
+    ];
+    const shuffledCube = R.makeMoves(solvedCube, moves);
     const solution = solve(shuffledCube);
     confirmSolution(shuffledCube, solution);
   });
 
   it("two moves", () => {
-    const shuffledCube = R.makeMoves(solvedCube, [R.yawTop90, R.rollFront180]);
+    const moves = [
+      R.yawTop90,
+      R.rollFront180
+    ];
+    const shuffledCube = R.makeMoves(solvedCube, moves);
     const solution = solve(shuffledCube);
     confirmSolution(shuffledCube, solution);
   });
 
   it("three moves", () => {
-    const shuffledCube = R.makeMoves(solvedCube, [R.yawTop90, R.rollFront180, R.pitchLeft90]);
+    const moves = [
+      R.yawTop90,
+      R.rollFront180,
+      R.pitchLeft90
+    ];
+    const shuffledCube = R.makeMoves(solvedCube, moves);
+    const solution = solve(shuffledCube);
+    confirmSolution(shuffledCube, solution);
+  });
+
+  it("four moves", () => {
+    const moves = [
+      R.yawTop90,
+      R.rollFront180,
+      R.pitchLeft90,
+      R.yawMiddle90
+    ];
+    const shuffledCube = R.makeMoves(solvedCube, moves);
     const solution = solve(shuffledCube);
     confirmSolution(shuffledCube, solution);
   });

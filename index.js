@@ -295,7 +295,7 @@ const aStar = openSet => {
   const isCubeInSeenCubes = cube =>
     !!seenCubes.find(element => areCubesSame(element, cube));
 
-  while (openSet.size > 0) {
+  while (openSet.size) {
     const currentNode = minBy(openSet, el => el.f);
     if (areCubesSame(currentNode.cube, solvedCube)) {
       return currentNode;
@@ -342,23 +342,30 @@ export const solve = shuffledCube => {
   return rootNode ? rootNodeToSolution(rootNode).reverse() : null;
 };
 
-export const makeMoves = (initialCube, moves) =>
-  moves.reduce((cube, move) => move(cube), initialCube);
+export const makeMoves = (initialCube, moves, display = false) => {
+  const finalCube = moves.reduce(
+    (cube, move) => {
+      display && (dumpCube(cube), console.log());
+      return move(cube);
+    },
+    initialCube);
+  display && dumpCube(finalCube);
+  return finalCube;
+};
 
 const demo = () => {
-  const shuffledCube = makeMoves(solvedCube, [yawTop90, rollFront180, pitchLeft90]);
+  const moves = [
+    yawTop90,
+    rollFront180,
+    pitchLeft90,
+    yawMiddle90
+  ];
+  const shuffledCube = makeMoves(solvedCube, moves);
   const solution = solve(shuffledCube);
 
   if (solution) {
     console.log(`solution.length: ${solution.length}`);
-    const finalCube = solution.reduce(
-      (cube, move) => {
-        dumpCube(cube);
-        console.log();
-        return move(cube);
-      },
-      shuffledCube);
-    dumpCube(finalCube);
+    makeMoves(shuffledCube, solution, true);
   }
   else {
     console.log('No solution found!');
