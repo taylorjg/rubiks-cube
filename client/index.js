@@ -1,5 +1,6 @@
 import * as S from '../solving';
 import * as C from '../solving/constants';
+import * as R from '../solving/rotations';
 import * as THREE from 'three';
 import TrackballControls from 'three-trackballcontrols';
 
@@ -20,32 +21,73 @@ const material = new THREE.MeshBasicMaterial({
   vertexColors: THREE.FaceColors
 });
 
-const createPiece = piece => {
+const makeKey = piece =>
+  `${piece.x}:${piece.y}:${piece.z}:${piece.colours}`;
 
-  const setFaceColour = (face, coloursIndex) => {
-    const ch = piece.colours[coloursIndex];
-    face.color = COLOUR_TABLE[ch !== "-" ? ch : "H"];
-  };
+const setFaceColour = (piece, face, coloursIndex) => {
+  const ch = piece.colours[coloursIndex];
+  face.color = COLOUR_TABLE[ch !== "-" ? ch : "H"];
+};
+
+const createUPiece = piece => {
 
   const geometry = new THREE.BoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
 
   geometry.faces.forEach(face => {
-    face.normal.x === 1 && setFaceColour(face, C.RIGHT);
-    face.normal.x === -1 && setFaceColour(face, C.LEFT);
-    face.normal.y === 1 && setFaceColour(face, C.TOP);
-    face.normal.y === -1 && setFaceColour(face, C.BOTTOM);
-    face.normal.z === 1 && setFaceColour(face, C.FRONT);
-    face.normal.z === -1 && setFaceColour(face, C.BACK);
+    face.normal.x === 1 && setFaceColour(piece, face, C.RIGHT);
+    face.normal.x === -1 && setFaceColour(piece, face, C.LEFT);
+    face.normal.y === 1 && setFaceColour(piece, face, C.TOP);
+    face.normal.y === -1 && setFaceColour(piece, face, C.BOTTOM);
+    face.normal.z === 1 && setFaceColour(piece, face, C.FRONT);
+    face.normal.z === -1 && setFaceColour(piece, face, C.BACK);
   });
 
-  const mesh = new THREE.Mesh(geometry, material);
+  const uiPiece = new THREE.Mesh(geometry, material);
 
-  mesh.position.x = piece.x;
-  mesh.position.y = piece.y;
-  mesh.position.z = piece.z;
+  uiPiece.position.x = piece.x;
+  uiPiece.position.y = piece.y;
+  uiPiece.position.z = piece.z;
 
-  return mesh;
+  uiPiece.userData = {
+    id: piece.id,
+    key: makeKey(piece)
+  };
+
+  return uiPiece;
 };
+
+const updateUiPiece = (piece, uiPiece, r) => {
+
+  uiPiece.position.x = piece.x;
+  uiPiece.position.y = piece.y;
+  uiPiece.position.z = piece.z;
+
+  const geometry = uiPiece.geometry;
+  geometry.faces.forEach(face => {
+    face.normal.x === 1 && setFaceColour(piece, face, C.RIGHT);
+    face.normal.x === -1 && setFaceColour(piece, face, C.LEFT);
+    face.normal.y === 1 && setFaceColour(piece, face, C.TOP);
+    face.normal.y === -1 && setFaceColour(piece, face, C.BOTTOM);
+    face.normal.z === 1 && setFaceColour(piece, face, C.FRONT);
+    face.normal.z === -1 && setFaceColour(piece, face, C.BACK);
+  });
+
+  const m = new THREE.Matrix4().set(
+    r.get([0, 0]), r.get([1, 0]), r.get([2, 0]), 0,
+    r.get([0, 1]), r.get([1, 1]), r.get([2, 1]), 0,
+    r.get([0, 2]), r.get([1, 2]), r.get([2, 2]), 0,
+    0, 0, 0, 1);
+
+  uiPiece.setRotationFromMatrix(m);
+
+  uiPiece.userData = {
+    id: piece.id,
+    key: makeKey(piece)
+  };
+};
+
+const findUiPiece = piece =>
+  mainGroup.children.find(child => child.userData.id === piece.id);
 
 const container = document.getElementById('container');
 const w = container.offsetWidth;
@@ -111,7 +153,20 @@ window.addEventListener('resize', () => {
 // const shuffledCube = S.makeMoves(S.solvedCube, moves);
 // shuffledCube.forEach(piece => mainGroup.add(createPiece(piece)));
 
-S.solvedCube.forEach(piece => mainGroup.add(createPiece(piece)));
+const renderCube = (cube, r) => {
+  cube.forEach(piece => {
+    const uiPiece = findUiPiece(piece);
+    if (uiPiece) {
+      const key = makeKey(piece);
+      if (uiPiece.userData.key !== key) {
+        updateUiPiece(piece, uiPiece, r);
+      }
+    }
+    else {
+      mainGroup.add(createUPiece(piece));
+    }
+  });
+};
 
 const animate = () => {
   window.requestAnimationFrame(animate);
@@ -119,4 +174,11 @@ const animate = () => {
   renderer.render(scene, camera);
 };
 
+renderCube(S.solvedCube, new THREE.Matrix3());
 animate();
+
+setTimeout(
+  () => {
+    renderCube(S.pitchMiddle270(S.solvedCube), R.X270);
+  },
+  2000);

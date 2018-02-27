@@ -5,37 +5,37 @@ import * as C from './constants';
 
 export const solvedCube = [
   // top layer
-  { x: -1, y: 1, z: 1, colours: "BRY---" },
-  { x: 0, y: 1, z: 1, colours: "B-Y---" },
-  { x: 1, y: 1, z: 1, colours: "B-YO--" },
-  { x: -1, y: 1, z: 0, colours: "BR----" },
-  { x: 0, y: 1, z: 0, colours: "B-----" },
-  { x: 1, y: 1, z: 0, colours: "B--O--" },
-  { x: -1, y: 1, z: -1, colours: "BR--W-" },
-  { x: 0, y: 1, z: -1, colours: "B---W-" },
-  { x: 1, y: 1, z: -1, colours: "B--OW-" },
+  { id: 1, x: -1, y: 1, z: 1, colours: "BRY---" },
+  { id: 2, x: 0, y: 1, z: 1, colours: "B-Y---" },
+  { id: 3, x: 1, y: 1, z: 1, colours: "B-YO--" },
+  { id: 4, x: -1, y: 1, z: 0, colours: "BR----" },
+  { id: 5, x: 0, y: 1, z: 0, colours: "B-----" },
+  { id: 6, x: 1, y: 1, z: 0, colours: "B--O--" },
+  { id: 7, x: -1, y: 1, z: -1, colours: "BR--W-" },
+  { id: 8, x: 0, y: 1, z: -1, colours: "B---W-" },
+  { id: 9, x: 1, y: 1, z: -1, colours: "B--OW-" },
 
   // middle layer
-  { x: -1, y: 0, z: 1, colours: "-RY---" },
-  { x: 0, y: 0, z: 1, colours: "--Y---" },
-  { x: 1, y: 0, z: 1, colours: "--YO--" },
-  { x: -1, y: 0, z: 0, colours: "-R----" },
-  { x: 0, y: 0, z: 0, colours: "------" },
-  { x: 1, y: 0, z: 0, colours: "---O--" },
-  { x: -1, y: 0, z: -1, colours: "-R--W-" },
-  { x: 0, y: 0, z: -1, colours: "----W-" },
-  { x: 1, y: 0, z: -1, colours: "---OW-" },
+  { id: 10, x: -1, y: 0, z: 1, colours: "-RY---" },
+  { id: 11, x: 0, y: 0, z: 1, colours: "--Y---" },
+  { id: 12, x: 1, y: 0, z: 1, colours: "--YO--" },
+  { id: 13, x: -1, y: 0, z: 0, colours: "-R----" },
+  { id: 14, x: 0, y: 0, z: 0, colours: "------" },
+  { id: 15, x: 1, y: 0, z: 0, colours: "---O--" },
+  { id: 16, x: -1, y: 0, z: -1, colours: "-R--W-" },
+  { id: 17, x: 0, y: 0, z: -1, colours: "----W-" },
+  { id: 18, x: 1, y: 0, z: -1, colours: "---OW-" },
 
   // bottom layer
-  { x: -1, y: -1, z: 1, colours: "-RY--G" },
-  { x: 0, y: -1, z: 1, colours: "--Y--G" },
-  { x: 1, y: -1, z: 1, colours: "--YO-G" },
-  { x: -1, y: -1, z: 0, colours: "-R---G" },
-  { x: 0, y: -1, z: 0, colours: "-----G" },
-  { x: 1, y: -1, z: 0, colours: "---O-G" },
-  { x: -1, y: -1, z: -1, colours: "-R--WG" },
-  { x: 0, y: -1, z: -1, colours: "----WG" },
-  { x: 1, y: -1, z: -1, colours: "---OWG" }
+  { id: 19, x: -1, y: -1, z: 1, colours: "-RY--G" },
+  { id: 20, x: 0, y: -1, z: 1, colours: "--Y--G" },
+  { id: 21, x: 1, y: -1, z: 1, colours: "--YO-G" },
+  { id: 22, x: -1, y: -1, z: 0, colours: "-R---G" },
+  { id: 23, x: 0, y: -1, z: 0, colours: "-----G" },
+  { id: 24, x: 1, y: -1, z: 0, colours: "---O-G" },
+  { id: 25, x: -1, y: -1, z: -1, colours: "-R--WG" },
+  { id: 26, x: 0, y: -1, z: -1, colours: "----WG" },
+  { id: 27, x: 1, y: -1, z: -1, colours: "---OWG" }
 ];
 
 const pieceHasCoords = (piece, coords) =>
@@ -91,6 +91,7 @@ const transform = (rotationMatrix, newColoursOrder) => piece => {
   const vector = matrix([piece.x, piece.y, piece.z]);
   const rotatedVector = math.multiply(vector, rotationMatrix);
   return {
+    id: piece.id,
     x: rotatedVector.get([0]),
     y: rotatedVector.get([1]),
     z: rotatedVector.get([2]),

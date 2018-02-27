@@ -20,7 +20,7 @@ export const X270 = matrix([
 
 export const Y90 = matrix([
   [0, 0, -1],
-  [0, 1, 0,],
+  [0, 1, 0],
   [1, 0, 0]
 ]);
 
