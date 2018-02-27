@@ -34,8 +34,8 @@ const createPiece = piece => {
     face.normal.x === -1 && setFaceColour(face, C.LEFT);
     face.normal.y === 1 && setFaceColour(face, C.TOP);
     face.normal.y === -1 && setFaceColour(face, C.BOTTOM);
-    face.normal.z === 1 && setFaceColour(face, C.BACK);
-    face.normal.z === -1 && setFaceColour(face, C.FRONT);
+    face.normal.z === 1 && setFaceColour(face, C.FRONT);
+    face.normal.z === -1 && setFaceColour(face, C.BACK);
   });
 
   const mesh = new THREE.Mesh(geometry, material);
@@ -56,7 +56,7 @@ container.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(34, w / h, 1, 100);
-camera.position.set(3.45, 7.35, -9.40);
+camera.position.set(3.45, 7.35, 9.40);
 camera.lookAt(new THREE.Vector3(0, 0, 0));
 scene.add(camera);
 
@@ -98,19 +98,20 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
 });
 
-const moves = [
-  S.yawBottom270,
-  S.pitchLeft180,
-  S.rollBack180,
-  S.pitchLeft90,
-  S.rollMiddle270,
-  S.yawBottom180,
-  S.yawTop270,
-  S.pitchRight90
-];
+// const moves = [
+//   S.yawBottom270,
+//   S.pitchLeft180,
+//   S.rollBack180,
+//   S.pitchLeft90,
+//   S.rollMiddle270,
+//   S.yawBottom180,
+//   S.yawTop270,
+//   S.pitchRight90
+// ];
+// const shuffledCube = S.makeMoves(S.solvedCube, moves);
+// shuffledCube.forEach(piece => mainGroup.add(createPiece(piece)));
 
-const shuffledCube = S.makeMoves(S.solvedCube, moves);
-shuffledCube.forEach(piece => mainGroup.add(createPiece(piece)));
+S.solvedCube.forEach(piece => mainGroup.add(createPiece(piece)));
 
 const animate = () => {
   window.requestAnimationFrame(animate);

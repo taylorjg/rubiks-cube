@@ -5,37 +5,37 @@ import * as C from './constants';
 
 export const solvedCube = [
   // top layer
-  { x: -1, y: 1, z: -1, colours: "BRY---" },
-  { x: 0, y: 1, z: -1, colours: "B-Y---" },
-  { x: 1, y: 1, z: -1, colours: "B-YO--" },
+  { x: -1, y: 1, z: 1, colours: "BRY---" },
+  { x: 0, y: 1, z: 1, colours: "B-Y---" },
+  { x: 1, y: 1, z: 1, colours: "B-YO--" },
   { x: -1, y: 1, z: 0, colours: "BR----" },
   { x: 0, y: 1, z: 0, colours: "B-----" },
   { x: 1, y: 1, z: 0, colours: "B--O--" },
-  { x: -1, y: 1, z: 1, colours: "BR--W-" },
-  { x: 0, y: 1, z: 1, colours: "B---W-" },
-  { x: 1, y: 1, z: 1, colours: "B--OW-" },
+  { x: -1, y: 1, z: -1, colours: "BR--W-" },
+  { x: 0, y: 1, z: -1, colours: "B---W-" },
+  { x: 1, y: 1, z: -1, colours: "B--OW-" },
 
   // middle layer
-  { x: -1, y: 0, z: -1, colours: "-RY---" },
-  { x: 0, y: 0, z: -1, colours: "--Y---" },
-  { x: 1, y: 0, z: -1, colours: "--YO--" },
+  { x: -1, y: 0, z: 1, colours: "-RY---" },
+  { x: 0, y: 0, z: 1, colours: "--Y---" },
+  { x: 1, y: 0, z: 1, colours: "--YO--" },
   { x: -1, y: 0, z: 0, colours: "-R----" },
   { x: 0, y: 0, z: 0, colours: "------" },
   { x: 1, y: 0, z: 0, colours: "---O--" },
-  { x: -1, y: 0, z: 1, colours: "-R--W-" },
-  { x: 0, y: 0, z: 1, colours: "----W-" },
-  { x: 1, y: 0, z: 1, colours: "---OW-" },
+  { x: -1, y: 0, z: -1, colours: "-R--W-" },
+  { x: 0, y: 0, z: -1, colours: "----W-" },
+  { x: 1, y: 0, z: -1, colours: "---OW-" },
 
   // bottom layer
-  { x: -1, y: -1, z: -1, colours: "-RY--G" },
-  { x: 0, y: -1, z: -1, colours: "--Y--G" },
-  { x: 1, y: -1, z: -1, colours: "--YO-G" },
+  { x: -1, y: -1, z: 1, colours: "-RY--G" },
+  { x: 0, y: -1, z: 1, colours: "--Y--G" },
+  { x: 1, y: -1, z: 1, colours: "--YO-G" },
   { x: -1, y: -1, z: 0, colours: "-R---G" },
   { x: 0, y: -1, z: 0, colours: "-----G" },
   { x: 1, y: -1, z: 0, colours: "---O-G" },
-  { x: -1, y: -1, z: 1, colours: "-R--WG" },
-  { x: 0, y: -1, z: 1, colours: "----WG" },
-  { x: 1, y: -1, z: 1, colours: "---OWG" }
+  { x: -1, y: -1, z: -1, colours: "-R--WG" },
+  { x: 0, y: -1, z: -1, colours: "----WG" },
+  { x: 1, y: -1, z: -1, colours: "---OWG" }
 ];
 
 const pieceHasCoords = (piece, coords) =>
@@ -104,58 +104,58 @@ const transformPieces = (cube, coordsList, transform) =>
     : piece);
 
 export const yawTop90 = cube =>
-  transformPieces(cube, CL.topCoordsList, transform(R.Y90, "023415"));
+  transformPieces(cube, CL.topCoordsList, transform(R.Y90, "041235"));
 
 export const yawTop180 = cube =>
   transformPieces(cube, CL.topCoordsList, transform(R.Y180, "034125"));
 
 export const yawTop270 = cube =>
-  transformPieces(cube, CL.topCoordsList, transform(R.Y270, "041235"));
+  transformPieces(cube, CL.topCoordsList, transform(R.Y270, "023415"));
 
 export const yawMiddle90 = cube =>
-  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y90, "023415"));
+  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y90, "041235"));
 
 export const yawMiddle180 = cube =>
   transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y180, "034125"));
 
 export const yawMiddle270 = cube =>
-  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y270, "041235"));
+  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y270, "023415"));
 
 export const yawBottom90 = cube =>
-  transformPieces(cube, CL.bottomCoordsList, transform(R.Y90, "023415"));
+  transformPieces(cube, CL.bottomCoordsList, transform(R.Y90, "041235"));
 
 export const yawBottom180 = cube =>
   transformPieces(cube, CL.bottomCoordsList, transform(R.Y180, "034125"));
 
 export const yawBottom270 = cube =>
-  transformPieces(cube, CL.bottomCoordsList, transform(R.Y270, "041235"));
+  transformPieces(cube, CL.bottomCoordsList, transform(R.Y270, "023415"));
 
 export const pitchLeft90 = cube =>
-  transformPieces(cube, CL.leftCoordsList, transform(R.X90, "215304"));
+  transformPieces(cube, CL.leftCoordsList, transform(R.X90, "410352"));
 
 export const pitchLeft180 = cube =>
   transformPieces(cube, CL.leftCoordsList, transform(R.X180, "514320"));
 
 export const pitchLeft270 = cube =>
-  transformPieces(cube, CL.leftCoordsList, transform(R.X270, "410352"));
+  transformPieces(cube, CL.leftCoordsList, transform(R.X270, "215304"));
 
 export const pitchMiddle90 = cube =>
-  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X90, "215304"));
+  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X90, "410352"));
 
 export const pitchMiddle180 = cube =>
   transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X180, "514320"));
 
 export const pitchMiddle270 = cube =>
-  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X270, "410352"));
+  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X270, "215304"));
 
 export const pitchRight90 = cube =>
-  transformPieces(cube, CL.rightCoordsList, transform(R.X90, "215304"));
+  transformPieces(cube, CL.rightCoordsList, transform(R.X90, "410352"));
 
 export const pitchRight180 = cube =>
   transformPieces(cube, CL.rightCoordsList, transform(R.X180, "514320"));
 
 export const pitchRight270 = cube =>
-  transformPieces(cube, CL.rightCoordsList, transform(R.X270, "410352"));
+  transformPieces(cube, CL.rightCoordsList, transform(R.X270, "215304"));
 
 export const rollFront90 = cube =>
   transformPieces(cube, CL.frontCoordsList, transform(R.Z90, "302541"));

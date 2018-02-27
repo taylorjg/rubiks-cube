@@ -16,10 +16,10 @@ describe("rotation tests", () => {
   it("yawTop90", () => {
     const rotatedCube = S.yawTop90(solvedCube);
     expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BBBBBBBBB"));
-    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("YYYRRRRRR"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("OOOYYYYYY"));
-    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("WWWOOOOOO"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("RRRWWWWWW"));
+    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("WWWRRRRRR"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("RRRYYYYYY"));
+    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("YYYOOOOOO"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("OOOWWWWWW"));
     expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GGGGGGGGG"));
   });
 
@@ -36,20 +36,20 @@ describe("rotation tests", () => {
   it("yawTop270", () => {
     const rotatedCube = S.yawTop270(solvedCube);
     expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BBBBBBBBB"));
-    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("WWWRRRRRR"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("RRRYYYYYY"));
-    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("YYYOOOOOO"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("OOOWWWWWW"));
+    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("YYYRRRRRR"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("OOOYYYYYY"));
+    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("WWWOOOOOO"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("RRRWWWWWW"));
     expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GGGGGGGGG"));
   });
 
   it("yawMiddle90", () => {
     const rotatedCube = S.yawMiddle90(solvedCube);
     expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BBBBBBBBB"));
-    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRYYYRRR"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYYOOOYYY"));
-    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOWWWOOO"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWWRRRWWW"));
+    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRWWWRRR"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYYRRRYYY"));
+    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOYYYOOO"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWWOOOWWW"));
     expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GGGGGGGGG"));
   });
 
@@ -66,20 +66,20 @@ describe("rotation tests", () => {
   it("yawMiddle270", () => {
     const rotatedCube = S.yawMiddle270(solvedCube);
     expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BBBBBBBBB"));
-    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRWWWRRR"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYYRRRYYY"));
-    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOYYYOOO"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWWOOOWWW"));
+    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRYYYRRR"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYYOOOYYY"));
+    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOWWWOOO"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWWRRRWWW"));
     expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GGGGGGGGG"));
   });
 
   it("yawBottom90", () => {
     const rotatedCube = S.yawBottom90(solvedCube);
     expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BBBBBBBBB"));
-    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRRRRYYY"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYYYYYOOO"));
-    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOOOOWWW"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWWWWWRRR"));
+    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRRRRWWW"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYYYYYRRR"));
+    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOOOOYYY"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWWWWWOOO"));
     expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GGGGGGGGG"));
   });
 
@@ -96,21 +96,21 @@ describe("rotation tests", () => {
   it("yawBottom270", () => {
     const rotatedCube = S.yawBottom270(solvedCube);
     expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BBBBBBBBB"));
-    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRRRRWWW"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYYYYYRRR"));
-    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOOOOYYY"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWWWWWOOO"));
+    expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRRRRYYY"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYYYYYOOO"));
+    expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOOOOWWW"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWWWWWRRR"));
     expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GGGGGGGGG"));
   });
 
   it("pitchLeft90", () => {
     const rotatedCube = S.pitchLeft90(solvedCube);
-    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("YBBYBBYBB"));
+    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("WBBWBBWBB"));
     expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRRRRRRR"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("GYYGYYGYY"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("BYYBYYBYY"));
     expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOOOOOOO"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWBWWBWWB"));
-    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("WGGWGGWGG"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWGWWGWWG"));
+    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("YGGYGGYGG"));
   });
 
   it("pitchLeft180", () => {
@@ -125,22 +125,22 @@ describe("rotation tests", () => {
 
   it("pitchLeft270", () => {
     const rotatedCube = S.pitchLeft270(solvedCube);
-    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("WBBWBBWBB"));
+    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("YBBYBBYBB"));
     expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRRRRRRR"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("BYYBYYBYY"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("GYYGYYGYY"));
     expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOOOOOOO"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWGWWGWWG"));
-    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("YGGYGGYGG"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WWBWWBWWB"));
+    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("WGGWGGWGG"));
   });
 
   it("pitchMiddle90", () => {
     const rotatedCube = S.pitchMiddle90(solvedCube);
-    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BYBBYBBYB"));
+    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BWBBWBBWB"));
     expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRRRRRRR"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YGYYGYYGY"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YBYYBYYBY"));
     expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOOOOOOO"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WBWWBWWBW"));
-    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GWGGWGGWG"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WGWWGWWGW"));
+    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GYGGYGGYG"));
   });
 
   it("pitchMiddle180", () => {
@@ -155,22 +155,22 @@ describe("rotation tests", () => {
 
   it("pitchMiddle270", () => {
     const rotatedCube = S.pitchMiddle270(solvedCube);
-    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BWBBWBBWB"));
+    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BYBBYBBYB"));
     expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRRRRRRR"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YBYYBYYBY"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YGYYGYYGY"));
     expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOOOOOOO"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WGWWGWWGW"));
-    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GYGGYGGYG"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("WBWWBWWBW"));
+    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GWGGWGGWG"));
   });
 
   it("pitchRight90", () => {
     const rotatedCube = S.pitchRight90(solvedCube);
-    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BBYBBYBBY"));
+    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BBWBBWBBW"));
     expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRRRRRRR"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYGYYGYYG"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYBYYBYYB"));
     expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOOOOOOO"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("BWWBWWBWW"));
-    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GGWGGWGGW"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("GWWGWWGWW"));
+    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GGYGGYGGY"));
   });
 
   it("pitchRight180", () => {
@@ -185,12 +185,12 @@ describe("rotation tests", () => {
 
   it("pitchRight270", () => {
     const rotatedCube = S.pitchRight270(solvedCube);
-    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BBWBBWBBW"));
+    expect(S.getTopFace(rotatedCube)).to.deep.equal(Array.from("BBYBBYBBY"));
     expect(S.getLeftFace(rotatedCube)).to.deep.equal(Array.from("RRRRRRRRR"));
-    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYBYYBYYB"));
+    expect(S.getFrontFace(rotatedCube)).to.deep.equal(Array.from("YYGYYGYYG"));
     expect(S.getRightFace(rotatedCube)).to.deep.equal(Array.from("OOOOOOOOO"));
-    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("GWWGWWGWW"));
-    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GGYGGYGGY"));
+    expect(S.getBackFace(rotatedCube)).to.deep.equal(Array.from("BWWBWWBWW"));
+    expect(S.getBottomFace(rotatedCube)).to.deep.equal(Array.from("GGWGGWGGW"));
   });
 
   it("rollFront90", () => {
