@@ -185,36 +185,6 @@ export const rollBack180 = cube =>
 export const rollBack270 = cube =>
   transformPieces(cube, CL.backCoordsList, transform(R.Z270, "152043"));
 
-// yawTop90.r = R.Y90;
-// yawTop180.r = R.Y180;
-// yawTop270.r = R.Y270;
-// yawMiddle90.r = R.Y90;
-// yawMiddle180.r = R.Y180;
-// yawMiddle270.r = R.Y270;
-// yawBottom90.r = R.Y90;
-// yawBottom180.r = R.Y180;
-// yawBottom270.r = R.Y270;
-
-// pitchLeft90.r = R.X90;
-// pitchLeft180.r = R.X180;
-// pitchLeft270.r = R.X270;
-// pitchMiddle90.r = R.X90;
-// pitchMiddle180.r = R.X180;
-// pitchMiddle270.r = R.X270;
-// pitchRight90.r = R.X90;
-// pitchRight180.r = R.X180;
-// pitchRight270.r = R.X270;
-
-// rollFront90.r = R.Z90;
-// rollFront180.r = R.Z180;
-// rollFront270.r = R.Z270;
-// rollMiddle90.r = R.Z90;
-// rollMiddle180.r = R.Z180;
-// rollMiddle270.r = R.Z270;
-// rollBack90.r = R.Z90;
-// rollBack180.r = R.Z180;
-// rollBack270.r = R.Z270;
-
 const dumpCube = cube => {
 
   const topFace = getTopFace(cube);
@@ -235,7 +205,7 @@ const dumpCube = cube => {
   line(6, 9);
 };
 
-const MOVES = [
+export const MOVES = [
   yawTop90,
   yawTop180,
   yawTop270,

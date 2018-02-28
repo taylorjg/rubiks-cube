@@ -15,7 +15,7 @@ const COLOUR_TABLE = {
 };
 
 // 'r' is a mathjs 3x3 rotation matrix.
-const makeRotationMatrix4D = r =>
+const makeRotationMatrix4 = r =>
   new THREE.Matrix4().set(
     r.get([0, 0]), r.get([1, 0]), r.get([2, 0]), 0,
     r.get([0, 1]), r.get([1, 1]), r.get([2, 1]), 0,
@@ -23,40 +23,40 @@ const makeRotationMatrix4D = r =>
     0, 0, 0, 1);
 
 const ROTATION_MATRICES = {
-  [S.yawTop90]: makeRotationMatrix4D(R.Y90),
-  [S.yawTop180]: makeRotationMatrix4D(R.Y180),
-  [S.yawTop270]: makeRotationMatrix4D(R.Y270),
-  [S.yawMiddle90]: makeRotationMatrix4D(R.Y90),
-  [S.yawMiddle180]: makeRotationMatrix4D(R.Y180),
-  [S.yawMiddle270]: makeRotationMatrix4D(R.Y270),
-  [S.yawBottom90]: makeRotationMatrix4D(R.Y90),
-  [S.yawBottom180]: makeRotationMatrix4D(R.Y180),
-  [S.yawBottom270]: makeRotationMatrix4D(R.Y270),
+  [S.yawTop90]: makeRotationMatrix4(R.Y90),
+  [S.yawTop180]: makeRotationMatrix4(R.Y180),
+  [S.yawTop270]: makeRotationMatrix4(R.Y270),
+  [S.yawMiddle90]: makeRotationMatrix4(R.Y90),
+  [S.yawMiddle180]: makeRotationMatrix4(R.Y180),
+  [S.yawMiddle270]: makeRotationMatrix4(R.Y270),
+  [S.yawBottom90]: makeRotationMatrix4(R.Y90),
+  [S.yawBottom180]: makeRotationMatrix4(R.Y180),
+  [S.yawBottom270]: makeRotationMatrix4(R.Y270),
 
-  [S.pitchLeft90]: makeRotationMatrix4D(R.X90),
-  [S.pitchLeft180]: makeRotationMatrix4D(R.X180),
-  [S.pitchLeft270]: makeRotationMatrix4D(R.X270),
-  [S.pitchMiddle90]: makeRotationMatrix4D(R.X90),
-  [S.pitchMiddle180]: makeRotationMatrix4D(R.X180),
-  [S.pitchMiddle270]: makeRotationMatrix4D(R.X270),
-  [S.pitchRight90]: makeRotationMatrix4D(R.X90),
-  [S.pitchRight180]: makeRotationMatrix4D(R.X180),
-  [S.pitchRight270]: makeRotationMatrix4D(R.X270),
+  [S.pitchLeft90]: makeRotationMatrix4(R.X90),
+  [S.pitchLeft180]: makeRotationMatrix4(R.X180),
+  [S.pitchLeft270]: makeRotationMatrix4(R.X270),
+  [S.pitchMiddle90]: makeRotationMatrix4(R.X90),
+  [S.pitchMiddle180]: makeRotationMatrix4(R.X180),
+  [S.pitchMiddle270]: makeRotationMatrix4(R.X270),
+  [S.pitchRight90]: makeRotationMatrix4(R.X90),
+  [S.pitchRight180]: makeRotationMatrix4(R.X180),
+  [S.pitchRight270]: makeRotationMatrix4(R.X270),
 
-  [S.rollFront90]: makeRotationMatrix4D(R.Z90),
-  [S.rollFront180]: makeRotationMatrix4D(R.Z180),
-  [S.rollFront270]: makeRotationMatrix4D(R.Z270),
-  [S.rollMiddle90]: makeRotationMatrix4D(R.Z90),
-  [S.rollMiddle180]: makeRotationMatrix4D(R.Z180),
-  [S.rollMiddle270]: makeRotationMatrix4D(R.Z270),
-  [S.rollBack90]: makeRotationMatrix4D(R.Z90),
-  [S.rollBack180]: makeRotationMatrix4D(R.Z180),
-  [S.rollBack270]: makeRotationMatrix4D(R.Z270)
+  [S.rollFront90]: makeRotationMatrix4(R.Z90),
+  [S.rollFront180]: makeRotationMatrix4(R.Z180),
+  [S.rollFront270]: makeRotationMatrix4(R.Z270),
+  [S.rollMiddle90]: makeRotationMatrix4(R.Z90),
+  [S.rollMiddle180]: makeRotationMatrix4(R.Z180),
+  [S.rollMiddle270]: makeRotationMatrix4(R.Z270),
+  [S.rollBack90]: makeRotationMatrix4(R.Z90),
+  [S.rollBack180]: makeRotationMatrix4(R.Z180),
+  [S.rollBack270]: makeRotationMatrix4(R.Z270)
 };
 
-const CUBE_SIZE = 0.94;
+const PIECE_SIZE = 0.94;
 
-const material = new THREE.MeshBasicMaterial({
+const pieceMaterial = new THREE.MeshBasicMaterial({
   color: 0xffffff,
   vertexColors: THREE.FaceColors
 });
@@ -65,8 +65,8 @@ const makeKey = piece =>
   `${piece.x}:${piece.y}:${piece.z}:${piece.colours}`;
 
 const createUiPiece = (piece, move) => {
-  const geometry = new THREE.BoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
-  const uiPiece = new THREE.Mesh(geometry, material);
+  const geometry = new THREE.BoxGeometry(PIECE_SIZE, PIECE_SIZE, PIECE_SIZE);
+  const uiPiece = new THREE.Mesh(geometry, pieceMaterial);
   updateUiPiece(piece, uiPiece, move);
   return uiPiece;
 };
@@ -83,7 +83,8 @@ const updateUiPiece = (piece, uiPiece, move) => {
   uiPiece.position.z = piece.z;
 
   if (move) {
-    uiPiece.setRotationFromMatrix(ROTATION_MATRICES[move]);
+    // uiPiece.setRotationFromMatrix(ROTATION_MATRICES[move]);
+    uiPiece.applyMatrix(ROTATION_MATRICES[move]);
   }
 
   const geometry = uiPiece.geometry;
@@ -179,11 +180,15 @@ const animate = () => {
 
 animate();
 
-renderCube(S.solvedCube);
+let cube = S.solvedCube;
 
-setTimeout(
+renderCube(cube);
+
+setInterval(
   () => {
-    const move = S.rollBack90;
-    renderCube(move(S.solvedCube), move);
+    const randomIndex = Math.floor(Math.random() * S.MOVES.length);
+    const move = S.MOVES[randomIndex];
+    cube = move(cube);
+    renderCube(cube, move);
   },
-  2000);
+  1000);
