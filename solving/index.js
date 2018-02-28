@@ -20,22 +20,21 @@ export const solvedCube = [
   { id: 11, x: 0, y: 0, z: 1, colours: "--Y---" },
   { id: 12, x: 1, y: 0, z: 1, colours: "--YO--" },
   { id: 13, x: -1, y: 0, z: 0, colours: "-R----" },
-  { id: 14, x: 0, y: 0, z: 0, colours: "------" },
-  { id: 15, x: 1, y: 0, z: 0, colours: "---O--" },
-  { id: 16, x: -1, y: 0, z: -1, colours: "-R--W-" },
-  { id: 17, x: 0, y: 0, z: -1, colours: "----W-" },
-  { id: 18, x: 1, y: 0, z: -1, colours: "---OW-" },
+  { id: 14, x: 1, y: 0, z: 0, colours: "---O--" },
+  { id: 15, x: -1, y: 0, z: -1, colours: "-R--W-" },
+  { id: 16, x: 0, y: 0, z: -1, colours: "----W-" },
+  { id: 17, x: 1, y: 0, z: -1, colours: "---OW-" },
 
   // bottom layer
-  { id: 19, x: -1, y: -1, z: 1, colours: "-RY--G" },
-  { id: 20, x: 0, y: -1, z: 1, colours: "--Y--G" },
-  { id: 21, x: 1, y: -1, z: 1, colours: "--YO-G" },
-  { id: 22, x: -1, y: -1, z: 0, colours: "-R---G" },
-  { id: 23, x: 0, y: -1, z: 0, colours: "-----G" },
-  { id: 24, x: 1, y: -1, z: 0, colours: "---O-G" },
-  { id: 25, x: -1, y: -1, z: -1, colours: "-R--WG" },
-  { id: 26, x: 0, y: -1, z: -1, colours: "----WG" },
-  { id: 27, x: 1, y: -1, z: -1, colours: "---OWG" }
+  { id: 18, x: -1, y: -1, z: 1, colours: "-RY--G" },
+  { id: 19, x: 0, y: -1, z: 1, colours: "--Y--G" },
+  { id: 20, x: 1, y: -1, z: 1, colours: "--YO-G" },
+  { id: 21, x: -1, y: -1, z: 0, colours: "-R---G" },
+  { id: 22, x: 0, y: -1, z: 0, colours: "-----G" },
+  { id: 23, x: 1, y: -1, z: 0, colours: "---O-G" },
+  { id: 24, x: -1, y: -1, z: -1, colours: "-R--WG" },
+  { id: 25, x: 0, y: -1, z: -1, colours: "----WG" },
+  { id: 26, x: 1, y: -1, z: -1, colours: "---OWG" }
 ];
 
 const pieceHasCoords = (piece, coords) =>

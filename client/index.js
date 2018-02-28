@@ -65,15 +65,27 @@ const makeKey = piece =>
   `${piece.x}:${piece.y}:${piece.z}:${piece.colours}`;
 
 const createUiPiece = (piece, move) => {
+
+  const setFaceColour = (face, colours, coloursIndex) => {
+    const ch = colours[coloursIndex];
+    face.color = COLOUR_TABLE[ch !== "-" ? ch : "H"];
+  };
+
   const geometry = new THREE.BoxGeometry(PIECE_SIZE, PIECE_SIZE, PIECE_SIZE);
   const uiPiece = new THREE.Mesh(geometry, pieceMaterial);
-  updateUiPiece(piece, uiPiece, move);
-  return uiPiece;
-};
 
-const setFaceColour = (piece, face, coloursIndex) => {
-  const ch = piece.colours[coloursIndex];
-  face.color = COLOUR_TABLE[ch !== "-" ? ch : "H"];
+  updateUiPiece(piece, uiPiece, move);
+
+  uiPiece.geometry.faces.forEach(face => {
+    face.normal.x === 1 && setFaceColour(face, piece.colours, C.RIGHT);
+    face.normal.x === -1 && setFaceColour(face, piece.colours, C.LEFT);
+    face.normal.y === 1 && setFaceColour(face, piece.colours, C.TOP);
+    face.normal.y === -1 && setFaceColour(face, piece.colours, C.BOTTOM);
+    face.normal.z === 1 && setFaceColour(face, piece.colours, C.FRONT);
+    face.normal.z === -1 && setFaceColour(face, piece.colours, C.BACK);
+  });
+  
+  return uiPiece;
 };
 
 const updateUiPiece = (piece, uiPiece, move) => {
@@ -83,19 +95,11 @@ const updateUiPiece = (piece, uiPiece, move) => {
   uiPiece.position.z = piece.z;
 
   if (move) {
-    // uiPiece.setRotationFromMatrix(ROTATION_MATRICES[move]);
     uiPiece.applyMatrix(ROTATION_MATRICES[move]);
   }
-
-  const geometry = uiPiece.geometry;
-  geometry.faces.forEach(face => {
-    face.normal.x === 1 && setFaceColour(piece, face, C.RIGHT);
-    face.normal.x === -1 && setFaceColour(piece, face, C.LEFT);
-    face.normal.y === 1 && setFaceColour(piece, face, C.TOP);
-    face.normal.y === -1 && setFaceColour(piece, face, C.BOTTOM);
-    face.normal.z === 1 && setFaceColour(piece, face, C.FRONT);
-    face.normal.z === -1 && setFaceColour(piece, face, C.BACK);
-  });
+  else {
+    uiPiece.setRotationFromMatrix(new THREE.Matrix4());
+  }
 
   uiPiece.userData = {
     id: piece.id,
@@ -184,6 +188,11 @@ let cube = S.solvedCube;
 
 renderCube(cube);
 
+const resetCube = () => {
+  cube = S.solvedCube;
+  renderCube(cube);
+};
+
 setInterval(
   () => {
     const randomIndex = Math.floor(Math.random() * S.MOVES.length);
@@ -192,3 +201,6 @@ setInterval(
     renderCube(cube, move);
   },
   1000);
+
+document.getElementById("btnReset")
+  .addEventListener("click", resetCube);

@@ -4,11 +4,14 @@
 <head>
     <title>Rubik's Cube (version:
         <%= htmlWebpackPlugin.options.version %>)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" />
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div id="container"></div>
+    <div id="container">
+        <button type="button" class="btn btn-sm btn-primary" id="btnReset">Reset</button>
+    </div>
 </body>
 
 </html>
