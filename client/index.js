@@ -14,6 +14,46 @@ const COLOUR_TABLE = {
   'H': new THREE.Color('black')
 };
 
+// 'r' is a mathjs 3x3 rotation matrix.
+const makeRotationMatrix4D = r =>
+  new THREE.Matrix4().set(
+    r.get([0, 0]), r.get([1, 0]), r.get([2, 0]), 0,
+    r.get([0, 1]), r.get([1, 1]), r.get([2, 1]), 0,
+    r.get([0, 2]), r.get([1, 2]), r.get([2, 2]), 0,
+    0, 0, 0, 1);
+
+const ROTATION_MATRICES = {
+  [S.yawTop90]: makeRotationMatrix4D(R.Y90),
+  [S.yawTop180]: makeRotationMatrix4D(R.Y180),
+  [S.yawTop270]: makeRotationMatrix4D(R.Y270),
+  [S.yawMiddle90]: makeRotationMatrix4D(R.Y90),
+  [S.yawMiddle180]: makeRotationMatrix4D(R.Y180),
+  [S.yawMiddle270]: makeRotationMatrix4D(R.Y270),
+  [S.yawBottom90]: makeRotationMatrix4D(R.Y90),
+  [S.yawBottom180]: makeRotationMatrix4D(R.Y180),
+  [S.yawBottom270]: makeRotationMatrix4D(R.Y270),
+
+  [S.pitchLeft90]: makeRotationMatrix4D(R.X90),
+  [S.pitchLeft180]: makeRotationMatrix4D(R.X180),
+  [S.pitchLeft270]: makeRotationMatrix4D(R.X270),
+  [S.pitchMiddle90]: makeRotationMatrix4D(R.X90),
+  [S.pitchMiddle180]: makeRotationMatrix4D(R.X180),
+  [S.pitchMiddle270]: makeRotationMatrix4D(R.X270),
+  [S.pitchRight90]: makeRotationMatrix4D(R.X90),
+  [S.pitchRight180]: makeRotationMatrix4D(R.X180),
+  [S.pitchRight270]: makeRotationMatrix4D(R.X270),
+
+  [S.rollFront90]: makeRotationMatrix4D(R.Z90),
+  [S.rollFront180]: makeRotationMatrix4D(R.Z180),
+  [S.rollFront270]: makeRotationMatrix4D(R.Z270),
+  [S.rollMiddle90]: makeRotationMatrix4D(R.Z90),
+  [S.rollMiddle180]: makeRotationMatrix4D(R.Z180),
+  [S.rollMiddle270]: makeRotationMatrix4D(R.Z270),
+  [S.rollBack90]: makeRotationMatrix4D(R.Z90),
+  [S.rollBack180]: makeRotationMatrix4D(R.Z180),
+  [S.rollBack270]: makeRotationMatrix4D(R.Z270)
+};
+
 const CUBE_SIZE = 0.94;
 
 const material = new THREE.MeshBasicMaterial({
@@ -24,43 +64,27 @@ const material = new THREE.MeshBasicMaterial({
 const makeKey = piece =>
   `${piece.x}:${piece.y}:${piece.z}:${piece.colours}`;
 
+const createUiPiece = (piece, move) => {
+  const geometry = new THREE.BoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
+  const uiPiece = new THREE.Mesh(geometry, material);
+  updateUiPiece(piece, uiPiece, move);
+  return uiPiece;
+};
+
 const setFaceColour = (piece, face, coloursIndex) => {
   const ch = piece.colours[coloursIndex];
   face.color = COLOUR_TABLE[ch !== "-" ? ch : "H"];
 };
 
-const createUPiece = piece => {
-
-  const geometry = new THREE.BoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
-
-  geometry.faces.forEach(face => {
-    face.normal.x === 1 && setFaceColour(piece, face, C.RIGHT);
-    face.normal.x === -1 && setFaceColour(piece, face, C.LEFT);
-    face.normal.y === 1 && setFaceColour(piece, face, C.TOP);
-    face.normal.y === -1 && setFaceColour(piece, face, C.BOTTOM);
-    face.normal.z === 1 && setFaceColour(piece, face, C.FRONT);
-    face.normal.z === -1 && setFaceColour(piece, face, C.BACK);
-  });
-
-  const uiPiece = new THREE.Mesh(geometry, material);
+const updateUiPiece = (piece, uiPiece, move) => {
 
   uiPiece.position.x = piece.x;
   uiPiece.position.y = piece.y;
   uiPiece.position.z = piece.z;
 
-  uiPiece.userData = {
-    id: piece.id,
-    key: makeKey(piece)
-  };
-
-  return uiPiece;
-};
-
-const updateUiPiece = (piece, uiPiece, r) => {
-
-  uiPiece.position.x = piece.x;
-  uiPiece.position.y = piece.y;
-  uiPiece.position.z = piece.z;
+  if (move) {
+    uiPiece.setRotationFromMatrix(ROTATION_MATRICES[move]);
+  }
 
   const geometry = uiPiece.geometry;
   geometry.faces.forEach(face => {
@@ -71,14 +95,6 @@ const updateUiPiece = (piece, uiPiece, r) => {
     face.normal.z === 1 && setFaceColour(piece, face, C.FRONT);
     face.normal.z === -1 && setFaceColour(piece, face, C.BACK);
   });
-
-  const m = new THREE.Matrix4().set(
-    r.get([0, 0]), r.get([1, 0]), r.get([2, 0]), 0,
-    r.get([0, 1]), r.get([1, 1]), r.get([2, 1]), 0,
-    r.get([0, 2]), r.get([1, 2]), r.get([2, 2]), 0,
-    0, 0, 0, 1);
-
-  uiPiece.setRotationFromMatrix(m);
 
   uiPiece.userData = {
     id: piece.id,
@@ -140,30 +156,17 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
 });
 
-// const moves = [
-//   S.yawBottom270,
-//   S.pitchLeft180,
-//   S.rollBack180,
-//   S.pitchLeft90,
-//   S.rollMiddle270,
-//   S.yawBottom180,
-//   S.yawTop270,
-//   S.pitchRight90
-// ];
-// const shuffledCube = S.makeMoves(S.solvedCube, moves);
-// shuffledCube.forEach(piece => mainGroup.add(createPiece(piece)));
-
-const renderCube = (cube, r) => {
+const renderCube = (cube, move) => {
   cube.forEach(piece => {
     const uiPiece = findUiPiece(piece);
     if (uiPiece) {
       const key = makeKey(piece);
       if (uiPiece.userData.key !== key) {
-        updateUiPiece(piece, uiPiece, r);
+        updateUiPiece(piece, uiPiece, move);
       }
     }
     else {
-      mainGroup.add(createUPiece(piece));
+      mainGroup.add(createUiPiece(piece, move));
     }
   });
 };
@@ -174,11 +177,13 @@ const animate = () => {
   renderer.render(scene, camera);
 };
 
-renderCube(S.solvedCube, new THREE.Matrix3());
 animate();
+
+renderCube(S.solvedCube);
 
 setTimeout(
   () => {
-    renderCube(S.pitchMiddle270(S.solvedCube), R.X270);
+    const move = S.rollBack90;
+    renderCube(move(S.solvedCube), move);
   },
   2000);
