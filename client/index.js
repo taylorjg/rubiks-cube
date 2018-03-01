@@ -116,7 +116,7 @@ const updateUiPiece = (piece, uiPiece, move) => {
 };
 
 const findUiPiece = piece =>
-  mainGroup.children.find(child => child.userData.id === piece.id);
+  puzzleGroup.children.find(child => child.userData.id === piece.id);
 
 const container = document.getElementById('container');
 const w = container.offsetWidth;
@@ -155,8 +155,8 @@ const light6 = new THREE.DirectionalLight(0xffffff, 0.4);
 light6.position.set(-10, 0, 0);
 scene.add(light6);
 
-const mainGroup = new THREE.Group();
-scene.add(mainGroup);
+const puzzleGroup = new THREE.Group();
+scene.add(puzzleGroup);
 
 const controls = new TrackballControls(camera, renderer.domElement);
 controls.minDistance = 5.0;
@@ -179,16 +179,13 @@ const renderCube = (cube, move) => {
       }
     }
     else {
-      mainGroup.add(createUiPiece(piece, move));
+      puzzleGroup.add(createUiPiece(piece, move));
     }
   });
 };
 
 const clock = new THREE.Clock();
 const mixer = new THREE.AnimationMixer();
-mixer.addEventListener("finished", () => {
-  console.log("Animation finished");
-});
 
 const animate = () => {
   window.requestAnimationFrame(animate);
@@ -227,26 +224,37 @@ setTimeout(
   () => {
     const pieces = S.getPieces(cube, CL.topCoordsList);
     const uiPieces = pieces.map(findUiPiece);
-    const slice = new THREE.Group();
-    uiPieces.forEach(uiPiece => {
-      mainGroup.remove(uiPiece);
-      slice.add(uiPiece);
-    });
-    mainGroup.add(slice);
+    puzzleGroup.remove(...uiPieces);
+    const sliceGroup = new THREE.Group();
+    sliceGroup.add(...uiPieces);
+    puzzleGroup.add(sliceGroup);
+
     const times = [0, 0.5];
-    const start = new THREE.Quaternion(0, 0, 0, 1);
-    const end = new THREE.Quaternion(0, 0.707107, 0, 0.707107);
     const values = [];
-    start.toArray(values, values.length);
-    end.toArray(values, values.length);
+    const startQuaternion = new THREE.Quaternion();
+    const endQuaternion = new THREE.Quaternion(0, 0.707107, 0, 0.707107);
+    startQuaternion.toArray(values, values.length);
+    endQuaternion.toArray(values, values.length);
     const clip = new THREE.AnimationClip(
       "yawTop90",
       -1,
       [ new THREE.QuaternionKeyframeTrack(".quaternion", times, values) ]);
-    const clipAction = mixer.clipAction(clip, slice);
-    console.log(`clipAction.loop: ${clipAction.loop}`);
+
+    const clipAction = mixer.clipAction(clip, sliceGroup);
     clipAction.setLoop(THREE.LoopOnce);
-    console.log(`clipAction.loop: ${clipAction.loop}`);
+
+    const onFinished = () => {
+      console.log("Animation finished");
+      mixer.removeEventListener("finished", onFinished);
+      sliceGroup.remove(...uiPieces);
+      puzzleGroup.add(...uiPieces);
+      const move = S.yawTop90;
+      cube = move(cube);
+      renderCube(cube, move);
+    };
+
+    mixer.addEventListener("finished", onFinished);
+    
     clipAction.play();
   },
   1000
