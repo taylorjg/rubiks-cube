@@ -42,7 +42,7 @@ const pieceHasCoords = (piece, coords) =>
   piece.y === coords[1] &&
   piece.z === coords[2];
 
-const getPieces = (cube, coordsList) =>
+export const getPieces = (cube, coordsList) =>
   coordsList.map(coords =>
     cube.find(piece => pieceHasCoords(piece, coords)));
 

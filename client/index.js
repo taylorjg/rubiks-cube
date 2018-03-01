@@ -1,6 +1,7 @@
 import * as S from '../solving';
 import * as C from '../solving/constants';
 import * as R from '../solving/rotations';
+import * as CL from '../solving/coordsLists';
 import * as THREE from 'three';
 import TrackballControls from 'three-trackballcontrols';
 
@@ -95,9 +96,14 @@ const updateUiPiece = (piece, uiPiece, move) => {
   uiPiece.position.z = piece.z;
 
   if (move) {
-    console.log(`uiPiece.quaternion (before): ${JSON.stringify(uiPiece.quaternion)}`);
+    const before = uiPiece.quaternion.clone();
     uiPiece.applyMatrix(ROTATION_MATRICES[move]);
-    console.log(`uiPiece.quaternion (after): ${JSON.stringify(uiPiece.quaternion)}`);
+    const after = uiPiece.quaternion.clone();
+    const dx = after.x - before.x;
+    const dy = after.y - before.y;
+    const dz = after.z - before.z;
+    const dw = after.w - before.w;
+    console.log(`move: ${move.name}; quaternion delta: [${dx}, ${dy}, ${dz}, ${dw}]`);
   }
   else {
     uiPiece.setRotationFromMatrix(new THREE.Matrix4());
@@ -219,10 +225,15 @@ document.getElementById("btnReset")
 
 setTimeout(
   () => {
-    console.log("Inside timeout function");
-    const piece = cube[0];
-    const uiPiece = findUiPiece(piece);
-    const times = [0, 0.2];
+    const pieces = S.getPieces(cube, CL.topCoordsList);
+    const uiPieces = pieces.map(findUiPiece);
+    const slice = new THREE.Group();
+    uiPieces.forEach(uiPiece => {
+      mainGroup.remove(uiPiece);
+      slice.add(uiPiece);
+    });
+    mainGroup.add(slice);
+    const times = [0, 0.5];
     const start = new THREE.Quaternion(0, 0, 0, 1);
     const end = new THREE.Quaternion(0, 0.707107, 0, 0.707107);
     const values = [];
@@ -232,7 +243,7 @@ setTimeout(
       "yawTop90",
       -1,
       [ new THREE.QuaternionKeyframeTrack(".quaternion", times, values) ]);
-    const clipAction = mixer.clipAction(clip, uiPiece);
+    const clipAction = mixer.clipAction(clip, slice);
     console.log(`clipAction.loop: ${clipAction.loop}`);
     clipAction.setLoop(THREE.LoopOnce);
     console.log(`clipAction.loop: ${clipAction.loop}`);
