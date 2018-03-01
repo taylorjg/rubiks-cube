@@ -84,7 +84,7 @@ const createUiPiece = (piece, move) => {
     face.normal.z === 1 && setFaceColour(face, piece.colours, C.FRONT);
     face.normal.z === -1 && setFaceColour(face, piece.colours, C.BACK);
   });
-  
+
   return uiPiece;
 };
 
@@ -95,7 +95,9 @@ const updateUiPiece = (piece, uiPiece, move) => {
   uiPiece.position.z = piece.z;
 
   if (move) {
+    console.log(`uiPiece.quaternion (before): ${JSON.stringify(uiPiece.quaternion)}`);
     uiPiece.applyMatrix(ROTATION_MATRICES[move]);
+    console.log(`uiPiece.quaternion (after): ${JSON.stringify(uiPiece.quaternion)}`);
   }
   else {
     uiPiece.setRotationFromMatrix(new THREE.Matrix4());
@@ -176,9 +178,17 @@ const renderCube = (cube, move) => {
   });
 };
 
+const clock = new THREE.Clock();
+const mixer = new THREE.AnimationMixer();
+mixer.addEventListener("finished", () => {
+  console.log("Animation finished");
+});
+
 const animate = () => {
   window.requestAnimationFrame(animate);
   controls.update();
+  const delta = 0.75 * clock.getDelta();
+  mixer.update(delta);
   renderer.render(scene, camera);
 };
 
@@ -193,14 +203,40 @@ const resetCube = () => {
   renderCube(cube);
 };
 
-setInterval(
-  () => {
-    const randomIndex = Math.floor(Math.random() * S.MOVES.length);
-    const move = S.MOVES[randomIndex];
-    cube = move(cube);
-    renderCube(cube, move);
-  },
-  1000);
+// setInterval(
+//   () => {
+//     // TODO: S.randomMove() ?
+//     const randomIndex = Math.floor(Math.random() * S.MOVES.length);
+//     const move = S.MOVES[randomIndex];
+// 
+//     cube = move(cube);
+//     renderCube(cube, move);
+//   },
+//   1000);
 
 document.getElementById("btnReset")
   .addEventListener("click", resetCube);
+
+setTimeout(
+  () => {
+    console.log("Inside timeout function");
+    const piece = cube[0];
+    const uiPiece = findUiPiece(piece);
+    const times = [0, 0.2];
+    const start = new THREE.Quaternion(0, 0, 0, 1);
+    const end = new THREE.Quaternion(0, 0.707107, 0, 0.707107);
+    const values = [];
+    start.toArray(values, values.length);
+    end.toArray(values, values.length);
+    const clip = new THREE.AnimationClip(
+      "yawTop90",
+      -1,
+      [ new THREE.QuaternionKeyframeTrack(".quaternion", times, values) ]);
+    const clipAction = mixer.clipAction(clip, uiPiece);
+    console.log(`clipAction.loop: ${clipAction.loop}`);
+    clipAction.setLoop(THREE.LoopOnce);
+    console.log(`clipAction.loop: ${clipAction.loop}`);
+    clipAction.play();
+  },
+  1000
+);
