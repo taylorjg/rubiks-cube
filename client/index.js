@@ -241,6 +241,8 @@ const renderCube = (cube, move) => {
   });
 };
 
+let cube = S.solvedCube;
+let resetFlag = false;
 const clock = new THREE.Clock();
 const mixer = new THREE.AnimationMixer();
 
@@ -254,65 +256,65 @@ const animate = () => {
 
 animate();
 
-let cube = S.solvedCube;
-
 renderCube(cube);
 
-const resetCube = () => {
-  cube = S.solvedCube;
-  renderCube(cube);
+const checkResetFlag = () => {
+  if (resetFlag) {
+    cube = S.solvedCube;
+    renderCube(cube);
+    resetFlag = false;
+  }
 };
 
-// setInterval(
-//   () => {
-//     // TODO: S.randomMove() ?
-//     const randomIndex = Math.floor(Math.random() * S.MOVES.length);
-//     const move = S.MOVES[randomIndex];
-// 
-//     cube = move(cube);
-//     renderCube(cube, move);
-//   },
-//   1000);
-
 document.getElementById("btnReset")
-  .addEventListener("click", resetCube);
+  .addEventListener("click", () => {
+    resetFlag = true;
+  });
 
-setTimeout(
-  () => {
-    const move = S.rollFront180;
+const makeMove = move => {
 
-    const pieces = S.getPieces(cube, COORDS_LIST[move]);
-    const uiPieces = pieces.map(findUiPiece);
-    puzzleGroup.remove(...uiPieces);
-    const sliceGroup = new THREE.Group();
-    sliceGroup.add(...uiPieces);
-    puzzleGroup.add(sliceGroup);
+  const pieces = S.getPieces(cube, COORDS_LIST[move]);
+  const uiPieces = pieces.map(findUiPiece);
+  puzzleGroup.remove(...uiPieces);
+  const sliceGroup = new THREE.Group();
+  sliceGroup.add(...uiPieces);
+  puzzleGroup.add(sliceGroup);
 
-    const times = [0, 1];
-    const values = [];
-    const startQuaternion = new THREE.Quaternion();
-    const endQuaternion = END_QUATERNIONS[move];
-    startQuaternion.toArray(values, values.length);
-    endQuaternion.toArray(values, values.length);
-    const clip = new THREE.AnimationClip(
-      move.name,
-      -1,
-      [ new THREE.QuaternionKeyframeTrack(".quaternion", times, values) ]);
+  const times = [0, 0.5];
+  const values = [];
+  const startQuaternion = new THREE.Quaternion();
+  const endQuaternion = END_QUATERNIONS[move];
+  startQuaternion.toArray(values, values.length);
+  endQuaternion.toArray(values, values.length);
+  const clip = new THREE.AnimationClip(
+    move.name,
+    -1,
+    [new THREE.QuaternionKeyframeTrack(".quaternion", times, values)]);
 
-    const clipAction = mixer.clipAction(clip, sliceGroup);
-    clipAction.setLoop(THREE.LoopOnce);
+  const clipAction = mixer.clipAction(clip, sliceGroup);
+  clipAction.setLoop(THREE.LoopOnce);
 
-    const onFinished = () => {
-      mixer.removeEventListener("finished", onFinished);
-      sliceGroup.remove(...uiPieces);
-      puzzleGroup.add(...uiPieces);
-      cube = move(cube);
-      renderCube(cube, move);
-    };
+  const onFinished = () => {
+    mixer.removeEventListener("finished", onFinished);
+    sliceGroup.remove(...uiPieces);
+    puzzleGroup.add(...uiPieces);
+    cube = move(cube);
+    renderCube(cube, move);
+    makeRandomMove();
+    checkResetFlag();
+  };
 
-    mixer.addEventListener("finished", onFinished);
+  mixer.addEventListener("finished", onFinished);
+  clipAction.play();
+};
 
-    clipAction.play();
-  },
-  1000
-);
+const makeRandomMove = () => {
+  setTimeout(
+    () => {
+      const move = S.randomMove();
+      makeMove(move);
+    },
+    500);
+};
+
+makeRandomMove();

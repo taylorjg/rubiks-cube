@@ -234,6 +234,11 @@ export const MOVES = [
   rollBack270
 ];
 
+export const randomMove = () => {
+  const randomIndex = Math.floor(Math.random() * MOVES.length);
+  return MOVES[randomIndex];
+};
+
 class Node {
   constructor(cube, move, parent, g, h) {
     this.cube = cube;
