@@ -55,6 +55,70 @@ const ROTATION_MATRICES = {
   [S.rollBack270]: makeRotationMatrix4(R.Z270)
 };
 
+const END_QUATERNIONS = {
+  [S.yawTop90]: new THREE.Quaternion(0, 0.7071067811865475, 0, 0.7071067811865476),
+  [S.yawMiddle90]: new THREE.Quaternion(0, 0.7071067811865475, 0, 0.7071067811865476),
+  [S.yawBottom90]: new THREE.Quaternion(0, 0.7071067811865475, 0, 0.7071067811865476),
+  [S.yawTop180]: new THREE.Quaternion(0, 1, 0, 0),
+  [S.yawMiddle180]: new THREE.Quaternion(0, 1, 0, 0),
+  [S.yawBottom180]: new THREE.Quaternion(0, 1, 0, 0),
+  [S.yawTop270]: new THREE.Quaternion(0, -0.7071067811865475, 0, 0.7071067811865476),
+  [S.yawMiddle270]: new THREE.Quaternion(0, -0.7071067811865475, 0, 0.7071067811865476),
+  [S.yawBottom270]: new THREE.Quaternion(0, -0.7071067811865475, 0, 0.7071067811865476),
+
+  [S.pitchLeft90]: new THREE.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476),
+  [S.pitchMiddle90]: new THREE.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476),
+  [S.pitchRight90]: new THREE.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476),
+  [S.pitchLeft180]: new THREE.Quaternion(1, 0, 0, 0),
+  [S.pitchMiddle180]: new THREE.Quaternion(1, 0, 0, 0),
+  [S.pitchRight180]: new THREE.Quaternion(1, 0, 0, 0),
+  [S.pitchLeft270]: new THREE.Quaternion(-0.7071067811865475, 0, 0, 0.7071067811865476),
+  [S.pitchMiddle270]: new THREE.Quaternion(-0.7071067811865475, 0, 0, 0.7071067811865476),
+  [S.pitchRight270]: new THREE.Quaternion(-0.7071067811865475, 0, 0, 0.7071067811865476),
+
+  [S.rollFront90]: new THREE.Quaternion(0, 0, 0.7071067811865475, 0.7071067811865476),
+  [S.rollMiddle90]: new THREE.Quaternion(0, 0, 0.7071067811865475, 0.7071067811865476),
+  [S.rollBack90]: new THREE.Quaternion(0, 0, 0.7071067811865475, 0.7071067811865476),
+  [S.rollFront180]: new THREE.Quaternion(0, 0, 1, 0),
+  [S.rollMiddle180]: new THREE.Quaternion(0, 0, 1, 0),
+  [S.rollBack180]: new THREE.Quaternion(0, 0, 1, 0),
+  [S.rollFront270]: new THREE.Quaternion(0, 0, -0.7071067811865475, 0.7071067811865476),
+  [S.rollMiddle270]: new THREE.Quaternion(0, 0, -0.7071067811865475, 0.7071067811865476),
+  [S.rollBack270]: new THREE.Quaternion(0, 0, -0.7071067811865475, 0.7071067811865476)
+};
+
+const COORDS_LIST = {
+  [S.yawTop90]: CL.topCoordsList,
+  [S.yawTop180]: CL.topCoordsList,
+  [S.yawTop270]: CL.topCoordsList,
+  [S.yawMiddle90]: CL.yawMiddleCoordsList,
+  [S.yawMiddle180]: CL.yawMiddleCoordsList,
+  [S.yawMiddle270]: CL.yawMiddleCoordsList,
+  [S.yawBottom90]: CL.bottomCoordsList,
+  [S.yawBottom180]: CL.bottomCoordsList,
+  [S.yawBottom270]: CL.bottomCoordsList,
+
+  [S.pitchLeft90]: CL.leftCoordsList,
+  [S.pitchLeft180]: CL.leftCoordsList,
+  [S.pitchLeft270]: CL.leftCoordsList,
+  [S.pitchMiddle90]: CL.pitchMiddleCoordsList,
+  [S.pitchMiddle180]: CL.pitchMiddleCoordsList,
+  [S.pitchMiddle270]: CL.pitchMiddleCoordsList,
+  [S.pitchRight90]: CL.rightCoordsList,
+  [S.pitchRight180]: CL.rightCoordsList,
+  [S.pitchRight270]: CL.rightCoordsList,
+
+  [S.rollFront90]: CL.frontCoordsList,
+  [S.rollFront180]: CL.frontCoordsList,
+  [S.rollFront270]: CL.frontCoordsList,
+  [S.rollMiddle90]: CL.rollMiddleCoordsList,
+  [S.rollMiddle180]: CL.rollMiddleCoordsList,
+  [S.rollMiddle270]: CL.rollMiddleCoordsList,
+  [S.rollBack90]: CL.backCoordsList,
+  [S.rollBack180]: CL.backCoordsList,
+  [S.rollBack270]: CL.backCoordsList
+};
+
 const PIECE_SIZE = 0.94;
 
 const pieceMaterial = new THREE.MeshBasicMaterial({
@@ -96,14 +160,7 @@ const updateUiPiece = (piece, uiPiece, move) => {
   uiPiece.position.z = piece.z;
 
   if (move) {
-    const before = uiPiece.quaternion.clone();
     uiPiece.applyMatrix(ROTATION_MATRICES[move]);
-    const after = uiPiece.quaternion.clone();
-    const dx = after.x - before.x;
-    const dy = after.y - before.y;
-    const dz = after.z - before.z;
-    const dw = after.w - before.w;
-    console.log(`move: ${move.name}; quaternion delta: [${dx}, ${dy}, ${dz}, ${dw}]`);
   }
   else {
     uiPiece.setRotationFromMatrix(new THREE.Matrix4());
@@ -222,21 +279,23 @@ document.getElementById("btnReset")
 
 setTimeout(
   () => {
-    const pieces = S.getPieces(cube, CL.topCoordsList);
+    const move = S.rollFront180;
+
+    const pieces = S.getPieces(cube, COORDS_LIST[move]);
     const uiPieces = pieces.map(findUiPiece);
     puzzleGroup.remove(...uiPieces);
     const sliceGroup = new THREE.Group();
     sliceGroup.add(...uiPieces);
     puzzleGroup.add(sliceGroup);
 
-    const times = [0, 0.5];
+    const times = [0, 1];
     const values = [];
     const startQuaternion = new THREE.Quaternion();
-    const endQuaternion = new THREE.Quaternion(0, 0.707107, 0, 0.707107);
+    const endQuaternion = END_QUATERNIONS[move];
     startQuaternion.toArray(values, values.length);
     endQuaternion.toArray(values, values.length);
     const clip = new THREE.AnimationClip(
-      "yawTop90",
+      move.name,
       -1,
       [ new THREE.QuaternionKeyframeTrack(".quaternion", times, values) ]);
 
@@ -244,17 +303,15 @@ setTimeout(
     clipAction.setLoop(THREE.LoopOnce);
 
     const onFinished = () => {
-      console.log("Animation finished");
       mixer.removeEventListener("finished", onFinished);
       sliceGroup.remove(...uiPieces);
       puzzleGroup.add(...uiPieces);
-      const move = S.yawTop90;
       cube = move(cube);
       renderCube(cube, move);
     };
 
     mixer.addEventListener("finished", onFinished);
-    
+
     clipAction.play();
   },
   1000
