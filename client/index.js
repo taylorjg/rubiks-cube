@@ -249,7 +249,7 @@ const mixer = new THREE.AnimationMixer();
 const animate = () => {
   window.requestAnimationFrame(animate);
   controls.update();
-  const delta = 0.75 * clock.getDelta();
+  const delta = clock.getDelta() * mixer.timeScale;
   mixer.update(delta);
   renderer.render(scene, camera);
 };
@@ -271,8 +271,9 @@ document.getElementById("btnReset")
     resetFlag = true;
   });
 
-const makeMove = move => {
+const animateMoves = nextMove => {
 
+  const move = nextMove();
   const pieces = S.getPieces(cube, COORDS_LIST[move]);
   const uiPieces = pieces.map(findUiPiece);
   puzzleGroup.remove(...uiPieces);
@@ -280,7 +281,7 @@ const makeMove = move => {
   sliceGroup.add(...uiPieces);
   puzzleGroup.add(sliceGroup);
 
-  const times = [0, 0.5];
+  const times = [0, 0.75];
   const values = [];
   const startQuaternion = new THREE.Quaternion();
   const endQuaternion = END_QUATERNIONS[move];
@@ -300,21 +301,12 @@ const makeMove = move => {
     puzzleGroup.add(...uiPieces);
     cube = move(cube);
     renderCube(cube, move);
-    makeRandomMove();
     checkResetFlag();
+    setTimeout(animateMoves, 500, nextMove);
   };
 
   mixer.addEventListener("finished", onFinished);
   clipAction.play();
 };
 
-const makeRandomMove = () => {
-  setTimeout(
-    () => {
-      const move = S.randomMove();
-      makeMove(move);
-    },
-    500);
-};
-
-makeRandomMove();
+animateMoves(S.randomMove);
