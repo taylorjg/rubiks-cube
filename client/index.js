@@ -119,6 +119,38 @@ const COORDS_LIST = {
   [S.rollBack270]: CL.backCoordsList
 };
 
+const DURATIONS = {
+  [S.yawTop90]: 1,
+  [S.yawTop180]: 2,
+  [S.yawTop270]: 1,
+  [S.yawMiddle90]: 1,
+  [S.yawMiddle180]: 2,
+  [S.yawMiddle270]: 1,
+  [S.yawBottom90]: 1,
+  [S.yawBottom180]: 2,
+  [S.yawBottom270]: 1,
+
+  [S.pitchLeft90]: 1,
+  [S.pitchLeft180]: 2,
+  [S.pitchLeft270]: 1,
+  [S.pitchMiddle90]: 1,
+  [S.pitchMiddle180]: 2,
+  [S.pitchMiddle270]: 1,
+  [S.pitchRight90]: 1,
+  [S.pitchRight180]: 2,
+  [S.pitchRight270]: 1,
+
+  [S.rollFront90]: 1,
+  [S.rollFront180]: 2,
+  [S.rollFront270]: 1,
+  [S.rollMiddle90]: 1,
+  [S.rollMiddle180]: 2,
+  [S.rollMiddle270]: 1,
+  [S.rollBack90]: 1,
+  [S.rollBack180]: 2,
+  [S.rollBack270]: 1
+};
+
 const PIECE_SIZE = 0.94;
 
 const pieceMaterial = new THREE.MeshBasicMaterial({
@@ -271,9 +303,11 @@ document.getElementById("btnReset")
     resetFlag = true;
   });
 
-const animateMoves = nextMove => {
+const animateMoves = (nextMove, context) => {
 
-  const move = nextMove();
+  const move = nextMove(context);
+  if (!move) return;
+
   const pieces = S.getPieces(cube, COORDS_LIST[move]);
   const uiPieces = pieces.map(findUiPiece);
   puzzleGroup.remove(...uiPieces);
@@ -281,7 +315,7 @@ const animateMoves = nextMove => {
   sliceGroup.add(...uiPieces);
   puzzleGroup.add(sliceGroup);
 
-  const times = [0, 0.75];
+  const times = [0, 0.75 * DURATIONS[move]];
   const values = [];
   const startQuaternion = new THREE.Quaternion();
   const endQuaternion = END_QUATERNIONS[move];
@@ -302,7 +336,7 @@ const animateMoves = nextMove => {
     cube = move(cube);
     renderCube(cube, move);
     checkResetFlag();
-    setTimeout(animateMoves, 500, nextMove);
+    setTimeout(animateMoves, 500, nextMove, context);
   };
 
   mixer.addEventListener("finished", onFinished);
@@ -310,3 +344,13 @@ const animateMoves = nextMove => {
 };
 
 animateMoves(S.randomMove);
+
+// const moveSequence = context => {
+
+//   const moves = S.MOVES;
+
+//   if (context.next >= moves.length) return null;
+//   return moves[context.next++];
+// };
+
+// animateMoves(moveSequence, { next: 0 });
