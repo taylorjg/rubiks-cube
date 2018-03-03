@@ -151,7 +151,7 @@ const DURATIONS = {
   [S.rollBack270]: 1
 };
 
-const PIECE_SIZE = 0.94;
+const PIECE_SIZE = 0.92;
 
 const pieceMaterial = new THREE.MeshBasicMaterial({
   color: 0xffffff,
@@ -273,8 +273,6 @@ const renderCube = (cube, move) => {
   });
 };
 
-let cube = S.solvedCube;
-let resetFlag = false;
 const clock = new THREE.Clock();
 const mixer = new THREE.AnimationMixer();
 
@@ -286,27 +284,15 @@ const animate = () => {
   renderer.render(scene, camera);
 };
 
-animate();
-
+let cube = S.solvedCube;
 renderCube(cube);
 
-const checkResetFlag = () => {
-  if (resetFlag) {
-    cube = S.solvedCube;
-    renderCube(cube);
-    resetFlag = false;
-  }
-};
+animate();
 
-document.getElementById("btnReset")
-  .addEventListener("click", () => {
-    resetFlag = true;
-  });
+const animateMoves = (nextMove, state, done, speed = 1) => {
 
-const animateMoves = (nextMove, context) => {
-
-  const move = nextMove(context);
-  if (!move) return;
+  const move = nextMove(state);
+  if (!move) return done(state);
 
   const pieces = S.getPieces(cube, COORDS_LIST[move]);
   const uiPieces = pieces.map(findUiPiece);
@@ -315,7 +301,7 @@ const animateMoves = (nextMove, context) => {
   sliceGroup.add(...uiPieces);
   puzzleGroup.add(sliceGroup);
 
-  const times = [0, 0.75 * DURATIONS[move]];
+  const times = [0, 0.75 * DURATIONS[move] * speed];
   const values = [];
   const startQuaternion = new THREE.Quaternion();
   const endQuaternion = END_QUATERNIONS[move];
@@ -335,22 +321,45 @@ const animateMoves = (nextMove, context) => {
     puzzleGroup.add(...uiPieces);
     cube = move(cube);
     renderCube(cube, move);
-    checkResetFlag();
-    setTimeout(animateMoves, 500, nextMove, context);
+    setTimeout(animateMoves, 500, nextMove, state, done, speed);
   };
 
   mixer.addEventListener("finished", onFinished);
   clipAction.play();
 };
 
-animateMoves(S.randomMove);
+const enableShuffleButton = () =>
+  document.getElementById("btnShuffle").disabled = false;
 
-// const moveSequence = context => {
+const disableShuffleButton = () =>
+  document.getElementById("btnShuffle").disabled = true;
 
-//   const moves = S.MOVES;
+const shuffle = () => {
+  disableShuffleButton();
+  cube = S.solvedCube;
+  const randomMoves = [
+    S.randomMove()
+  ];
+  animateMoves(
+    sequenceOfMoves,
+    { moves: randomMoves, next: 0 },
+    () => {
+      const solutionMoves = S.solve(cube);
+      animateMoves(
+        sequenceOfMoves,
+        { moves: solutionMoves, next: 0 },
+        enableShuffleButton);
+    },
+    0.25
+  );
+};
 
-//   if (context.next >= moves.length) return null;
-//   return moves[context.next++];
-// };
+const sequenceOfMoves = state => {
+  if (state.next >= state.moves.length) return null;
+  return state.moves[state.next++];
+};
 
-// animateMoves(moveSequence, { next: 0 });
+document.getElementById("btnShuffle")
+  .addEventListener("click", shuffle);
+
+shuffle();
