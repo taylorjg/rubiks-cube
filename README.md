@@ -6,7 +6,8 @@ A [three.js](https://threejs.org/) visualisation of solving a Rubik's cube.
 
 # Status
 
-Currently, I have not implemented the solving part. Instead, I am visualising random moves.
+Currently, I have not implemented the solving part. Instead, I am cheating
+by using a reversed list of opposite moves as the solution.
 
 # Links
 

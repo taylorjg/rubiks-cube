@@ -1,6 +1,6 @@
 {
   "name": "rubiks-cube",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Rubik's cube solver",
   "main": "index.js",
   "scripts": {

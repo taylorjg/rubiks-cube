@@ -151,6 +151,38 @@ const DURATIONS = {
   [S.rollBack270]: 1
 };
 
+const REVERSE_MOVES = {
+  [S.yawTop90]: S.yawTop270,
+  [S.yawTop180]: S.yawTop180,
+  [S.yawTop270]: S.yawTop90,
+  [S.yawMiddle90]: S.yawMiddle270,
+  [S.yawMiddle180]: S.yawMiddle180,
+  [S.yawMiddle270]: S.yawMiddle90,
+  [S.yawBottom90]: S.yawBottom270,
+  [S.yawBottom180]: S.yawBottom180,
+  [S.yawBottom270]: S.yawBottom90,
+
+  [S.pitchLeft90]: S.pitchLeft270,
+  [S.pitchLeft180]: S.pitchLeft180,
+  [S.pitchLeft270]: S.pitchLeft90,
+  [S.pitchMiddle90]: S.pitchMiddle270,
+  [S.pitchMiddle180]: S.pitchMiddle180,
+  [S.pitchMiddle270]: S.pitchMiddle90,
+  [S.pitchRight90]: S.pitchRight270,
+  [S.pitchRight180]: S.pitchRight180,
+  [S.pitchRight270]: S.pitchRight90,
+
+  [S.rollFront90]: S.rollFront270,
+  [S.rollFront180]: S.rollFront180,
+  [S.rollFront270]: S.rollFront90,
+  [S.rollMiddle90]: S.rollMiddle270,
+  [S.rollMiddle180]: S.rollMiddle180,
+  [S.rollMiddle270]: S.rollMiddle90,
+  [S.rollBack90]: S.rollBack270,
+  [S.rollBack180]: S.rollBack180,
+  [S.rollBack270]: S.rollBack90
+};
+
 const PIECE_SIZE = 0.92;
 
 const pieceMaterial = new THREE.MeshBasicMaterial({
@@ -195,7 +227,7 @@ const updateUiPiece = (piece, uiPiece, move) => {
     uiPiece.applyMatrix(ROTATION_MATRICES[move]);
   }
   else {
-    uiPiece.setRotationFromMatrix(new THREE.Matrix4());
+    uiPiece.setRotationFromMatrix(makeRotationMatrix4(piece.accTransform));
   }
 
   uiPiece.userData = {
@@ -321,37 +353,40 @@ const animateMoves = (nextMove, state, done, speed = 1) => {
     puzzleGroup.add(...uiPieces);
     cube = move(cube);
     renderCube(cube, move);
-    setTimeout(animateMoves, 500, nextMove, state, done, speed);
+    setTimeout(animateMoves, 500 * speed, nextMove, state, done, speed);
   };
 
   mixer.addEventListener("finished", onFinished);
   clipAction.play();
 };
 
-const enableShuffleButton = () =>
-  document.getElementById("btnShuffle").disabled = false;
+const enableScrambleButton = () => {
+  const element = document.getElementById("btnScramble");
+  element.disabled = false;
+  element.focus();
+};
 
-const disableShuffleButton = () =>
-  document.getElementById("btnShuffle").disabled = true;
+const disableScrambleButton = () =>
+  document.getElementById("btnScramble").disabled = true;
 
-const shuffle = () => {
-  disableShuffleButton();
-  cube = S.solvedCube;
-  const randomMoves = [
-    S.randomMove()
-  ];
-  animateMoves(
-    sequenceOfMoves,
-    { moves: randomMoves, next: 0 },
+const scramble = () => {
+
+  disableScrambleButton();
+
+  const numRandomMoves = 10 + Math.floor(Math.random() * 30);
+  const randomMoves = Array.from(Array(numRandomMoves).keys()).map(S.randomMove);
+  cube = randomMoves.reduce((c, m) => m(c), S.solvedCube);
+  renderCube(cube);
+
+  setTimeout(
     () => {
-      const solutionMoves = S.solve(cube);
+      const solution = randomMoves.map(move => REVERSE_MOVES[move]).reverse();
       animateMoves(
         sequenceOfMoves,
-        { moves: solutionMoves, next: 0 },
-        enableShuffleButton);
+        { moves: solution, next: 0 },
+        enableScrambleButton);
     },
-    0.25
-  );
+    1000);
 };
 
 const sequenceOfMoves = state => {
@@ -359,7 +394,7 @@ const sequenceOfMoves = state => {
   return state.moves[state.next++];
 };
 
-document.getElementById("btnShuffle")
-  .addEventListener("click", shuffle);
+document.getElementById("btnScramble")
+  .addEventListener("click", scramble);
 
-shuffle();
+scramble();
