@@ -3,7 +3,7 @@ import * as C from '../solving/constants';
 import * as R from '../solving/rotations';
 import * as CL from '../solving/coordsLists';
 import * as THREE from 'three';
-import TrackballControls from 'three-trackballcontrols';
+import OrbitControls from 'three-orbitcontrols';
 
 const COLOUR_TABLE = {
   'B': new THREE.Color('blue'),
@@ -279,10 +279,13 @@ scene.add(light6);
 const puzzleGroup = new THREE.Group();
 scene.add(puzzleGroup);
 
-const controls = new TrackballControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
 controls.minDistance = 5.0;
 controls.maxDistance = 40.0;
-controls.noPan = true;
+controls.enableDamping = true;
+controls.dampingFactor = 0.9;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 1.0;
 
 window.addEventListener('resize', () => {
   renderer.setSize(container.offsetWidth, container.offsetHeight);
