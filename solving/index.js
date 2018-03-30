@@ -104,86 +104,190 @@ const transformPieces = (cube, coordsList, transform) =>
     ? transform(piece)
     : piece);
 
+const NEW_COLOUR_ORDER_YAW_90 = "041235";
+const NEW_COLOUR_ORDER_YAW_180 = "034125";
+const NEW_COLOUR_ORDER_YAW_270 = "023415";
+
+const NEW_COLOUR_ORDER_PITCH_90 = "410352";
+const NEW_COLOUR_ORDER_PITCH_180 = "514320";
+const NEW_COLOUR_ORDER_PITCH_270 = "215304";
+
+const NEW_COLOUR_ORDER_ROLL_90 = "302541";
+const NEW_COLOUR_ORDER_ROLL_180 = "532140";
+const NEW_COLOUR_ORDER_ROLL_270 = "152043";
+
 export const yawTop90 = cube =>
-  transformPieces(cube, CL.topCoordsList, transform(R.Y90, "041235"));
+  transformPieces(cube, CL.topCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90));
 
 export const yawTop180 = cube =>
-  transformPieces(cube, CL.topCoordsList, transform(R.Y180, "034125"));
+  transformPieces(cube, CL.topCoordsList, transform(R.Y180, NEW_COLOUR_ORDER_YAW_180));
 
 export const yawTop270 = cube =>
-  transformPieces(cube, CL.topCoordsList, transform(R.Y270, "023415"));
+  transformPieces(cube, CL.topCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270));
 
 export const yawMiddle90 = cube =>
-  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y90, "041235"));
-
-export const yawMiddle180 = cube =>
-  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y180, "034125"));
+  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90));
 
 export const yawMiddle270 = cube =>
-  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y270, "023415"));
+  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270));
 
 export const yawBottom90 = cube =>
-  transformPieces(cube, CL.bottomCoordsList, transform(R.Y90, "041235"));
+  transformPieces(cube, CL.bottomCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90));
 
 export const yawBottom180 = cube =>
-  transformPieces(cube, CL.bottomCoordsList, transform(R.Y180, "034125"));
+  transformPieces(cube, CL.bottomCoordsList, transform(R.Y180, NEW_COLOUR_ORDER_YAW_180));
 
 export const yawBottom270 = cube =>
-  transformPieces(cube, CL.bottomCoordsList, transform(R.Y270, "023415"));
+  transformPieces(cube, CL.bottomCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270));
+
+export const yawTopAndMiddle90 = cube =>
+  transformPieces(cube, CL.topAndMiddleCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90));
+
+export const yawTopAndMiddle270 = cube =>
+  transformPieces(cube, CL.topAndMiddleCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270));
+
+export const yawBottomAndMiddle90 = cube =>
+  transformPieces(cube, CL.bottomAndMiddleCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90));
+
+export const yawBottomAndMiddle270 = cube =>
+  transformPieces(cube, CL.bottomAndMiddleCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270));
+
+export const yawAll90 = cube =>
+  transformPieces(cube, CL.allCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90));
+
+export const yawAll270 = cube =>
+  transformPieces(cube, CL.allCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270));
 
 export const pitchLeft90 = cube =>
-  transformPieces(cube, CL.leftCoordsList, transform(R.X90, "410352"));
+  transformPieces(cube, CL.leftCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90));
 
 export const pitchLeft180 = cube =>
-  transformPieces(cube, CL.leftCoordsList, transform(R.X180, "514320"));
+  transformPieces(cube, CL.leftCoordsList, transform(R.X180, NEW_COLOUR_ORDER_PITCH_180));
 
 export const pitchLeft270 = cube =>
-  transformPieces(cube, CL.leftCoordsList, transform(R.X270, "215304"));
+  transformPieces(cube, CL.leftCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270));
 
 export const pitchMiddle90 = cube =>
-  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X90, "410352"));
-
-export const pitchMiddle180 = cube =>
-  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X180, "514320"));
+  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90));
 
 export const pitchMiddle270 = cube =>
-  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X270, "215304"));
+  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270));
 
 export const pitchRight90 = cube =>
-  transformPieces(cube, CL.rightCoordsList, transform(R.X90, "410352"));
+  transformPieces(cube, CL.rightCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90));
 
 export const pitchRight180 = cube =>
-  transformPieces(cube, CL.rightCoordsList, transform(R.X180, "514320"));
+  transformPieces(cube, CL.rightCoordsList, transform(R.X180, NEW_COLOUR_ORDER_PITCH_180));
 
 export const pitchRight270 = cube =>
-  transformPieces(cube, CL.rightCoordsList, transform(R.X270, "215304"));
+  transformPieces(cube, CL.rightCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270));
+
+export const pitchLeftAndMiddle90 = cube =>
+  transformPieces(cube, CL.leftAndMiddleCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90));
+
+export const pitchLeftAndMiddle270 = cube =>
+  transformPieces(cube, CL.leftAndMiddleCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270));
+
+export const pitchRightAndMiddle90 = cube =>
+  transformPieces(cube, CL.rightAndMiddleCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90));
+
+export const pitchRightAndMiddle270 = cube =>
+  transformPieces(cube, CL.rightAndMiddleCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270));
+
+export const pitchAll90 = cube =>
+  transformPieces(cube, CL.allCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90));
+
+export const pitchAll270 = cube =>
+  transformPieces(cube, CL.allCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270));
 
 export const rollFront90 = cube =>
-  transformPieces(cube, CL.frontCoordsList, transform(R.Z90, "302541"));
+  transformPieces(cube, CL.frontCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90));
 
 export const rollFront180 = cube =>
-  transformPieces(cube, CL.frontCoordsList, transform(R.Z180, "532140"));
+  transformPieces(cube, CL.frontCoordsList, transform(R.Z180, NEW_COLOUR_ORDER_ROLL_180));
 
 export const rollFront270 = cube =>
-  transformPieces(cube, CL.frontCoordsList, transform(R.Z270, "152043"));
+  transformPieces(cube, CL.frontCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270));
 
 export const rollMiddle90 = cube =>
-  transformPieces(cube, CL.rollMiddleCoordsList, transform(R.Z90, "302541"));
-
-export const rollMiddle180 = cube =>
-  transformPieces(cube, CL.rollMiddleCoordsList, transform(R.Z180, "532140"));
+  transformPieces(cube, CL.rollMiddleCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90));
 
 export const rollMiddle270 = cube =>
-  transformPieces(cube, CL.rollMiddleCoordsList, transform(R.Z270, "152043"));
+  transformPieces(cube, CL.rollMiddleCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270));
 
 export const rollBack90 = cube =>
-  transformPieces(cube, CL.backCoordsList, transform(R.Z90, "302541"));
+  transformPieces(cube, CL.backCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90));
 
 export const rollBack180 = cube =>
-  transformPieces(cube, CL.backCoordsList, transform(R.Z180, "532140"));
+  transformPieces(cube, CL.backCoordsList, transform(R.Z180, NEW_COLOUR_ORDER_ROLL_180));
 
 export const rollBack270 = cube =>
-  transformPieces(cube, CL.backCoordsList, transform(R.Z270, "152043"));
+  transformPieces(cube, CL.backCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270));
+
+export const rollFrontAndMiddle90 = cube =>
+  transformPieces(cube, CL.frontAndMiddleCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90));
+
+export const rollFrontAndMiddle270 = cube =>
+  transformPieces(cube, CL.frontAndMiddleCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270));
+
+export const rollBackAndMiddle90 = cube =>
+  transformPieces(cube, CL.backAndMiddleCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90));
+
+export const rollBackAndMiddle270 = cube =>
+  transformPieces(cube, CL.backAndMiddleCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270));
+
+export const rollAll90 = cube =>
+  transformPieces(cube, CL.allCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90));
+
+export const rollAll270 = cube =>
+  transformPieces(cube, CL.allCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270));
+
+export const MOVES = [
+  yawTop90, // U'
+  yawTop180, // U2
+  yawTop270, // U
+  yawMiddle90, // E
+  yawMiddle270, // E'
+  yawBottom90, // D'
+  yawBottom180, // D2
+  yawBottom270, // D
+  yawTopAndMiddle90, // u'
+  yawTopAndMiddle270, // u
+  yawBottomAndMiddle90, // d
+  yawBottomAndMiddle270, // d'
+  yawAll90, // Y'
+  yawAll270, // Y
+
+  pitchLeft90, // L
+  pitchLeft180, // L2
+  pitchLeft270, // L'
+  pitchMiddle90, // M
+  pitchMiddle270, // M'
+  pitchRight90, // R'
+  pitchRight180, // R2
+  pitchRight270, // R
+  pitchLeftAndMiddle90, // l
+  pitchLeftAndMiddle270, // l'
+  pitchRightAndMiddle90, // r'
+  pitchRightAndMiddle270, // r
+  pitchAll90, // X'
+  pitchAll270, // X
+
+  rollFront90, // F'
+  rollFront180, // F2
+  rollFront270, // F
+  rollMiddle90, // S'
+  rollMiddle270, // S
+  rollBack90, // B
+  rollBack180, // B2
+  rollBack270, // B'
+  rollFrontAndMiddle90, // f'
+  rollFrontAndMiddle270, // f
+  rollBackAndMiddle90, // b
+  rollBackAndMiddle270, // b'
+  rollAll90, // Z'
+  rollAll270 // Z
+];
 
 const dumpCube = cube => {
 
@@ -204,36 +308,6 @@ const dumpCube = cube => {
   line(3, 6);
   line(6, 9);
 };
-
-export const MOVES = [
-  yawTop90,
-  yawTop180,
-  yawTop270,
-  yawMiddle90,
-  yawMiddle180,
-  yawMiddle270,
-  yawBottom90,
-  yawBottom180,
-  yawBottom270,
-  pitchLeft90,
-  pitchLeft180,
-  pitchLeft270,
-  pitchMiddle90,
-  pitchMiddle180,
-  pitchMiddle270,
-  pitchRight90,
-  pitchRight180,
-  pitchRight270,
-  rollFront90,
-  rollFront180,
-  rollFront270,
-  rollMiddle90,
-  rollMiddle180,
-  rollMiddle270,
-  rollBack90,
-  rollBack180,
-  rollBack270
-];
 
 export const randomMove = () => {
   const randomIndex = Math.floor(Math.random() * MOVES.length);

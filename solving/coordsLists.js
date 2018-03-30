@@ -102,3 +102,35 @@ export const rollMiddleCoordsList = [
   [0, -1, 0],
   [1, -1, 0]
 ];
+
+// u and u'
+export const topAndMiddleCoordsList =
+  topCoordsList.concat(yawMiddleCoordsList);
+
+// l and l'
+export const leftAndMiddleCoordsList =
+  leftCoordsList.concat(pitchMiddleCoordsList);
+
+// f and f'
+export const frontAndMiddleCoordsList =
+  frontCoordsList.concat(rollMiddleCoordsList);
+
+// r and r'
+export const rightAndMiddleCoordsList =
+  rightCoordsList.concat(pitchMiddleCoordsList);
+
+// b and b'
+export const backAndMiddleCoordsList =
+  backCoordsList.concat(rollMiddleCoordsList);
+
+// d and d'
+export const bottomAndMiddleCoordsList =
+  bottomCoordsList.concat(yawMiddleCoordsList);
+
+// X, X', Y, Y', Z, Z'
+export const allCoordsList =
+  [].concat(
+    frontCoordsList,
+    rollMiddleCoordsList,
+    backCoordsList
+  );
