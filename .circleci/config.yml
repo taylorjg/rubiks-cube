@@ -2,7 +2,7 @@ version: 2
 jobs:
   build-job:
     docker:
-      - image: circleci/node:8.9
+      - image: circleci/node
     steps:
       - checkout
       - restore_cache:
@@ -17,7 +17,7 @@ jobs:
       - run: yarn test
   deploy-job:
     docker:
-      - image: circleci/node:8.9
+      - image: circleci/node
     steps:
       - checkout
       - run:
