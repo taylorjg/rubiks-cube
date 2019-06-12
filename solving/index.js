@@ -1,40 +1,40 @@
-import math, { matrix } from 'mathjs';
+import * as math from 'mathjs';
 import * as CL from './coordsLists';
 import * as R from './rotations';
 import * as C from './constants';
 
 export const solvedCube = [
   // top layer
-  { id: 1, x: -1, y: 1, z: 1, colours: "BRY---", accTransform: math.eye(3) },
-  { id: 2, x: 0, y: 1, z: 1, colours: "B-Y---", accTransform: math.eye(3) },
-  { id: 3, x: 1, y: 1, z: 1, colours: "B-YO--", accTransform: math.eye(3) },
-  { id: 4, x: -1, y: 1, z: 0, colours: "BR----", accTransform: math.eye(3) },
-  { id: 5, x: 0, y: 1, z: 0, colours: "B-----", accTransform: math.eye(3) },
-  { id: 6, x: 1, y: 1, z: 0, colours: "B--O--", accTransform: math.eye(3) },
-  { id: 7, x: -1, y: 1, z: -1, colours: "BR--W-", accTransform: math.eye(3) },
-  { id: 8, x: 0, y: 1, z: -1, colours: "B---W-", accTransform: math.eye(3) },
-  { id: 9, x: 1, y: 1, z: -1, colours: "B--OW-", accTransform: math.eye(3) },
+  { id: 1, x: -1, y: 1, z: 1, colours: "BRY---", accTransform: math.identity(3) },
+  { id: 2, x: 0, y: 1, z: 1, colours: "B-Y---", accTransform: math.identity(3) },
+  { id: 3, x: 1, y: 1, z: 1, colours: "B-YO--", accTransform: math.identity(3) },
+  { id: 4, x: -1, y: 1, z: 0, colours: "BR----", accTransform: math.identity(3) },
+  { id: 5, x: 0, y: 1, z: 0, colours: "B-----", accTransform: math.identity(3) },
+  { id: 6, x: 1, y: 1, z: 0, colours: "B--O--", accTransform: math.identity(3) },
+  { id: 7, x: -1, y: 1, z: -1, colours: "BR--W-", accTransform: math.identity(3) },
+  { id: 8, x: 0, y: 1, z: -1, colours: "B---W-", accTransform: math.identity(3) },
+  { id: 9, x: 1, y: 1, z: -1, colours: "B--OW-", accTransform: math.identity(3) },
 
   // middle layer
-  { id: 10, x: -1, y: 0, z: 1, colours: "-RY---", accTransform: math.eye(3) },
-  { id: 11, x: 0, y: 0, z: 1, colours: "--Y---", accTransform: math.eye(3) },
-  { id: 12, x: 1, y: 0, z: 1, colours: "--YO--", accTransform: math.eye(3) },
-  { id: 13, x: -1, y: 0, z: 0, colours: "-R----", accTransform: math.eye(3) },
-  { id: 14, x: 1, y: 0, z: 0, colours: "---O--", accTransform: math.eye(3) },
-  { id: 15, x: -1, y: 0, z: -1, colours: "-R--W-", accTransform: math.eye(3) },
-  { id: 16, x: 0, y: 0, z: -1, colours: "----W-", accTransform: math.eye(3) },
-  { id: 17, x: 1, y: 0, z: -1, colours: "---OW-", accTransform: math.eye(3) },
+  { id: 10, x: -1, y: 0, z: 1, colours: "-RY---", accTransform: math.identity(3) },
+  { id: 11, x: 0, y: 0, z: 1, colours: "--Y---", accTransform: math.identity(3) },
+  { id: 12, x: 1, y: 0, z: 1, colours: "--YO--", accTransform: math.identity(3) },
+  { id: 13, x: -1, y: 0, z: 0, colours: "-R----", accTransform: math.identity(3) },
+  { id: 14, x: 1, y: 0, z: 0, colours: "---O--", accTransform: math.identity(3) },
+  { id: 15, x: -1, y: 0, z: -1, colours: "-R--W-", accTransform: math.identity(3) },
+  { id: 16, x: 0, y: 0, z: -1, colours: "----W-", accTransform: math.identity(3) },
+  { id: 17, x: 1, y: 0, z: -1, colours: "---OW-", accTransform: math.identity(3) },
 
   // bottom layer
-  { id: 18, x: -1, y: -1, z: 1, colours: "-RY--G", accTransform: math.eye(3) },
-  { id: 19, x: 0, y: -1, z: 1, colours: "--Y--G", accTransform: math.eye(3) },
-  { id: 20, x: 1, y: -1, z: 1, colours: "--YO-G", accTransform: math.eye(3) },
-  { id: 21, x: -1, y: -1, z: 0, colours: "-R---G", accTransform: math.eye(3) },
-  { id: 22, x: 0, y: -1, z: 0, colours: "-----G", accTransform: math.eye(3) },
-  { id: 23, x: 1, y: -1, z: 0, colours: "---O-G", accTransform: math.eye(3) },
-  { id: 24, x: -1, y: -1, z: -1, colours: "-R--WG", accTransform: math.eye(3) },
-  { id: 25, x: 0, y: -1, z: -1, colours: "----WG", accTransform: math.eye(3) },
-  { id: 26, x: 1, y: -1, z: -1, colours: "---OWG", accTransform: math.eye(3) }
+  { id: 18, x: -1, y: -1, z: 1, colours: "-RY--G", accTransform: math.identity(3) },
+  { id: 19, x: 0, y: -1, z: 1, colours: "--Y--G", accTransform: math.identity(3) },
+  { id: 20, x: 1, y: -1, z: 1, colours: "--YO-G", accTransform: math.identity(3) },
+  { id: 21, x: -1, y: -1, z: 0, colours: "-R---G", accTransform: math.identity(3) },
+  { id: 22, x: 0, y: -1, z: 0, colours: "-----G", accTransform: math.identity(3) },
+  { id: 23, x: 1, y: -1, z: 0, colours: "---O-G", accTransform: math.identity(3) },
+  { id: 24, x: -1, y: -1, z: -1, colours: "-R--WG", accTransform: math.identity(3) },
+  { id: 25, x: 0, y: -1, z: -1, colours: "----WG", accTransform: math.identity(3) },
+  { id: 26, x: 1, y: -1, z: -1, colours: "---OWG", accTransform: math.identity(3) }
 ];
 
 const pieceHasCoords = (piece, coords) =>
@@ -87,7 +87,7 @@ const reorderColours = (colours, newColoursOrder) => {
 };
 
 const transform = (rotationMatrix, newColoursOrder) => piece => {
-  const vector = matrix([piece.x, piece.y, piece.z]);
+  const vector = math.matrix([piece.x, piece.y, piece.z]);
   const rotatedVector = math.multiply(vector, rotationMatrix);
   return {
     id: piece.id,
