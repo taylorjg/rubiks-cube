@@ -1,6 +1,6 @@
 {
   "name": "rubiks-cube",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Rubik's cube solver",
   "scripts": {
     "eslint": "eslint .",
@@ -14,7 +14,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "mathjs": "^6.0.2",
-    "three": "^0.105.2",
+    "three": "^0.102.1",
     "three-orbitcontrols": "^2.102.1"
   },
   "repository": {
