@@ -1,14 +1,14 @@
 /* eslint-env node */
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
-const packageJson = require('./package.json');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
+const packageJson = require('./package.json')
 
-const serverPublic = path.join(__dirname, 'server', 'public');
+const serverPublic = path.join(__dirname, 'server', 'public')
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: [
     './solving/index.js',
     './client/index.js'
@@ -27,17 +27,8 @@ module.exports = {
       version: packageJson.version
     })
   ],
-  module: {
-    rules: [
-      {
-        test: /\.(js)$/,
-        exclude: /node_modules/,
-        use: 'babel-loader'
-      }
-    ]
-  },
   devtool: 'source-map',
   devServer: {
     contentBase: serverPublic
   }
-};
+}

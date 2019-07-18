@@ -10,10 +10,6 @@ module.exports = {
     es6: true
   },
   rules: {
-    semi: [
-      2,
-      'always'
-    ],
     'no-console': 'off'
   }
 }
