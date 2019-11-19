@@ -1,9 +1,9 @@
+import * as THREE from 'three';
+import OrbitControls from 'three-orbitcontrols';
 import * as S from '../solving';
 import * as C from '../solving/constants';
 import * as R from '../solving/rotations';
 import * as CL from '../solving/coordsLists';
-import * as THREE from 'three';
-import OrbitControls from 'three-orbitcontrols';
 
 const COLOUR_TABLE = {
   'B': new THREE.Color('blue'),
@@ -70,57 +70,61 @@ const ROTATION_MATRICES = {
   [S.rollAll270]: makeRotationMatrix4(R.Z270)
 };
 
+// QC = Quaternion constant
+// why is is Math.sqrt(2) / 2 ?
+const QC = Math.sqrt(2) / 2 // 0.7071067811865476
+
 const END_QUATERNIONS = {
-  [S.yawTop90]: new THREE.Quaternion(0, 0.7071067811865475, 0, 0.7071067811865476),
-  [S.yawMiddle90]: new THREE.Quaternion(0, 0.7071067811865475, 0, 0.7071067811865476),
-  [S.yawBottom90]: new THREE.Quaternion(0, 0.7071067811865475, 0, 0.7071067811865476),
-  [S.yawTopAndMiddle90]: new THREE.Quaternion(0, 0.7071067811865475, 0, 0.7071067811865476),
-  [S.yawBottomAndMiddle90]: new THREE.Quaternion(0, 0.7071067811865475, 0, 0.7071067811865476),
-  [S.yawAll90]: new THREE.Quaternion(0, 0.7071067811865475, 0, 0.7071067811865476),
+  [S.yawTop90]: new THREE.Quaternion(0, QC, 0, QC),
+  [S.yawMiddle90]: new THREE.Quaternion(0, QC, 0, QC),
+  [S.yawBottom90]: new THREE.Quaternion(0, QC, 0, QC),
+  [S.yawTopAndMiddle90]: new THREE.Quaternion(0, QC, 0, QC),
+  [S.yawBottomAndMiddle90]: new THREE.Quaternion(0, QC, 0, QC),
+  [S.yawAll90]: new THREE.Quaternion(0, QC, 0, QC),
 
   [S.yawTop180]: new THREE.Quaternion(0, 1, 0, 0),
   [S.yawBottom180]: new THREE.Quaternion(0, 1, 0, 0),
 
-  [S.yawTop270]: new THREE.Quaternion(0, -0.7071067811865475, 0, 0.7071067811865476),
-  [S.yawMiddle270]: new THREE.Quaternion(0, -0.7071067811865475, 0, 0.7071067811865476),
-  [S.yawBottom270]: new THREE.Quaternion(0, -0.7071067811865475, 0, 0.7071067811865476),
-  [S.yawTopAndMiddle270]: new THREE.Quaternion(0, -0.7071067811865475, 0, 0.7071067811865476),
-  [S.yawBottomAndMiddle270]: new THREE.Quaternion(0, -0.7071067811865475, 0, 0.7071067811865476),
-  [S.yawAll270]: new THREE.Quaternion(0, -0.7071067811865475, 0, 0.7071067811865476),
+  [S.yawTop270]: new THREE.Quaternion(0, -QC, 0, QC),
+  [S.yawMiddle270]: new THREE.Quaternion(0, -QC, 0, QC),
+  [S.yawBottom270]: new THREE.Quaternion(0, -QC, 0, QC),
+  [S.yawTopAndMiddle270]: new THREE.Quaternion(0, -QC, 0, QC),
+  [S.yawBottomAndMiddle270]: new THREE.Quaternion(0, -QC, 0, QC),
+  [S.yawAll270]: new THREE.Quaternion(0, -QC, 0, QC),
 
-  [S.pitchLeft90]: new THREE.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476),
-  [S.pitchMiddle90]: new THREE.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476),
-  [S.pitchRight90]: new THREE.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476),
-  [S.pitchLeftAndMiddle90]: new THREE.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476),
-  [S.pitchRightAndMiddle90]: new THREE.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476),
-  [S.pitchAll90]: new THREE.Quaternion(0.7071067811865475, 0, 0, 0.7071067811865476),
+  [S.pitchLeft90]: new THREE.Quaternion(QC, 0, 0, QC),
+  [S.pitchMiddle90]: new THREE.Quaternion(QC, 0, 0, QC),
+  [S.pitchRight90]: new THREE.Quaternion(QC, 0, 0, QC),
+  [S.pitchLeftAndMiddle90]: new THREE.Quaternion(QC, 0, 0, QC),
+  [S.pitchRightAndMiddle90]: new THREE.Quaternion(QC, 0, 0, QC),
+  [S.pitchAll90]: new THREE.Quaternion(QC, 0, 0, QC),
 
   [S.pitchLeft180]: new THREE.Quaternion(1, 0, 0, 0),
   [S.pitchRight180]: new THREE.Quaternion(1, 0, 0, 0),
 
-  [S.pitchLeft270]: new THREE.Quaternion(-0.7071067811865475, 0, 0, 0.7071067811865476),
-  [S.pitchMiddle270]: new THREE.Quaternion(-0.7071067811865475, 0, 0, 0.7071067811865476),
-  [S.pitchRight270]: new THREE.Quaternion(-0.7071067811865475, 0, 0, 0.7071067811865476),
-  [S.pitchLeftAndMiddle270]: new THREE.Quaternion(-0.7071067811865475, 0, 0, 0.7071067811865476),
-  [S.pitchRightAndMiddle270]: new THREE.Quaternion(-0.7071067811865475, 0, 0, 0.7071067811865476),
-  [S.pitchAll270]: new THREE.Quaternion(-0.7071067811865475, 0, 0, 0.7071067811865476),
+  [S.pitchLeft270]: new THREE.Quaternion(-QC, 0, 0, QC),
+  [S.pitchMiddle270]: new THREE.Quaternion(-QC, 0, 0, QC),
+  [S.pitchRight270]: new THREE.Quaternion(-QC, 0, 0, QC),
+  [S.pitchLeftAndMiddle270]: new THREE.Quaternion(-QC, 0, 0, QC),
+  [S.pitchRightAndMiddle270]: new THREE.Quaternion(-QC, 0, 0, QC),
+  [S.pitchAll270]: new THREE.Quaternion(-QC, 0, 0, QC),
 
-  [S.rollFront90]: new THREE.Quaternion(0, 0, 0.7071067811865475, 0.7071067811865476),
-  [S.rollMiddle90]: new THREE.Quaternion(0, 0, 0.7071067811865475, 0.7071067811865476),
-  [S.rollBack90]: new THREE.Quaternion(0, 0, 0.7071067811865475, 0.7071067811865476),
-  [S.rollFrontAndMiddle90]: new THREE.Quaternion(0, 0, 0.7071067811865475, 0.7071067811865476),
-  [S.rollBackAndMiddle90]: new THREE.Quaternion(0, 0, 0.7071067811865475, 0.7071067811865476),
-  [S.rollAll90]: new THREE.Quaternion(0, 0, 0.7071067811865475, 0.7071067811865476),
+  [S.rollFront90]: new THREE.Quaternion(0, 0, QC, QC),
+  [S.rollMiddle90]: new THREE.Quaternion(0, 0, QC, QC),
+  [S.rollBack90]: new THREE.Quaternion(0, 0, QC, QC),
+  [S.rollFrontAndMiddle90]: new THREE.Quaternion(0, 0, QC, QC),
+  [S.rollBackAndMiddle90]: new THREE.Quaternion(0, 0, QC, QC),
+  [S.rollAll90]: new THREE.Quaternion(0, 0, QC, QC),
 
   [S.rollFront180]: new THREE.Quaternion(0, 0, 1, 0),
   [S.rollBack180]: new THREE.Quaternion(0, 0, 1, 0),
 
-  [S.rollFront270]: new THREE.Quaternion(0, 0, -0.7071067811865475, 0.7071067811865476),
-  [S.rollMiddle270]: new THREE.Quaternion(0, 0, -0.7071067811865475, 0.7071067811865476),
-  [S.rollBack270]: new THREE.Quaternion(0, 0, -0.7071067811865475, 0.7071067811865476),
-  [S.rollFrontAndMiddle270]: new THREE.Quaternion(0, 0, -0.7071067811865475, 0.7071067811865476),
-  [S.rollBackAndMiddle270]: new THREE.Quaternion(0, 0, -0.7071067811865475, 0.7071067811865476),
-  [S.rollAll270]: new THREE.Quaternion(0, 0, -0.7071067811865475, 0.7071067811865476)
+  [S.rollFront270]: new THREE.Quaternion(0, 0, -QC, QC),
+  [S.rollMiddle270]: new THREE.Quaternion(0, 0, -QC, QC),
+  [S.rollBack270]: new THREE.Quaternion(0, 0, -QC, QC),
+  [S.rollFrontAndMiddle270]: new THREE.Quaternion(0, 0, -QC, QC),
+  [S.rollBackAndMiddle270]: new THREE.Quaternion(0, 0, -QC, QC),
+  [S.rollAll270]: new THREE.Quaternion(0, 0, -QC, QC)
 };
 
 const COORDS_LIST = {
@@ -215,53 +219,6 @@ const DURATIONS = {
   [S.rollBackAndMiddle270]: 1,
   [S.rollAll90]: 1,
   [S.rollAll270]: 1
-};
-
-const OPPOSITE_MOVES = {
-  [S.yawTop90]: S.yawTop270,
-  [S.yawTop180]: S.yawTop180,
-  [S.yawTop270]: S.yawTop90,
-  [S.yawMiddle90]: S.yawMiddle270,
-  [S.yawMiddle270]: S.yawMiddle90,
-  [S.yawBottom90]: S.yawBottom270,
-  [S.yawBottom180]: S.yawBottom180,
-  [S.yawBottom270]: S.yawBottom90,
-  [S.yawTopAndMiddle90]: S.yawTopAndMiddle270,
-  [S.yawTopAndMiddle270]: S.yawTopAndMiddle90,
-  [S.yawBottomAndMiddle90]: S.yawBottomAndMiddle270,
-  [S.yawBottomAndMiddle270]: S.yawBottomAndMiddle90,
-  [S.yawAll90]: S.yawAll270,
-  [S.yawAll270]: S.yawAll90,
-
-  [S.pitchLeft90]: S.pitchLeft270,
-  [S.pitchLeft180]: S.pitchLeft180,
-  [S.pitchLeft270]: S.pitchLeft90,
-  [S.pitchMiddle90]: S.pitchMiddle270,
-  [S.pitchMiddle270]: S.pitchMiddle90,
-  [S.pitchRight90]: S.pitchRight270,
-  [S.pitchRight180]: S.pitchRight180,
-  [S.pitchRight270]: S.pitchRight90,
-  [S.pitchLeftAndMiddle90]: S.pitchLeftAndMiddle270,
-  [S.pitchLeftAndMiddle270]: S.pitchLeftAndMiddle90,
-  [S.pitchRightAndMiddle90]: S.pitchRightAndMiddle270,
-  [S.pitchRightAndMiddle270]: S.pitchRightAndMiddle90,
-  [S.pitchAll90]: S.pitchAll270,
-  [S.pitchAll270]: S.pitchAll90,
-
-  [S.rollFront90]: S.rollFront270,
-  [S.rollFront180]: S.rollFront180,
-  [S.rollFront270]: S.rollFront90,
-  [S.rollMiddle90]: S.rollMiddle270,
-  [S.rollMiddle270]: S.rollMiddle90,
-  [S.rollBack90]: S.rollBack270,
-  [S.rollBack180]: S.rollBack180,
-  [S.rollBack270]: S.rollBack90,
-  [S.rollFrontAndMiddle90]: S.rollFrontAndMiddle270,
-  [S.rollFrontAndMiddle270]: S.rollFrontAndMiddle90,
-  [S.rollBackAndMiddle90]: S.rollBackAndMiddle270,
-  [S.rollBackAndMiddle270]: S.rollBackAndMiddle90,
-  [S.rollAll90]: S.rollAll270,
-  [S.rollAll270]: S.rollAll90
 };
 
 const PIECE_SIZE = 0.92;
@@ -457,14 +414,15 @@ const scramble = () => {
 
   disableScrambleButton();
 
-  const numRandomMoves = 10 + Math.floor(Math.random() * 30);
+  const numRandomMoves = 25 + Math.floor(Math.random() * 25);
   const randomMoves = Array.from(Array(numRandomMoves).keys()).map(S.randomMove);
+  S.removeRedundantMoves(randomMoves)
   cube = randomMoves.reduce((c, m) => m(c), S.solvedCube);
   renderCube(cube);
 
   setTimeout(
     () => {
-      const solution = randomMoves.map(move => OPPOSITE_MOVES[move]).reverse();
+      const solution = randomMoves.map(move => S.OPPOSITE_MOVES[move]).reverse();
       animateMoves(
         sequenceOfMoves,
         { moves: solution, next: 0 },

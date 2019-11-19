@@ -3,28 +3,25 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
-const packageJson = require('./package.json')
+const { version } = require('./package.json')
 
 const serverPublic = path.join(__dirname, 'server', 'public')
 
 module.exports = {
   mode: 'production',
-  entry: [
-    './solving/index.js',
-    './client/index.js'
-  ],
+  entry: './src/index.js',
   output: {
     path: serverPublic,
     filename: 'bundle.js',
   },
   plugins: [
     new CopyWebpackPlugin([
-      { context: './client', from: '*.html' },
-      { context: './client', from: '*.css' }
+      { context: './src', from: '*.html' },
+      { context: './src', from: '*.css' }
     ]),
     new HtmlWebpackPlugin({
-      template: './client/index.html',
-      version: packageJson.version
+      template: './src/index.html',
+      version
     })
   ],
   devtool: 'source-map',

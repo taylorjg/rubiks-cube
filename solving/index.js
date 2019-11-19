@@ -242,6 +242,7 @@ export const rollAll90 = cube =>
 export const rollAll270 = cube =>
   transformPieces(cube, CL.allCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270));
 
+// https://ruwix.com/the-rubiks-cube/notation/advanced/
 export const MOVES = [
   yawTop90, // U'
   yawTop180, // U2
@@ -289,24 +290,51 @@ export const MOVES = [
   rollAll270 // Z
 ];
 
-const dumpCube = cube => {
+export const OPPOSITE_MOVES = {
+  [yawTop90]: yawTop270,
+  [yawTop180]: yawTop180,
+  [yawTop270]: yawTop90,
+  [yawMiddle90]: yawMiddle270,
+  [yawMiddle270]: yawMiddle90,
+  [yawBottom90]: yawBottom270,
+  [yawBottom180]: yawBottom180,
+  [yawBottom270]: yawBottom90,
+  [yawTopAndMiddle90]: yawTopAndMiddle270,
+  [yawTopAndMiddle270]: yawTopAndMiddle90,
+  [yawBottomAndMiddle90]: yawBottomAndMiddle270,
+  [yawBottomAndMiddle270]: yawBottomAndMiddle90,
+  [yawAll90]: yawAll270,
+  [yawAll270]: yawAll90,
 
-  const topFace = getTopFace(cube);
-  const leftFace = getLeftFace(cube);
-  const frontFace = getFrontFace(cube);
-  const rightFace = getRightFace(cube);
-  const backFace = getBackFace(cube);
-  const bottomFace = getBottomFace(cube);
+  [pitchLeft90]: pitchLeft270,
+  [pitchLeft180]: pitchLeft180,
+  [pitchLeft270]: pitchLeft90,
+  [pitchMiddle90]: pitchMiddle270,
+  [pitchMiddle270]: pitchMiddle90,
+  [pitchRight90]: pitchRight270,
+  [pitchRight180]: pitchRight180,
+  [pitchRight270]: pitchRight90,
+  [pitchLeftAndMiddle90]: pitchLeftAndMiddle270,
+  [pitchLeftAndMiddle270]: pitchLeftAndMiddle90,
+  [pitchRightAndMiddle90]: pitchRightAndMiddle270,
+  [pitchRightAndMiddle270]: pitchRightAndMiddle90,
+  [pitchAll90]: pitchAll270,
+  [pitchAll270]: pitchAll90,
 
-  const three = (x, from, to) => x.slice(from, to).join('');
-  const line = (f, t) => {
-    console.log(`${three(topFace, f, t)}  ${three(leftFace, f, t)}   ${three(frontFace, f, t)}    ${three(rightFace, f, t)}    ${three(backFace, f, t)}   ${three(bottomFace, f, t)}`);
-  };
-
-  console.log('Top  Left  Front  Right  Back  Bottom');
-  line(0, 3);
-  line(3, 6);
-  line(6, 9);
+  [rollFront90]: rollFront270,
+  [rollFront180]: rollFront180,
+  [rollFront270]: rollFront90,
+  [rollMiddle90]: rollMiddle270,
+  [rollMiddle270]: rollMiddle90,
+  [rollBack90]: rollBack270,
+  [rollBack180]: rollBack180,
+  [rollBack270]: rollBack90,
+  [rollFrontAndMiddle90]: rollFrontAndMiddle270,
+  [rollFrontAndMiddle270]: rollFrontAndMiddle90,
+  [rollBackAndMiddle90]: rollBackAndMiddle270,
+  [rollBackAndMiddle270]: rollBackAndMiddle90,
+  [rollAll90]: rollAll270,
+  [rollAll270]: rollAll90
 };
 
 export const randomMove = () => {
@@ -314,121 +342,20 @@ export const randomMove = () => {
   return MOVES[randomIndex];
 };
 
-class Node {
-  constructor(cube, move, parent, g, h) {
-    this.cube = cube;
-    this.move = move;
-    this.parent = parent;
-    this.g = g;
-    this.h = h;
-    this.f = g + h;
+export const removeRedundantMoves = moves => {
+  for (; ;) {
+    let removedSomething = false
+    const indexes = Array.from(Array(moves.length).keys())
+    for (const index of indexes) {
+      if (index === 0) continue
+      const move = moves[index]
+      const previousMove = moves[index - 1]
+      if (move === OPPOSITE_MOVES[previousMove]) {
+        moves.splice(index, 1)
+        removedSomething = true
+        break
+      }
+    }
+    if (!removedSomething) break
   }
 }
-
-const heuristic = cube => {
-
-  const faceCount = (face, colour) =>
-    getFace(cube, face).filter(ch => ch === colour).length;
-
-  const counts = [
-    faceCount(C.TOP, "B"),
-    faceCount(C.LEFT, "R"),
-    faceCount(C.FRONT, "Y"),
-    faceCount(C.RIGHT, "O"),
-    faceCount(C.BACK, "W"),
-    faceCount(C.BOTTOM, "G")
-  ];
-  const total = counts.reduce((a, b) => a + b, 0);
-  return (9 * 6) - total;
-};
-
-export const areCubesSame = (cube1, cube2) => {
-  const s1 = JSON.stringify(cube1);
-  const s2 = JSON.stringify(cube2);
-  return s1 === s2;
-};
-
-const minBy = (set, fn) => {
-  let currentMin = null;
-  set.forEach(element => {
-    const value = fn(element);
-    if (currentMin) {
-      if (value < currentMin.value) {
-        currentMin.element = element;
-        currentMin.value = value;
-      }
-    }
-    else {
-      currentMin = { element, value };
-    }
-  });
-  return currentMin ? currentMin.element : null;
-};
-
-const aStar = openSet => {
-
-  const seenCubes = [];
-
-  const isCubeInOpenSet = cube =>
-    !!Array.from(openSet.values()).find(element => areCubesSame(element.cube, cube));
-
-  const isCubeInSeenCubes = cube =>
-    !!seenCubes.find(element => areCubesSame(element, cube));
-
-  while (openSet.size) {
-    const currentNode = minBy(openSet, el => el.f);
-    if (areCubesSame(currentNode.cube, solvedCube)) {
-      return currentNode;
-    }
-    else {
-      openSet.delete(currentNode);
-      if (!isCubeInSeenCubes(currentNode.cube)) {
-        seenCubes.push(currentNode.cube);
-      }
-
-      const nextCubes = MOVES.map(move => [move(currentNode.cube), move])
-        .filter(([cube]) => !isCubeInOpenSet(cube))
-        .filter(([cube]) => !isCubeInSeenCubes(cube));
-
-      const nextNodes = nextCubes.map(([cube, move]) => {
-        const g = 0;
-        const h = heuristic(cube);
-        return new Node(cube, move, currentNode, g, h);
-      });
-
-      nextNodes.forEach(nextNode => openSet.add(nextNode));
-    }
-  }
-
-  return null;
-};
-
-const forEachNode = (node, fn) => {
-  fn(node);
-  const parent = node.parent;
-  parent && forEachNode(parent, fn);
-};
-
-const rootNodeToSolution = rootNode => {
-  const moves = [];
-  forEachNode(rootNode, node => node.move && moves.push(node.move));
-  return moves;
-};
-
-export const solve = shuffledCube => {
-  const initialNode = new Node(shuffledCube, null, null, 0, 0);
-  const openSet = new Set([initialNode]);
-  const rootNode = aStar(openSet);
-  return rootNode ? rootNodeToSolution(rootNode).reverse() : null;
-};
-
-export const makeMoves = (initialCube, moves, display = false) => {
-  const finalCube = moves.reduce(
-    (cube, move) => {
-      display && (dumpCube(cube), console.log());
-      return move(cube);
-    },
-    initialCube);
-  display && dumpCube(finalCube);
-  return finalCube;
-};
