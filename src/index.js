@@ -70,9 +70,9 @@ const ROTATION_MATRICES = {
   [S.rollAll270]: makeRotationMatrix4(R.Z270)
 };
 
-// QC = Quaternion constant
-// why is is Math.sqrt(2) / 2 ?
-const QC = Math.sqrt(2) / 2 // 0.7071067811865476
+// QC = Quaternion Constant
+// I can't remember how I calculated this to be Math.sqrt(2) / 2
+const QC = Math.sqrt(2) / 2
 
 const END_QUATERNIONS = {
   [S.yawTop90]: new THREE.Quaternion(0, QC, 0, QC),

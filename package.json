@@ -1,13 +1,13 @@
 {
   "name": "rubiks-cube",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Rubik's cube solver",
   "scripts": {
     "eslint": "eslint .",
     "build": "webpack",
     "start": "node server",
     "start:dev": "webpack-dev-server",
-    "test": "mocha -r @babel/register --slow 200"
+    "test": "mocha -r esm"
   },
   "author": "Jonathan Taylor",
   "license": "MIT",
@@ -25,6 +25,7 @@
     "chai": "^4.2.0",
     "copy-webpack-plugin": "^5.0.5",
     "eslint": "^6.6.0",
+    "esm": "^3.2.25",
     "html-webpack-plugin": "^3.2.0",
     "mocha": "^6.2.2",
     "webpack": "^4.41.2",
