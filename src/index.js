@@ -256,18 +256,15 @@ const createUiPiece = (piece, move) => {
 };
 
 const updateUiPiece = (piece, uiPiece, move) => {
-
-  uiPiece.position.x = piece.x;
-  uiPiece.position.y = piece.y;
-  uiPiece.position.z = piece.z;
-
   if (move) {
     uiPiece.applyMatrix(ROTATION_MATRICES[move]);
   }
   else {
+    uiPiece.position.x = piece.x;
+    uiPiece.position.y = piece.y;
+    uiPiece.position.z = piece.z;
     uiPiece.setRotationFromMatrix(makeRotationMatrix4(piece.accTransform));
   }
-
   uiPiece.userData = {
     id: piece.id,
     key: makeKey(piece)
@@ -372,7 +369,7 @@ const animateMoves = (nextMove, state, done, speed = 1) => {
   puzzleGroup.remove(...uiPieces);
   const sliceGroup = new THREE.Group();
   sliceGroup.add(...uiPieces);
-  puzzleGroup.add(sliceGroup);
+  scene.add(sliceGroup);
 
   const times = [0, 0.75 * DURATIONS[move] * speed];
   const values = [];
@@ -391,6 +388,7 @@ const animateMoves = (nextMove, state, done, speed = 1) => {
   const onFinished = () => {
     mixer.removeEventListener("finished", onFinished);
     sliceGroup.remove(...uiPieces);
+    scene.remove(sliceGroup);
     puzzleGroup.add(...uiPieces);
     cube = move(cube);
     renderCube(cube, move);

@@ -1,6 +1,6 @@
 {
   "name": "rubiks-cube",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Rubik's cube solver",
   "scripts": {
     "eslint": "eslint .",
@@ -13,9 +13,9 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
-    "mathjs": "^6.0.2",
-    "three": "0.102.1",
-    "three-orbitcontrols": "2.102.1"
+    "mathjs": "^6.2.5",
+    "three": "^0.110.0",
+    "three-orbitcontrols": "^2.110.1"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "copy-webpack-plugin": "^5.0.5",
-    "eslint": "^6.6.0",
+    "eslint": "^6.7.0",
     "esm": "^3.2.25",
     "html-webpack-plugin": "^3.2.0",
     "mocha": "^6.2.2",
