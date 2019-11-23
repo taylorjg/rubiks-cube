@@ -52,12 +52,12 @@ export class PieceBufferGeometry extends BufferGeometry {
     var groupStart = 0
 
     // build each side of the box geometry
-    buildPlane('z', 'y', 'x', -1, -1, size, size, size, numSegments, numSegments, 0); // px
-    buildPlane('z', 'y', 'x', 1, -1, size, size, -size, numSegments, numSegments, 1); // nx
-    buildPlane('x', 'z', 'y', 1, 1, size, size, size, numSegments, numSegments, 2); // py
-    buildPlane('x', 'z', 'y', 1, -1, size, size, -size, numSegments, numSegments, 3); // ny
-    buildPlane('x', 'y', 'z', 1, -1, size, size, size, numSegments, numSegments, 4); // pz
-    buildPlane('x', 'y', 'z', -1, -1, size, size, -size, numSegments, numSegments, 5); // nz
+    buildPlane('z', 'y', 'x', -1, -1, size, size, size, numSegments, numSegments, 0) // px
+    buildPlane('z', 'y', 'x', 1, -1, size, size, -size, numSegments, numSegments, 1) // nx
+    buildPlane('x', 'z', 'y', 1, 1, size, size, size, numSegments, numSegments, 2) // py
+    buildPlane('x', 'z', 'y', 1, -1, size, size, -size, numSegments, numSegments, 3) // ny
+    buildPlane('x', 'y', 'z', 1, -1, size, size, size, numSegments, numSegments, 4) // pz
+    buildPlane('x', 'y', 'z', -1, -1, size, size, -size, numSegments, numSegments, 5) // nz
 
     // build geometry
     this.setIndex(indices)
