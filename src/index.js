@@ -33,203 +33,203 @@ const makeRotationMatrix4 = rotationMatrix3 => {
     0, 0, 0, 1)
 }
 
-const ROTATION_MATRICES = {
-  [L.yawTop90]: makeRotationMatrix4(R.Y90),
-  [L.yawTop180]: makeRotationMatrix4(R.Y180),
-  [L.yawTop270]: makeRotationMatrix4(R.Y270),
-  [L.yawMiddle90]: makeRotationMatrix4(R.Y90),
-  [L.yawMiddle270]: makeRotationMatrix4(R.Y270),
-  [L.yawBottom90]: makeRotationMatrix4(R.Y90),
-  [L.yawBottom180]: makeRotationMatrix4(R.Y180),
-  [L.yawBottom270]: makeRotationMatrix4(R.Y270),
-  [L.yawTopAndMiddle90]: makeRotationMatrix4(R.Y90),
-  [L.yawTopAndMiddle270]: makeRotationMatrix4(R.Y270),
-  [L.yawBottomAndMiddle90]: makeRotationMatrix4(R.Y90),
-  [L.yawBottomAndMiddle270]: makeRotationMatrix4(R.Y270),
-  [L.yawAll90]: makeRotationMatrix4(R.Y90),
-  [L.yawAll270]: makeRotationMatrix4(R.Y270),
+const ROTATION_MATRICES = new Map([
+  [L.yawTop90, makeRotationMatrix4(R.Y90)],
+  [L.yawTop180, makeRotationMatrix4(R.Y180)],
+  [L.yawTop270, makeRotationMatrix4(R.Y270)],
+  [L.yawMiddle90, makeRotationMatrix4(R.Y90)],
+  [L.yawMiddle270, makeRotationMatrix4(R.Y270)],
+  [L.yawBottom90, makeRotationMatrix4(R.Y90)],
+  [L.yawBottom180, makeRotationMatrix4(R.Y180)],
+  [L.yawBottom270, makeRotationMatrix4(R.Y270)],
+  [L.yawTopAndMiddle90, makeRotationMatrix4(R.Y90)],
+  [L.yawTopAndMiddle270, makeRotationMatrix4(R.Y270)],
+  [L.yawBottomAndMiddle90, makeRotationMatrix4(R.Y90)],
+  [L.yawBottomAndMiddle270, makeRotationMatrix4(R.Y270)],
+  [L.yawAll90, makeRotationMatrix4(R.Y90)],
+  [L.yawAll270, makeRotationMatrix4(R.Y270)],
 
-  [L.pitchLeft90]: makeRotationMatrix4(R.X90),
-  [L.pitchLeft180]: makeRotationMatrix4(R.X180),
-  [L.pitchLeft270]: makeRotationMatrix4(R.X270),
-  [L.pitchMiddle90]: makeRotationMatrix4(R.X90),
-  [L.pitchMiddle270]: makeRotationMatrix4(R.X270),
-  [L.pitchRight90]: makeRotationMatrix4(R.X90),
-  [L.pitchRight180]: makeRotationMatrix4(R.X180),
-  [L.pitchRight270]: makeRotationMatrix4(R.X270),
-  [L.pitchLeftAndMiddle90]: makeRotationMatrix4(R.X90),
-  [L.pitchLeftAndMiddle270]: makeRotationMatrix4(R.X270),
-  [L.pitchRightAndMiddle90]: makeRotationMatrix4(R.X90),
-  [L.pitchRightAndMiddle270]: makeRotationMatrix4(R.X270),
-  [L.pitchAll90]: makeRotationMatrix4(R.X90),
-  [L.pitchAll270]: makeRotationMatrix4(R.X270),
+  [L.pitchLeft90, makeRotationMatrix4(R.X90)],
+  [L.pitchLeft180, makeRotationMatrix4(R.X180)],
+  [L.pitchLeft270, makeRotationMatrix4(R.X270)],
+  [L.pitchMiddle90, makeRotationMatrix4(R.X90)],
+  [L.pitchMiddle270, makeRotationMatrix4(R.X270)],
+  [L.pitchRight90, makeRotationMatrix4(R.X90)],
+  [L.pitchRight180, makeRotationMatrix4(R.X180)],
+  [L.pitchRight270, makeRotationMatrix4(R.X270)],
+  [L.pitchLeftAndMiddle90, makeRotationMatrix4(R.X90)],
+  [L.pitchLeftAndMiddle270, makeRotationMatrix4(R.X270)],
+  [L.pitchRightAndMiddle90, makeRotationMatrix4(R.X90)],
+  [L.pitchRightAndMiddle270, makeRotationMatrix4(R.X270)],
+  [L.pitchAll90, makeRotationMatrix4(R.X90)],
+  [L.pitchAll270, makeRotationMatrix4(R.X270)],
 
-  [L.rollFront90]: makeRotationMatrix4(R.Z90),
-  [L.rollFront180]: makeRotationMatrix4(R.Z180),
-  [L.rollFront270]: makeRotationMatrix4(R.Z270),
-  [L.rollMiddle90]: makeRotationMatrix4(R.Z90),
-  [L.rollMiddle270]: makeRotationMatrix4(R.Z270),
-  [L.rollBack90]: makeRotationMatrix4(R.Z90),
-  [L.rollBack180]: makeRotationMatrix4(R.Z180),
-  [L.rollBack270]: makeRotationMatrix4(R.Z270),
-  [L.rollFrontAndMiddle90]: makeRotationMatrix4(R.Z90),
-  [L.rollFrontAndMiddle270]: makeRotationMatrix4(R.Z270),
-  [L.rollBackAndMiddle90]: makeRotationMatrix4(R.Z90),
-  [L.rollBackAndMiddle270]: makeRotationMatrix4(R.Z270),
-  [L.rollAll90]: makeRotationMatrix4(R.Z90),
-  [L.rollAll270]: makeRotationMatrix4(R.Z270)
-}
+  [L.rollFront90, makeRotationMatrix4(R.Z90)],
+  [L.rollFront180, makeRotationMatrix4(R.Z180)],
+  [L.rollFront270, makeRotationMatrix4(R.Z270)],
+  [L.rollMiddle90, makeRotationMatrix4(R.Z90)],
+  [L.rollMiddle270, makeRotationMatrix4(R.Z270)],
+  [L.rollBack90, makeRotationMatrix4(R.Z90)],
+  [L.rollBack180, makeRotationMatrix4(R.Z180)],
+  [L.rollBack270, makeRotationMatrix4(R.Z270)],
+  [L.rollFrontAndMiddle90, makeRotationMatrix4(R.Z90)],
+  [L.rollFrontAndMiddle270, makeRotationMatrix4(R.Z270)],
+  [L.rollBackAndMiddle90, makeRotationMatrix4(R.Z90)],
+  [L.rollBackAndMiddle270, makeRotationMatrix4(R.Z270)],
+  [L.rollAll90, makeRotationMatrix4(R.Z90)],
+  [L.rollAll270, makeRotationMatrix4(R.Z270)]
+])
 
 // QC = Quaternion Constant
 // I can't remember how I calculated this to be Math.sqrt(2) / 2
 const QC = Math.sqrt(2) / 2
 
-const END_QUATERNIONS = {
-  [L.yawTop90]: new THREE.Quaternion(0, QC, 0, QC),
-  [L.yawMiddle90]: new THREE.Quaternion(0, QC, 0, QC),
-  [L.yawBottom90]: new THREE.Quaternion(0, QC, 0, QC),
-  [L.yawTopAndMiddle90]: new THREE.Quaternion(0, QC, 0, QC),
-  [L.yawBottomAndMiddle90]: new THREE.Quaternion(0, QC, 0, QC),
-  [L.yawAll90]: new THREE.Quaternion(0, QC, 0, QC),
+const END_QUATERNIONS = new Map([
+  [L.yawTop90, new THREE.Quaternion(0, QC, 0, QC)],
+  [L.yawMiddle90, new THREE.Quaternion(0, QC, 0, QC)],
+  [L.yawBottom90, new THREE.Quaternion(0, QC, 0, QC)],
+  [L.yawTopAndMiddle90, new THREE.Quaternion(0, QC, 0, QC)],
+  [L.yawBottomAndMiddle90, new THREE.Quaternion(0, QC, 0, QC)],
+  [L.yawAll90, new THREE.Quaternion(0, QC, 0, QC)],
 
-  [L.yawTop180]: new THREE.Quaternion(0, 1, 0, 0),
-  [L.yawBottom180]: new THREE.Quaternion(0, 1, 0, 0),
+  [L.yawTop180, new THREE.Quaternion(0, 1, 0, 0)],
+  [L.yawBottom180, new THREE.Quaternion(0, 1, 0, 0)],
 
-  [L.yawTop270]: new THREE.Quaternion(0, -QC, 0, QC),
-  [L.yawMiddle270]: new THREE.Quaternion(0, -QC, 0, QC),
-  [L.yawBottom270]: new THREE.Quaternion(0, -QC, 0, QC),
-  [L.yawTopAndMiddle270]: new THREE.Quaternion(0, -QC, 0, QC),
-  [L.yawBottomAndMiddle270]: new THREE.Quaternion(0, -QC, 0, QC),
-  [L.yawAll270]: new THREE.Quaternion(0, -QC, 0, QC),
+  [L.yawTop270, new THREE.Quaternion(0, -QC, 0, QC)],
+  [L.yawMiddle270, new THREE.Quaternion(0, -QC, 0, QC)],
+  [L.yawBottom270, new THREE.Quaternion(0, -QC, 0, QC)],
+  [L.yawTopAndMiddle270, new THREE.Quaternion(0, -QC, 0, QC)],
+  [L.yawBottomAndMiddle270, new THREE.Quaternion(0, -QC, 0, QC)],
+  [L.yawAll270, new THREE.Quaternion(0, -QC, 0, QC)],
 
-  [L.pitchLeft90]: new THREE.Quaternion(QC, 0, 0, QC),
-  [L.pitchMiddle90]: new THREE.Quaternion(QC, 0, 0, QC),
-  [L.pitchRight90]: new THREE.Quaternion(QC, 0, 0, QC),
-  [L.pitchLeftAndMiddle90]: new THREE.Quaternion(QC, 0, 0, QC),
-  [L.pitchRightAndMiddle90]: new THREE.Quaternion(QC, 0, 0, QC),
-  [L.pitchAll90]: new THREE.Quaternion(QC, 0, 0, QC),
+  [L.pitchLeft90, new THREE.Quaternion(QC, 0, 0, QC)],
+  [L.pitchMiddle90, new THREE.Quaternion(QC, 0, 0, QC)],
+  [L.pitchRight90, new THREE.Quaternion(QC, 0, 0, QC)],
+  [L.pitchLeftAndMiddle90, new THREE.Quaternion(QC, 0, 0, QC)],
+  [L.pitchRightAndMiddle90, new THREE.Quaternion(QC, 0, 0, QC)],
+  [L.pitchAll90, new THREE.Quaternion(QC, 0, 0, QC)],
 
-  [L.pitchLeft180]: new THREE.Quaternion(1, 0, 0, 0),
-  [L.pitchRight180]: new THREE.Quaternion(1, 0, 0, 0),
+  [L.pitchLeft180, new THREE.Quaternion(1, 0, 0, 0)],
+  [L.pitchRight180, new THREE.Quaternion(1, 0, 0, 0)],
 
-  [L.pitchLeft270]: new THREE.Quaternion(-QC, 0, 0, QC),
-  [L.pitchMiddle270]: new THREE.Quaternion(-QC, 0, 0, QC),
-  [L.pitchRight270]: new THREE.Quaternion(-QC, 0, 0, QC),
-  [L.pitchLeftAndMiddle270]: new THREE.Quaternion(-QC, 0, 0, QC),
-  [L.pitchRightAndMiddle270]: new THREE.Quaternion(-QC, 0, 0, QC),
-  [L.pitchAll270]: new THREE.Quaternion(-QC, 0, 0, QC),
+  [L.pitchLeft270, new THREE.Quaternion(-QC, 0, 0, QC)],
+  [L.pitchMiddle270, new THREE.Quaternion(-QC, 0, 0, QC)],
+  [L.pitchRight270, new THREE.Quaternion(-QC, 0, 0, QC)],
+  [L.pitchLeftAndMiddle270, new THREE.Quaternion(-QC, 0, 0, QC)],
+  [L.pitchRightAndMiddle270, new THREE.Quaternion(-QC, 0, 0, QC)],
+  [L.pitchAll270, new THREE.Quaternion(-QC, 0, 0, QC)],
 
-  [L.rollFront90]: new THREE.Quaternion(0, 0, QC, QC),
-  [L.rollMiddle90]: new THREE.Quaternion(0, 0, QC, QC),
-  [L.rollBack90]: new THREE.Quaternion(0, 0, QC, QC),
-  [L.rollFrontAndMiddle90]: new THREE.Quaternion(0, 0, QC, QC),
-  [L.rollBackAndMiddle90]: new THREE.Quaternion(0, 0, QC, QC),
-  [L.rollAll90]: new THREE.Quaternion(0, 0, QC, QC),
+  [L.rollFront90, new THREE.Quaternion(0, 0, QC, QC)],
+  [L.rollMiddle90, new THREE.Quaternion(0, 0, QC, QC)],
+  [L.rollBack90, new THREE.Quaternion(0, 0, QC, QC)],
+  [L.rollFrontAndMiddle90, new THREE.Quaternion(0, 0, QC, QC)],
+  [L.rollBackAndMiddle90, new THREE.Quaternion(0, 0, QC, QC)],
+  [L.rollAll90, new THREE.Quaternion(0, 0, QC, QC)],
 
-  [L.rollFront180]: new THREE.Quaternion(0, 0, 1, 0),
-  [L.rollBack180]: new THREE.Quaternion(0, 0, 1, 0),
+  [L.rollFront180, new THREE.Quaternion(0, 0, 1, 0)],
+  [L.rollBack180, new THREE.Quaternion(0, 0, 1, 0)],
 
-  [L.rollFront270]: new THREE.Quaternion(0, 0, -QC, QC),
-  [L.rollMiddle270]: new THREE.Quaternion(0, 0, -QC, QC),
-  [L.rollBack270]: new THREE.Quaternion(0, 0, -QC, QC),
-  [L.rollFrontAndMiddle270]: new THREE.Quaternion(0, 0, -QC, QC),
-  [L.rollBackAndMiddle270]: new THREE.Quaternion(0, 0, -QC, QC),
-  [L.rollAll270]: new THREE.Quaternion(0, 0, -QC, QC)
-}
+  [L.rollFront270, new THREE.Quaternion(0, 0, -QC, QC)],
+  [L.rollMiddle270, new THREE.Quaternion(0, 0, -QC, QC)],
+  [L.rollBack270, new THREE.Quaternion(0, 0, -QC, QC)],
+  [L.rollFrontAndMiddle270, new THREE.Quaternion(0, 0, -QC, QC)],
+  [L.rollBackAndMiddle270, new THREE.Quaternion(0, 0, -QC, QC)],
+  [L.rollAll270, new THREE.Quaternion(0, 0, -QC, QC)]
+])
 
-const COORDS_LIST = {
-  [L.yawTop90]: CL.topCoordsList,
-  [L.yawTop180]: CL.topCoordsList,
-  [L.yawTop270]: CL.topCoordsList,
-  [L.yawMiddle90]: CL.yawMiddleCoordsList,
-  [L.yawMiddle270]: CL.yawMiddleCoordsList,
-  [L.yawBottom90]: CL.bottomCoordsList,
-  [L.yawBottom180]: CL.bottomCoordsList,
-  [L.yawBottom270]: CL.bottomCoordsList,
-  [L.yawTopAndMiddle90]: CL.topAndMiddleCoordsList,
-  [L.yawTopAndMiddle270]: CL.topAndMiddleCoordsList,
-  [L.yawBottomAndMiddle90]: CL.bottomAndMiddleCoordsList,
-  [L.yawBottomAndMiddle270]: CL.bottomAndMiddleCoordsList,
-  [L.yawAll90]: CL.allCoordsList,
-  [L.yawAll270]: CL.allCoordsList,
+const COORDS_LIST = new Map([
+  [L.yawTop90, CL.topCoordsList],
+  [L.yawTop180, CL.topCoordsList],
+  [L.yawTop270, CL.topCoordsList],
+  [L.yawMiddle90, CL.yawMiddleCoordsList],
+  [L.yawMiddle270, CL.yawMiddleCoordsList],
+  [L.yawBottom90, CL.bottomCoordsList],
+  [L.yawBottom180, CL.bottomCoordsList],
+  [L.yawBottom270, CL.bottomCoordsList],
+  [L.yawTopAndMiddle90, CL.topAndMiddleCoordsList],
+  [L.yawTopAndMiddle270, CL.topAndMiddleCoordsList],
+  [L.yawBottomAndMiddle90, CL.bottomAndMiddleCoordsList],
+  [L.yawBottomAndMiddle270, CL.bottomAndMiddleCoordsList],
+  [L.yawAll90, CL.allCoordsList],
+  [L.yawAll270, CL.allCoordsList],
 
-  [L.pitchLeft90]: CL.leftCoordsList,
-  [L.pitchLeft180]: CL.leftCoordsList,
-  [L.pitchLeft270]: CL.leftCoordsList,
-  [L.pitchMiddle90]: CL.pitchMiddleCoordsList,
-  [L.pitchMiddle270]: CL.pitchMiddleCoordsList,
-  [L.pitchRight90]: CL.rightCoordsList,
-  [L.pitchRight180]: CL.rightCoordsList,
-  [L.pitchRight270]: CL.rightCoordsList,
-  [L.pitchLeftAndMiddle90]: CL.leftAndMiddleCoordsList,
-  [L.pitchLeftAndMiddle270]: CL.leftAndMiddleCoordsList,
-  [L.pitchRightAndMiddle90]: CL.rightAndMiddleCoordsList,
-  [L.pitchRightAndMiddle270]: CL.rightAndMiddleCoordsList,
-  [L.pitchAll90]: CL.allCoordsList,
-  [L.pitchAll270]: CL.allCoordsList,
+  [L.pitchLeft90, CL.leftCoordsList],
+  [L.pitchLeft180, CL.leftCoordsList],
+  [L.pitchLeft270, CL.leftCoordsList],
+  [L.pitchMiddle90, CL.pitchMiddleCoordsList],
+  [L.pitchMiddle270, CL.pitchMiddleCoordsList],
+  [L.pitchRight90, CL.rightCoordsList],
+  [L.pitchRight180, CL.rightCoordsList],
+  [L.pitchRight270, CL.rightCoordsList],
+  [L.pitchLeftAndMiddle90, CL.leftAndMiddleCoordsList],
+  [L.pitchLeftAndMiddle270, CL.leftAndMiddleCoordsList],
+  [L.pitchRightAndMiddle90, CL.rightAndMiddleCoordsList],
+  [L.pitchRightAndMiddle270, CL.rightAndMiddleCoordsList],
+  [L.pitchAll90, CL.allCoordsList],
+  [L.pitchAll270, CL.allCoordsList],
 
-  [L.rollFront90]: CL.frontCoordsList,
-  [L.rollFront180]: CL.frontCoordsList,
-  [L.rollFront270]: CL.frontCoordsList,
-  [L.rollMiddle90]: CL.rollMiddleCoordsList,
-  [L.rollMiddle270]: CL.rollMiddleCoordsList,
-  [L.rollBack90]: CL.backCoordsList,
-  [L.rollBack180]: CL.backCoordsList,
-  [L.rollBack270]: CL.backCoordsList,
-  [L.rollFrontAndMiddle90]: CL.frontAndMiddleCoordsList,
-  [L.rollFrontAndMiddle270]: CL.frontAndMiddleCoordsList,
-  [L.rollBackAndMiddle90]: CL.backAndMiddleCoordsList,
-  [L.rollBackAndMiddle270]: CL.backAndMiddleCoordsList,
-  [L.rollAll90]: CL.allCoordsList,
-  [L.rollAll270]: CL.allCoordsList
-}
+  [L.rollFront90, CL.frontCoordsList],
+  [L.rollFront180, CL.frontCoordsList],
+  [L.rollFront270, CL.frontCoordsList],
+  [L.rollMiddle90, CL.rollMiddleCoordsList],
+  [L.rollMiddle270, CL.rollMiddleCoordsList],
+  [L.rollBack90, CL.backCoordsList],
+  [L.rollBack180, CL.backCoordsList],
+  [L.rollBack270, CL.backCoordsList],
+  [L.rollFrontAndMiddle90, CL.frontAndMiddleCoordsList],
+  [L.rollFrontAndMiddle270, CL.frontAndMiddleCoordsList],
+  [L.rollBackAndMiddle90, CL.backAndMiddleCoordsList],
+  [L.rollBackAndMiddle270, CL.backAndMiddleCoordsList],
+  [L.rollAll90, CL.allCoordsList],
+  [L.rollAll270, CL.allCoordsList]
+])
 
-const NUM_TURNS = {
-  [L.yawTop90]: 1,
-  [L.yawTop180]: 2,
-  [L.yawTop270]: 1,
-  [L.yawMiddle90]: 1,
-  [L.yawMiddle270]: 1,
-  [L.yawBottom90]: 1,
-  [L.yawBottom180]: 2,
-  [L.yawBottom270]: 1,
-  [L.yawTopAndMiddle90]: 1,
-  [L.yawTopAndMiddle270]: 1,
-  [L.yawBottomAndMiddle90]: 1,
-  [L.yawBottomAndMiddle270]: 1,
-  [L.yawAll90]: 1,
-  [L.yawAll270]: 1,
+const NUM_TURNS = new Map([
+  [L.yawTop90, 1],
+  [L.yawTop180, 2],
+  [L.yawTop270, 1],
+  [L.yawMiddle90, 1],
+  [L.yawMiddle270, 1],
+  [L.yawBottom90, 1],
+  [L.yawBottom180, 2],
+  [L.yawBottom270, 1],
+  [L.yawTopAndMiddle90, 1],
+  [L.yawTopAndMiddle270, 1],
+  [L.yawBottomAndMiddle90, 1],
+  [L.yawBottomAndMiddle270, 1],
+  [L.yawAll90, 1],
+  [L.yawAll270, 1],
 
-  [L.pitchLeft90]: 1,
-  [L.pitchLeft180]: 2,
-  [L.pitchLeft270]: 1,
-  [L.pitchMiddle90]: 1,
-  [L.pitchMiddle270]: 1,
-  [L.pitchRight90]: 1,
-  [L.pitchRight180]: 2,
-  [L.pitchRight270]: 1,
-  [L.pitchLeftAndMiddle90]: 1,
-  [L.pitchLeftAndMiddle270]: 1,
-  [L.pitchRightAndMiddle90]: 1,
-  [L.pitchRightAndMiddle270]: 1,
-  [L.pitchAll90]: 1,
-  [L.pitchAll270]: 1,
+  [L.pitchLeft90, 1],
+  [L.pitchLeft180, 2],
+  [L.pitchLeft270, 1],
+  [L.pitchMiddle90, 1],
+  [L.pitchMiddle270, 1],
+  [L.pitchRight90, 1],
+  [L.pitchRight180, 2],
+  [L.pitchRight270, 1],
+  [L.pitchLeftAndMiddle90, 1],
+  [L.pitchLeftAndMiddle270, 1],
+  [L.pitchRightAndMiddle90, 1],
+  [L.pitchRightAndMiddle270, 1],
+  [L.pitchAll90, 1],
+  [L.pitchAll270, 1],
 
-  [L.rollFront90]: 1,
-  [L.rollFront180]: 2,
-  [L.rollFront270]: 1,
-  [L.rollMiddle90]: 1,
-  [L.rollMiddle270]: 1,
-  [L.rollBack90]: 1,
-  [L.rollBack180]: 2,
-  [L.rollBack270]: 1,
-  [L.rollFrontAndMiddle90]: 1,
-  [L.rollFrontAndMiddle270]: 1,
-  [L.rollBackAndMiddle90]: 1,
-  [L.rollBackAndMiddle270]: 1,
-  [L.rollAll90]: 1,
-  [L.rollAll270]: 1
-}
+  [L.rollFront90, 1],
+  [L.rollFront180, 2],
+  [L.rollFront270, 1],
+  [L.rollMiddle90, 1],
+  [L.rollMiddle270, 1],
+  [L.rollBack90, 1],
+  [L.rollBack180, 2],
+  [L.rollBack270, 1],
+  [L.rollFrontAndMiddle90, 1],
+  [L.rollFrontAndMiddle270, 1],
+  [L.rollBackAndMiddle90, 1],
+  [L.rollBackAndMiddle270, 1],
+  [L.rollAll90, 1],
+  [L.rollAll270, 1]
+])
 
 const PIECE_SIZE = 1
 const NUM_SEGMENTS = 12
@@ -271,7 +271,7 @@ const resetUiPiece = (uiPiece, piece) => {
   uiPiece.position.x = piece.x
   uiPiece.position.y = piece.y
   uiPiece.position.z = piece.z
-  uiPiece.setRotationFromMatrix(makeRotationMatrix4(piece.accTransform))
+  uiPiece.setRotationFromMatrix(makeRotationMatrix4(piece.accTransform3))
   uiPiece.userData = {
     id: piece.id,
     key: makeKey(piece)
@@ -279,7 +279,7 @@ const resetUiPiece = (uiPiece, piece) => {
 }
 
 const updateUiPiece = (uiPiece, piece, move) => {
-  uiPiece.applyMatrix(ROTATION_MATRICES[move])
+  uiPiece.applyMatrix(ROTATION_MATRICES.get(move))
   uiPiece.userData = {
     id: piece.id,
     key: makeKey(piece)
@@ -393,20 +393,21 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
     return
   }
 
-  const pieces = L.getPieces(cube, COORDS_LIST[move])
+  const pieces = L.getPieces(cube, COORDS_LIST.get(move))
   const uiPieces = pieces.map(findUiPiece)
   puzzleGroup.remove(...uiPieces)
   const sliceGroup = new THREE.Group()
   sliceGroup.add(...uiPieces)
   scene.add(sliceGroup)
 
+  const numTurns = NUM_TURNS.get(move)
   const animationSpeedPerTurn = ANIMATION_SPEED_PER_TURN_MS / 1000
   const t0 = 0
-  const t1 = NUM_TURNS[move] * animationSpeedPerTurn
+  const t1 = numTurns * animationSpeedPerTurn
   const times = [t0, t1]
   const values = []
   const startQuaternion = new THREE.Quaternion()
-  const endQuaternion = END_QUATERNIONS[move]
+  const endQuaternion = END_QUATERNIONS.get(move)
   startQuaternion.toArray(values, values.length)
   endQuaternion.toArray(values, values.length)
   const clip = new THREE.AnimationClip(
@@ -432,7 +433,7 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
 }
 
 const solveByCheating = randomMoves => {
-  const solutionMoves = randomMoves.map(move => L.OPPOSITE_MOVES[move]).reverse()
+  const solutionMoves = randomMoves.map(move => L.OPPOSITE_MOVES.get(move)).reverse()
   animateMoves(solutionMoves)
 }
 

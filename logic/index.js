@@ -1,41 +1,40 @@
 import * as math from 'mathjs'
 import * as CL from './coordsLists'
 import * as R from './rotations'
-import * as C from './constants'
 
 export const SOLVED_CUBE = [
   // top layer
-  { id: 1, x: -1, y: 1, z: 1, colours: 'BRY---', accTransform: R.Identity },
-  { id: 2, x: 0, y: 1, z: 1, colours: 'B-Y---', accTransform: R.Identity },
-  { id: 3, x: 1, y: 1, z: 1, colours: 'B-YO--', accTransform: R.Identity },
-  { id: 4, x: -1, y: 1, z: 0, colours: 'BR----', accTransform: R.Identity },
-  { id: 5, x: 0, y: 1, z: 0, colours: 'B-----', accTransform: R.Identity },
-  { id: 6, x: 1, y: 1, z: 0, colours: 'B--O--', accTransform: R.Identity },
-  { id: 7, x: -1, y: 1, z: -1, colours: 'BR--W-', accTransform: R.Identity },
-  { id: 8, x: 0, y: 1, z: -1, colours: 'B---W-', accTransform: R.Identity },
-  { id: 9, x: 1, y: 1, z: -1, colours: 'B--OW-', accTransform: R.Identity },
+  { id: 1, x: -1, y: 1, z: 1, colours: 'BRY---', accTransform3: R.Identity },
+  { id: 2, x: 0, y: 1, z: 1, colours: 'B-Y---', accTransform3: R.Identity },
+  { id: 3, x: 1, y: 1, z: 1, colours: 'B-YO--', accTransform3: R.Identity },
+  { id: 4, x: -1, y: 1, z: 0, colours: 'BR----', accTransform3: R.Identity },
+  { id: 5, x: 0, y: 1, z: 0, colours: 'B-----', accTransform3: R.Identity },
+  { id: 6, x: 1, y: 1, z: 0, colours: 'B--O--', accTransform3: R.Identity },
+  { id: 7, x: -1, y: 1, z: -1, colours: 'BR--W-', accTransform3: R.Identity },
+  { id: 8, x: 0, y: 1, z: -1, colours: 'B---W-', accTransform3: R.Identity },
+  { id: 9, x: 1, y: 1, z: -1, colours: 'B--OW-', accTransform3: R.Identity },
 
   // middle layer
-  { id: 10, x: -1, y: 0, z: 1, colours: '-RY---', accTransform: R.Identity },
-  { id: 11, x: 0, y: 0, z: 1, colours: '--Y---', accTransform: R.Identity },
-  { id: 12, x: 1, y: 0, z: 1, colours: '--YO--', accTransform: R.Identity },
-  { id: 13, x: -1, y: 0, z: 0, colours: '-R----', accTransform: R.Identity },
+  { id: 10, x: -1, y: 0, z: 1, colours: '-RY---', accTransform3: R.Identity },
+  { id: 11, x: 0, y: 0, z: 1, colours: '--Y---', accTransform3: R.Identity },
+  { id: 12, x: 1, y: 0, z: 1, colours: '--YO--', accTransform3: R.Identity },
+  { id: 13, x: -1, y: 0, z: 0, colours: '-R----', accTransform3: R.Identity },
   // Note: there is no piece at the centre i.e. x: 0, y: 0, z: 0
-  { id: 14, x: 1, y: 0, z: 0, colours: '---O--', accTransform: R.Identity },
-  { id: 15, x: -1, y: 0, z: -1, colours: '-R--W-', accTransform: R.Identity },
-  { id: 16, x: 0, y: 0, z: -1, colours: '----W-', accTransform: R.Identity },
-  { id: 17, x: 1, y: 0, z: -1, colours: '---OW-', accTransform: R.Identity },
+  { id: 14, x: 1, y: 0, z: 0, colours: '---O--', accTransform3: R.Identity },
+  { id: 15, x: -1, y: 0, z: -1, colours: '-R--W-', accTransform3: R.Identity },
+  { id: 16, x: 0, y: 0, z: -1, colours: '----W-', accTransform3: R.Identity },
+  { id: 17, x: 1, y: 0, z: -1, colours: '---OW-', accTransform3: R.Identity },
 
   // bottom layer
-  { id: 18, x: -1, y: -1, z: 1, colours: '-RY--G', accTransform: R.Identity },
-  { id: 19, x: 0, y: -1, z: 1, colours: '--Y--G', accTransform: R.Identity },
-  { id: 20, x: 1, y: -1, z: 1, colours: '--YO-G', accTransform: R.Identity },
-  { id: 21, x: -1, y: -1, z: 0, colours: '-R---G', accTransform: R.Identity },
-  { id: 22, x: 0, y: -1, z: 0, colours: '-----G', accTransform: R.Identity },
-  { id: 23, x: 1, y: -1, z: 0, colours: '---O-G', accTransform: R.Identity },
-  { id: 24, x: -1, y: -1, z: -1, colours: '-R--WG', accTransform: R.Identity },
-  { id: 25, x: 0, y: -1, z: -1, colours: '----WG', accTransform: R.Identity },
-  { id: 26, x: 1, y: -1, z: -1, colours: '---OWG', accTransform: R.Identity }
+  { id: 18, x: -1, y: -1, z: 1, colours: '-RY--G', accTransform3: R.Identity },
+  { id: 19, x: 0, y: -1, z: 1, colours: '--Y--G', accTransform3: R.Identity },
+  { id: 20, x: 1, y: -1, z: 1, colours: '--YO-G', accTransform3: R.Identity },
+  { id: 21, x: -1, y: -1, z: 0, colours: '-R---G', accTransform3: R.Identity },
+  { id: 22, x: 0, y: -1, z: 0, colours: '-----G', accTransform3: R.Identity },
+  { id: 23, x: 1, y: -1, z: 0, colours: '---O-G', accTransform3: R.Identity },
+  { id: 24, x: -1, y: -1, z: -1, colours: '-R--WG', accTransform3: R.Identity },
+  { id: 25, x: 0, y: -1, z: -1, colours: '----WG', accTransform3: R.Identity },
+  { id: 26, x: 1, y: -1, z: -1, colours: '---OWG', accTransform3: R.Identity }
 ]
 
 const pieceHasCoords = (piece, coords) =>
@@ -50,198 +49,67 @@ export const getPieces = (cube, coordsList) =>
 const isPieceInCoordsList = (piece, coordsList) =>
   coordsList.findIndex(coords => pieceHasCoords(piece, coords)) >= 0
 
-export const getFace = (cube, face) => {
-  switch (face) {
-    case C.TOP: return getTopFace(cube)
-    case C.LEFT: return getLeftFace(cube)
-    case C.FRONT: return getFrontFace(cube)
-    case C.RIGHT: return getRightFace(cube)
-    case C.BACK: return getBackFace(cube)
-    case C.BOTTOM: return getBottomFace(cube)
-  }
-}
-
-export const getTopFace = cube =>
-  getPieces(cube, CL.topCoordsList).map(piece => piece.colours[C.TOP])
-
-export const getLeftFace = cube =>
-  getPieces(cube, CL.leftCoordsList).map(piece => piece.colours[C.LEFT])
-
-export const getFrontFace = cube =>
-  getPieces(cube, CL.frontCoordsList).map(piece => piece.colours[C.FRONT])
-
-export const getRightFace = cube =>
-  getPieces(cube, CL.rightCoordsList).map(piece => piece.colours[C.RIGHT])
-
-export const getBackFace = cube =>
-  getPieces(cube, CL.backCoordsList).map(piece => piece.colours[C.BACK])
-
-export const getBottomFace = cube =>
-  getPieces(cube, CL.bottomCoordsList).map(piece => piece.colours[C.BOTTOM])
-
-const DIGIT_ZERO_CHAR_CODE = 48
-const reorderColours = (colours, newColoursOrder) => {
-  const chs1 = Array.from(colours)
-  const idxs = Array.from(newColoursOrder).map(ch => ch.charCodeAt(0) - DIGIT_ZERO_CHAR_CODE)
-  const chs2 = idxs.map(idx => chs1[idx])
-  return chs2.join('')
-}
-
-const transform = (rotationMatrix, newColoursOrder) => piece => {
+const transformPiece = (piece, rotationMatrix3) => {
   const vector = math.matrix([piece.x, piece.y, piece.z])
-  const rotatedVector = math.multiply(vector, rotationMatrix)
+  const rotatedVector = math.multiply(vector, rotationMatrix3)
   return {
-    id: piece.id,
+    ...piece,
     x: rotatedVector.get([0]),
     y: rotatedVector.get([1]),
     z: rotatedVector.get([2]),
-    colours: reorderColours(piece.colours, newColoursOrder),
-    accTransform: math.multiply(piece.accTransform, rotationMatrix)
+    accTransform3: math.multiply(piece.accTransform3, rotationMatrix3)
   }
 }
 
-const transformPieces = (cube, coordsList, transform) =>
+const transformPieces = (coordsList, rotationMatrix3) => cube =>
   cube.map(piece => isPieceInCoordsList(piece, coordsList)
-    ? transform(piece)
+    ? transformPiece(piece, rotationMatrix3)
     : piece)
 
-const NEW_COLOUR_ORDER_YAW_90 = '041235'
-const NEW_COLOUR_ORDER_YAW_180 = '034125'
-const NEW_COLOUR_ORDER_YAW_270 = '023415'
+export const yawTop90 = transformPieces(CL.topCoordsList, R.Y90)
+export const yawTop180 = transformPieces(CL.topCoordsList, R.Y180)
+export const yawTop270 = transformPieces(CL.topCoordsList, R.Y270)
+export const yawMiddle90 = transformPieces(CL.yawMiddleCoordsList, R.Y90)
+export const yawMiddle270 = transformPieces(CL.yawMiddleCoordsList, R.Y270)
+export const yawBottom90 = transformPieces(CL.bottomCoordsList, R.Y90)
+export const yawBottom180 = transformPieces(CL.bottomCoordsList, R.Y180)
+export const yawBottom270 = transformPieces(CL.bottomCoordsList, R.Y270)
+export const yawTopAndMiddle90 = transformPieces(CL.topAndMiddleCoordsList, R.Y90)
+export const yawTopAndMiddle270 = transformPieces(CL.topAndMiddleCoordsList, R.Y270)
+export const yawBottomAndMiddle90 = transformPieces(CL.bottomAndMiddleCoordsList, R.Y90)
+export const yawBottomAndMiddle270 = transformPieces(CL.bottomAndMiddleCoordsList, R.Y270)
+export const yawAll90 = transformPieces(CL.allCoordsList, R.Y90)
+export const yawAll270 = transformPieces(CL.allCoordsList, R.Y270)
 
-const NEW_COLOUR_ORDER_PITCH_90 = '410352'
-const NEW_COLOUR_ORDER_PITCH_180 = '514320'
-const NEW_COLOUR_ORDER_PITCH_270 = '215304'
+export const pitchLeft90 = transformPieces(CL.leftCoordsList, R.X90)
+export const pitchLeft180 = transformPieces(CL.leftCoordsList, R.X180)
+export const pitchLeft270 = transformPieces(CL.leftCoordsList, R.X270)
+export const pitchMiddle90 = transformPieces(CL.pitchMiddleCoordsList, R.X90)
+export const pitchMiddle270 = transformPieces(CL.pitchMiddleCoordsList, R.X270)
+export const pitchRight90 = transformPieces(CL.rightCoordsList, R.X90)
+export const pitchRight180 = transformPieces(CL.rightCoordsList, R.X180)
+export const pitchRight270 = transformPieces(CL.rightCoordsList, R.X270)
+export const pitchLeftAndMiddle90 = transformPieces(CL.leftAndMiddleCoordsList, R.X90)
+export const pitchLeftAndMiddle270 = transformPieces(CL.leftAndMiddleCoordsList, R.X270)
+export const pitchRightAndMiddle90 = transformPieces(CL.rightAndMiddleCoordsList, R.X90)
+export const pitchRightAndMiddle270 = transformPieces(CL.rightAndMiddleCoordsList, R.X270)
+export const pitchAll90 = transformPieces(CL.allCoordsList, R.X90)
+export const pitchAll270 = transformPieces(CL.allCoordsList, R.X270)
 
-const NEW_COLOUR_ORDER_ROLL_90 = '302541'
-const NEW_COLOUR_ORDER_ROLL_180 = '532140'
-const NEW_COLOUR_ORDER_ROLL_270 = '152043'
-
-export const yawTop90 = cube =>
-  transformPieces(cube, CL.topCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90))
-
-export const yawTop180 = cube =>
-  transformPieces(cube, CL.topCoordsList, transform(R.Y180, NEW_COLOUR_ORDER_YAW_180))
-
-export const yawTop270 = cube =>
-  transformPieces(cube, CL.topCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270))
-
-export const yawMiddle90 = cube =>
-  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90))
-
-export const yawMiddle270 = cube =>
-  transformPieces(cube, CL.yawMiddleCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270))
-
-export const yawBottom90 = cube =>
-  transformPieces(cube, CL.bottomCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90))
-
-export const yawBottom180 = cube =>
-  transformPieces(cube, CL.bottomCoordsList, transform(R.Y180, NEW_COLOUR_ORDER_YAW_180))
-
-export const yawBottom270 = cube =>
-  transformPieces(cube, CL.bottomCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270))
-
-export const yawTopAndMiddle90 = cube =>
-  transformPieces(cube, CL.topAndMiddleCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90))
-
-export const yawTopAndMiddle270 = cube =>
-  transformPieces(cube, CL.topAndMiddleCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270))
-
-export const yawBottomAndMiddle90 = cube =>
-  transformPieces(cube, CL.bottomAndMiddleCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90))
-
-export const yawBottomAndMiddle270 = cube =>
-  transformPieces(cube, CL.bottomAndMiddleCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270))
-
-export const yawAll90 = cube =>
-  transformPieces(cube, CL.allCoordsList, transform(R.Y90, NEW_COLOUR_ORDER_YAW_90))
-
-export const yawAll270 = cube =>
-  transformPieces(cube, CL.allCoordsList, transform(R.Y270, NEW_COLOUR_ORDER_YAW_270))
-
-export const pitchLeft90 = cube =>
-  transformPieces(cube, CL.leftCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90))
-
-export const pitchLeft180 = cube =>
-  transformPieces(cube, CL.leftCoordsList, transform(R.X180, NEW_COLOUR_ORDER_PITCH_180))
-
-export const pitchLeft270 = cube =>
-  transformPieces(cube, CL.leftCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270))
-
-export const pitchMiddle90 = cube =>
-  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90))
-
-export const pitchMiddle270 = cube =>
-  transformPieces(cube, CL.pitchMiddleCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270))
-
-export const pitchRight90 = cube =>
-  transformPieces(cube, CL.rightCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90))
-
-export const pitchRight180 = cube =>
-  transformPieces(cube, CL.rightCoordsList, transform(R.X180, NEW_COLOUR_ORDER_PITCH_180))
-
-export const pitchRight270 = cube =>
-  transformPieces(cube, CL.rightCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270))
-
-export const pitchLeftAndMiddle90 = cube =>
-  transformPieces(cube, CL.leftAndMiddleCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90))
-
-export const pitchLeftAndMiddle270 = cube =>
-  transformPieces(cube, CL.leftAndMiddleCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270))
-
-export const pitchRightAndMiddle90 = cube =>
-  transformPieces(cube, CL.rightAndMiddleCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90))
-
-export const pitchRightAndMiddle270 = cube =>
-  transformPieces(cube, CL.rightAndMiddleCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270))
-
-export const pitchAll90 = cube =>
-  transformPieces(cube, CL.allCoordsList, transform(R.X90, NEW_COLOUR_ORDER_PITCH_90))
-
-export const pitchAll270 = cube =>
-  transformPieces(cube, CL.allCoordsList, transform(R.X270, NEW_COLOUR_ORDER_PITCH_270))
-
-export const rollFront90 = cube =>
-  transformPieces(cube, CL.frontCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90))
-
-export const rollFront180 = cube =>
-  transformPieces(cube, CL.frontCoordsList, transform(R.Z180, NEW_COLOUR_ORDER_ROLL_180))
-
-export const rollFront270 = cube =>
-  transformPieces(cube, CL.frontCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270))
-
-export const rollMiddle90 = cube =>
-  transformPieces(cube, CL.rollMiddleCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90))
-
-export const rollMiddle270 = cube =>
-  transformPieces(cube, CL.rollMiddleCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270))
-
-export const rollBack90 = cube =>
-  transformPieces(cube, CL.backCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90))
-
-export const rollBack180 = cube =>
-  transformPieces(cube, CL.backCoordsList, transform(R.Z180, NEW_COLOUR_ORDER_ROLL_180))
-
-export const rollBack270 = cube =>
-  transformPieces(cube, CL.backCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270))
-
-export const rollFrontAndMiddle90 = cube =>
-  transformPieces(cube, CL.frontAndMiddleCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90))
-
-export const rollFrontAndMiddle270 = cube =>
-  transformPieces(cube, CL.frontAndMiddleCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270))
-
-export const rollBackAndMiddle90 = cube =>
-  transformPieces(cube, CL.backAndMiddleCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90))
-
-export const rollBackAndMiddle270 = cube =>
-  transformPieces(cube, CL.backAndMiddleCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270))
-
-export const rollAll90 = cube =>
-  transformPieces(cube, CL.allCoordsList, transform(R.Z90, NEW_COLOUR_ORDER_ROLL_90))
-
-export const rollAll270 = cube =>
-  transformPieces(cube, CL.allCoordsList, transform(R.Z270, NEW_COLOUR_ORDER_ROLL_270))
+export const rollFront90 = transformPieces(CL.frontCoordsList, R.Z90)
+export const rollFront180 = transformPieces(CL.frontCoordsList, R.Z180)
+export const rollFront270 = transformPieces(CL.frontCoordsList, R.Z270)
+export const rollMiddle90 = transformPieces(CL.rollMiddleCoordsList, R.Z90)
+export const rollMiddle270 = transformPieces(CL.rollMiddleCoordsList, R.Z270)
+export const rollBack90 = transformPieces(CL.backCoordsList, R.Z90)
+export const rollBack180 = transformPieces(CL.backCoordsList, R.Z180)
+export const rollBack270 = transformPieces(CL.backCoordsList, R.Z270)
+export const rollFrontAndMiddle90 = transformPieces(CL.frontAndMiddleCoordsList, R.Z90)
+export const rollFrontAndMiddle270 = transformPieces(CL.frontAndMiddleCoordsList, R.Z270)
+export const rollBackAndMiddle90 = transformPieces(CL.backAndMiddleCoordsList, R.Z90)
+export const rollBackAndMiddle270 = transformPieces(CL.backAndMiddleCoordsList, R.Z270)
+export const rollAll90 = transformPieces(CL.allCoordsList, R.Z90)
+export const rollAll270 = transformPieces(CL.allCoordsList, R.Z270)
 
 // https://ruwix.com/the-rubiks-cube/notation/advanced/
 export const MOVES = [
@@ -291,52 +159,52 @@ export const MOVES = [
   rollAll270 // Z
 ]
 
-export const OPPOSITE_MOVES = {
-  [yawTop90]: yawTop270,
-  [yawTop180]: yawTop180,
-  [yawTop270]: yawTop90,
-  [yawMiddle90]: yawMiddle270,
-  [yawMiddle270]: yawMiddle90,
-  [yawBottom90]: yawBottom270,
-  [yawBottom180]: yawBottom180,
-  [yawBottom270]: yawBottom90,
-  [yawTopAndMiddle90]: yawTopAndMiddle270,
-  [yawTopAndMiddle270]: yawTopAndMiddle90,
-  [yawBottomAndMiddle90]: yawBottomAndMiddle270,
-  [yawBottomAndMiddle270]: yawBottomAndMiddle90,
-  [yawAll90]: yawAll270,
-  [yawAll270]: yawAll90,
+export const OPPOSITE_MOVES = new Map([
+  [yawTop90, yawTop270],
+  [yawTop180, yawTop180],
+  [yawTop270, yawTop90],
+  [yawMiddle90, yawMiddle270],
+  [yawMiddle270, yawMiddle90],
+  [yawBottom90, yawBottom270],
+  [yawBottom180, yawBottom180],
+  [yawBottom270, yawBottom90],
+  [yawTopAndMiddle90, yawTopAndMiddle270],
+  [yawTopAndMiddle270, yawTopAndMiddle90],
+  [yawBottomAndMiddle90, yawBottomAndMiddle270],
+  [yawBottomAndMiddle270, yawBottomAndMiddle90],
+  [yawAll90, yawAll270],
+  [yawAll270, yawAll90],
 
-  [pitchLeft90]: pitchLeft270,
-  [pitchLeft180]: pitchLeft180,
-  [pitchLeft270]: pitchLeft90,
-  [pitchMiddle90]: pitchMiddle270,
-  [pitchMiddle270]: pitchMiddle90,
-  [pitchRight90]: pitchRight270,
-  [pitchRight180]: pitchRight180,
-  [pitchRight270]: pitchRight90,
-  [pitchLeftAndMiddle90]: pitchLeftAndMiddle270,
-  [pitchLeftAndMiddle270]: pitchLeftAndMiddle90,
-  [pitchRightAndMiddle90]: pitchRightAndMiddle270,
-  [pitchRightAndMiddle270]: pitchRightAndMiddle90,
-  [pitchAll90]: pitchAll270,
-  [pitchAll270]: pitchAll90,
+  [pitchLeft90, pitchLeft270],
+  [pitchLeft180, pitchLeft180],
+  [pitchLeft270, pitchLeft90],
+  [pitchMiddle90, pitchMiddle270],
+  [pitchMiddle270, pitchMiddle90],
+  [pitchRight90, pitchRight270],
+  [pitchRight180, pitchRight180],
+  [pitchRight270, pitchRight90],
+  [pitchLeftAndMiddle90, pitchLeftAndMiddle270],
+  [pitchLeftAndMiddle270, pitchLeftAndMiddle90],
+  [pitchRightAndMiddle90, pitchRightAndMiddle270],
+  [pitchRightAndMiddle270, pitchRightAndMiddle90],
+  [pitchAll90, pitchAll270],
+  [pitchAll270, pitchAll90],
 
-  [rollFront90]: rollFront270,
-  [rollFront180]: rollFront180,
-  [rollFront270]: rollFront90,
-  [rollMiddle90]: rollMiddle270,
-  [rollMiddle270]: rollMiddle90,
-  [rollBack90]: rollBack270,
-  [rollBack180]: rollBack180,
-  [rollBack270]: rollBack90,
-  [rollFrontAndMiddle90]: rollFrontAndMiddle270,
-  [rollFrontAndMiddle270]: rollFrontAndMiddle90,
-  [rollBackAndMiddle90]: rollBackAndMiddle270,
-  [rollBackAndMiddle270]: rollBackAndMiddle90,
-  [rollAll90]: rollAll270,
-  [rollAll270]: rollAll90
-}
+  [rollFront90, rollFront270],
+  [rollFront180, rollFront180],
+  [rollFront270, rollFront90],
+  [rollMiddle90, rollMiddle270],
+  [rollMiddle270, rollMiddle90],
+  [rollBack90, rollBack270],
+  [rollBack180, rollBack180],
+  [rollBack270, rollBack90],
+  [rollFrontAndMiddle90, rollFrontAndMiddle270],
+  [rollFrontAndMiddle270, rollFrontAndMiddle90],
+  [rollBackAndMiddle90, rollBackAndMiddle270],
+  [rollBackAndMiddle270, rollBackAndMiddle90],
+  [rollAll90, rollAll270],
+  [rollAll270, rollAll90]
+])
 
 export const randomMove = () => {
   const randomIndex = Math.floor(Math.random() * MOVES.length)
@@ -351,7 +219,7 @@ export const removeRedundantMoves = moves => {
       if (index === 0) continue
       const move = moves[index]
       const previousMove = moves[index - 1]
-      if (move === OPPOSITE_MOVES[previousMove]) {
+      if (move === OPPOSITE_MOVES.get(previousMove)) {
         moves.splice(index, 1)
         removedSomething = true
         break
