@@ -1,6 +1,6 @@
 {
   "name": "rubiks-cube",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Rubik's cube solver",
   "scripts": {
     "eslint": "eslint .",

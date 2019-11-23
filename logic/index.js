@@ -3,38 +3,39 @@ import * as CL from './coordsLists'
 import * as R from './rotations'
 import * as C from './constants'
 
-export const solvedCube = [
+export const SOLVED_CUBE = [
   // top layer
-  { id: 1, x: -1, y: 1, z: 1, colours: 'BRY---', accTransform: math.identity(3) },
-  { id: 2, x: 0, y: 1, z: 1, colours: 'B-Y---', accTransform: math.identity(3) },
-  { id: 3, x: 1, y: 1, z: 1, colours: 'B-YO--', accTransform: math.identity(3) },
-  { id: 4, x: -1, y: 1, z: 0, colours: 'BR----', accTransform: math.identity(3) },
-  { id: 5, x: 0, y: 1, z: 0, colours: 'B-----', accTransform: math.identity(3) },
-  { id: 6, x: 1, y: 1, z: 0, colours: 'B--O--', accTransform: math.identity(3) },
-  { id: 7, x: -1, y: 1, z: -1, colours: 'BR--W-', accTransform: math.identity(3) },
-  { id: 8, x: 0, y: 1, z: -1, colours: 'B---W-', accTransform: math.identity(3) },
-  { id: 9, x: 1, y: 1, z: -1, colours: 'B--OW-', accTransform: math.identity(3) },
+  { id: 1, x: -1, y: 1, z: 1, colours: 'BRY---', accTransform: R.Identity },
+  { id: 2, x: 0, y: 1, z: 1, colours: 'B-Y---', accTransform: R.Identity },
+  { id: 3, x: 1, y: 1, z: 1, colours: 'B-YO--', accTransform: R.Identity },
+  { id: 4, x: -1, y: 1, z: 0, colours: 'BR----', accTransform: R.Identity },
+  { id: 5, x: 0, y: 1, z: 0, colours: 'B-----', accTransform: R.Identity },
+  { id: 6, x: 1, y: 1, z: 0, colours: 'B--O--', accTransform: R.Identity },
+  { id: 7, x: -1, y: 1, z: -1, colours: 'BR--W-', accTransform: R.Identity },
+  { id: 8, x: 0, y: 1, z: -1, colours: 'B---W-', accTransform: R.Identity },
+  { id: 9, x: 1, y: 1, z: -1, colours: 'B--OW-', accTransform: R.Identity },
 
   // middle layer
-  { id: 10, x: -1, y: 0, z: 1, colours: '-RY---', accTransform: math.identity(3) },
-  { id: 11, x: 0, y: 0, z: 1, colours: '--Y---', accTransform: math.identity(3) },
-  { id: 12, x: 1, y: 0, z: 1, colours: '--YO--', accTransform: math.identity(3) },
-  { id: 13, x: -1, y: 0, z: 0, colours: '-R----', accTransform: math.identity(3) },
-  { id: 14, x: 1, y: 0, z: 0, colours: '---O--', accTransform: math.identity(3) },
-  { id: 15, x: -1, y: 0, z: -1, colours: '-R--W-', accTransform: math.identity(3) },
-  { id: 16, x: 0, y: 0, z: -1, colours: '----W-', accTransform: math.identity(3) },
-  { id: 17, x: 1, y: 0, z: -1, colours: '---OW-', accTransform: math.identity(3) },
+  { id: 10, x: -1, y: 0, z: 1, colours: '-RY---', accTransform: R.Identity },
+  { id: 11, x: 0, y: 0, z: 1, colours: '--Y---', accTransform: R.Identity },
+  { id: 12, x: 1, y: 0, z: 1, colours: '--YO--', accTransform: R.Identity },
+  { id: 13, x: -1, y: 0, z: 0, colours: '-R----', accTransform: R.Identity },
+  // Note: there is no piece at the centre i.e. x: 0, y: 0, z: 0
+  { id: 14, x: 1, y: 0, z: 0, colours: '---O--', accTransform: R.Identity },
+  { id: 15, x: -1, y: 0, z: -1, colours: '-R--W-', accTransform: R.Identity },
+  { id: 16, x: 0, y: 0, z: -1, colours: '----W-', accTransform: R.Identity },
+  { id: 17, x: 1, y: 0, z: -1, colours: '---OW-', accTransform: R.Identity },
 
   // bottom layer
-  { id: 18, x: -1, y: -1, z: 1, colours: '-RY--G', accTransform: math.identity(3) },
-  { id: 19, x: 0, y: -1, z: 1, colours: '--Y--G', accTransform: math.identity(3) },
-  { id: 20, x: 1, y: -1, z: 1, colours: '--YO-G', accTransform: math.identity(3) },
-  { id: 21, x: -1, y: -1, z: 0, colours: '-R---G', accTransform: math.identity(3) },
-  { id: 22, x: 0, y: -1, z: 0, colours: '-----G', accTransform: math.identity(3) },
-  { id: 23, x: 1, y: -1, z: 0, colours: '---O-G', accTransform: math.identity(3) },
-  { id: 24, x: -1, y: -1, z: -1, colours: '-R--WG', accTransform: math.identity(3) },
-  { id: 25, x: 0, y: -1, z: -1, colours: '----WG', accTransform: math.identity(3) },
-  { id: 26, x: 1, y: -1, z: -1, colours: '---OWG', accTransform: math.identity(3) }
+  { id: 18, x: -1, y: -1, z: 1, colours: '-RY--G', accTransform: R.Identity },
+  { id: 19, x: 0, y: -1, z: 1, colours: '--Y--G', accTransform: R.Identity },
+  { id: 20, x: 1, y: -1, z: 1, colours: '--YO-G', accTransform: R.Identity },
+  { id: 21, x: -1, y: -1, z: 0, colours: '-R---G', accTransform: R.Identity },
+  { id: 22, x: 0, y: -1, z: 0, colours: '-----G', accTransform: R.Identity },
+  { id: 23, x: 1, y: -1, z: 0, colours: '---O-G', accTransform: R.Identity },
+  { id: 24, x: -1, y: -1, z: -1, colours: '-R--WG', accTransform: R.Identity },
+  { id: 25, x: 0, y: -1, z: -1, colours: '----WG', accTransform: R.Identity },
+  { id: 26, x: 1, y: -1, z: -1, colours: '---OWG', accTransform: R.Identity }
 ]
 
 const pieceHasCoords = (piece, coords) =>

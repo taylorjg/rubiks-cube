@@ -4,16 +4,16 @@ import * as L from '../logic/index'
 describe('rotation tests', () => {
 
   it('no rotation', () => {
-    expect(L.getTopFace(L.solvedCube)).to.deep.equal(Array.from('BBBBBBBBB'))
-    expect(L.getLeftFace(L.solvedCube)).to.deep.equal(Array.from('RRRRRRRRR'))
-    expect(L.getFrontFace(L.solvedCube)).to.deep.equal(Array.from('YYYYYYYYY'))
-    expect(L.getRightFace(L.solvedCube)).to.deep.equal(Array.from('OOOOOOOOO'))
-    expect(L.getBackFace(L.solvedCube)).to.deep.equal(Array.from('WWWWWWWWW'))
-    expect(L.getBottomFace(L.solvedCube)).to.deep.equal(Array.from('GGGGGGGGG'))
+    expect(L.getTopFace(L.SOLVED_CUBE)).to.deep.equal(Array.from('BBBBBBBBB'))
+    expect(L.getLeftFace(L.SOLVED_CUBE)).to.deep.equal(Array.from('RRRRRRRRR'))
+    expect(L.getFrontFace(L.SOLVED_CUBE)).to.deep.equal(Array.from('YYYYYYYYY'))
+    expect(L.getRightFace(L.SOLVED_CUBE)).to.deep.equal(Array.from('OOOOOOOOO'))
+    expect(L.getBackFace(L.SOLVED_CUBE)).to.deep.equal(Array.from('WWWWWWWWW'))
+    expect(L.getBottomFace(L.SOLVED_CUBE)).to.deep.equal(Array.from('GGGGGGGGG'))
   })
 
   it('yawTop90', () => {
-    const rotatedCube = L.yawTop90(L.solvedCube)
+    const rotatedCube = L.yawTop90(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('WWWRRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('RRRYYYYYY'))
@@ -23,7 +23,7 @@ describe('rotation tests', () => {
   })
 
   it('yawTop180', () => {
-    const rotatedCube = L.yawTop180(L.solvedCube)
+    const rotatedCube = L.yawTop180(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('OOORRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('WWWYYYYYY'))
@@ -33,7 +33,7 @@ describe('rotation tests', () => {
   })
 
   it('yawTop270', () => {
-    const rotatedCube = L.yawTop270(L.solvedCube)
+    const rotatedCube = L.yawTop270(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('YYYRRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('OOOYYYYYY'))
@@ -43,7 +43,7 @@ describe('rotation tests', () => {
   })
 
   it('yawMiddle90', () => {
-    const rotatedCube = L.yawMiddle90(L.solvedCube)
+    const rotatedCube = L.yawMiddle90(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRWWWRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYRRRYYY'))
@@ -53,7 +53,7 @@ describe('rotation tests', () => {
   })
 
   it('yawMiddle270', () => {
-    const rotatedCube = L.yawMiddle270(L.solvedCube)
+    const rotatedCube = L.yawMiddle270(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRYYYRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYOOOYYY'))
@@ -63,7 +63,7 @@ describe('rotation tests', () => {
   })
 
   it('yawBottom90', () => {
-    const rotatedCube = L.yawBottom90(L.solvedCube)
+    const rotatedCube = L.yawBottom90(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRRWWW'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYRRR'))
@@ -73,7 +73,7 @@ describe('rotation tests', () => {
   })
 
   it('yawBottom180', () => {
-    const rotatedCube = L.yawBottom180(L.solvedCube)
+    const rotatedCube = L.yawBottom180(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRROOO'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYWWW'))
@@ -83,7 +83,7 @@ describe('rotation tests', () => {
   })
 
   it('yawBottom270', () => {
-    const rotatedCube = L.yawBottom270(L.solvedCube)
+    const rotatedCube = L.yawBottom270(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRRYYY'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYOOO'))
@@ -93,7 +93,7 @@ describe('rotation tests', () => {
   })
 
   it('pitchLeft90', () => {
-    const rotatedCube = L.pitchLeft90(L.solvedCube)
+    const rotatedCube = L.pitchLeft90(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('WBBWBBWBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('BYYBYYBYY'))
@@ -103,7 +103,7 @@ describe('rotation tests', () => {
   })
 
   it('pitchLeft180', () => {
-    const rotatedCube = L.pitchLeft180(L.solvedCube)
+    const rotatedCube = L.pitchLeft180(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('GBBGBBGBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('WYYWYYWYY'))
@@ -113,7 +113,7 @@ describe('rotation tests', () => {
   })
 
   it('pitchLeft270', () => {
-    const rotatedCube = L.pitchLeft270(L.solvedCube)
+    const rotatedCube = L.pitchLeft270(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('YBBYBBYBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('GYYGYYGYY'))
@@ -123,7 +123,7 @@ describe('rotation tests', () => {
   })
 
   it('pitchMiddle90', () => {
-    const rotatedCube = L.pitchMiddle90(L.solvedCube)
+    const rotatedCube = L.pitchMiddle90(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BWBBWBBWB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YBYYBYYBY'))
@@ -133,7 +133,7 @@ describe('rotation tests', () => {
   })
 
   it('pitchMiddle270', () => {
-    const rotatedCube = L.pitchMiddle270(L.solvedCube)
+    const rotatedCube = L.pitchMiddle270(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BYBBYBBYB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YGYYGYYGY'))
@@ -143,7 +143,7 @@ describe('rotation tests', () => {
   })
 
   it('pitchRight90', () => {
-    const rotatedCube = L.pitchRight90(L.solvedCube)
+    const rotatedCube = L.pitchRight90(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBWBBWBBW'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYBYYBYYB'))
@@ -153,7 +153,7 @@ describe('rotation tests', () => {
   })
 
   it('pitchRight180', () => {
-    const rotatedCube = L.pitchRight180(L.solvedCube)
+    const rotatedCube = L.pitchRight180(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBGBBGBBG'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYWYYWYYW'))
@@ -163,7 +163,7 @@ describe('rotation tests', () => {
   })
 
   it('pitchRight270', () => {
-    const rotatedCube = L.pitchRight270(L.solvedCube)
+    const rotatedCube = L.pitchRight270(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBYBBYBBY'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRRRRRRRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYGYYGYYG'))
@@ -173,7 +173,7 @@ describe('rotation tests', () => {
   })
 
   it('rollFront90', () => {
-    const rotatedCube = L.rollFront90(L.solvedCube)
+    const rotatedCube = L.rollFront90(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBOOO'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRBRRBRRB'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYYYY'))
@@ -183,7 +183,7 @@ describe('rotation tests', () => {
   })
 
   it('rollFront180', () => {
-    const rotatedCube = L.rollFront180(L.solvedCube)
+    const rotatedCube = L.rollFront180(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBGGG'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRORRORRO'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYYYY'))
@@ -193,7 +193,7 @@ describe('rotation tests', () => {
   })
 
   it('rollFront270', () => {
-    const rotatedCube = L.rollFront270(L.solvedCube)
+    const rotatedCube = L.rollFront270(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBBBBRRR'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RRGRRGRRG'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYYYY'))
@@ -203,7 +203,7 @@ describe('rotation tests', () => {
   })
 
   it('rollMiddle90', () => {
-    const rotatedCube = L.rollMiddle90(L.solvedCube)
+    const rotatedCube = L.rollMiddle90(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBOOOBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RBRRBRRBR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYYYY'))
@@ -213,7 +213,7 @@ describe('rotation tests', () => {
   })
 
   it('rollMiddle270', () => {
-    const rotatedCube = L.rollMiddle270(L.solvedCube)
+    const rotatedCube = L.rollMiddle270(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('BBBRRRBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('RGRRGRRGR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYYYY'))
@@ -223,7 +223,7 @@ describe('rotation tests', () => {
   })
 
   it('rollBack90', () => {
-    const rotatedCube = L.rollBack90(L.solvedCube)
+    const rotatedCube = L.rollBack90(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('OOOBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('BRRBRRBRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYYYY'))
@@ -233,7 +233,7 @@ describe('rotation tests', () => {
   })
 
   it('rollBack180', () => {
-    const rotatedCube = L.rollBack180(L.solvedCube)
+    const rotatedCube = L.rollBack180(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('GGGBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('ORRORRORR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYYYY'))
@@ -243,7 +243,7 @@ describe('rotation tests', () => {
   })
 
   it('rollBack270', () => {
-    const rotatedCube = L.rollBack270(L.solvedCube)
+    const rotatedCube = L.rollBack270(L.SOLVED_CUBE)
     expect(L.getTopFace(rotatedCube)).to.deep.equal(Array.from('RRRBBBBBB'))
     expect(L.getLeftFace(rotatedCube)).to.deep.equal(Array.from('GRRGRRGRR'))
     expect(L.getFrontFace(rotatedCube)).to.deep.equal(Array.from('YYYYYYYYY'))

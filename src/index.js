@@ -13,16 +13,25 @@ const COLOUR_TABLE = {
   'O': new THREE.Color('darkorange'),
   'W': new THREE.Color('ghostwhite'),
   'G': new THREE.Color('green'),
-  'H': new THREE.Color('black')
+  'H': new THREE.Color('black') // H for hidden
 }
 
-// 'r' is a mathjs 3x3 rotation matrix.
-const makeRotationMatrix4 = r =>
-  new THREE.Matrix4().set(
-    r.get([0, 0]), r.get([1, 0]), r.get([2, 0]), 0,
-    r.get([0, 1]), r.get([1, 1]), r.get([2, 1]), 0,
-    r.get([0, 2]), r.get([1, 2]), r.get([2, 2]), 0,
+const makeRotationMatrix4 = rotationMatrix3 => {
+  const n11 = rotationMatrix3.get([0, 0])
+  const n12 = rotationMatrix3.get([1, 0])
+  const n13 = rotationMatrix3.get([2, 0])
+  const n21 = rotationMatrix3.get([0, 1])
+  const n22 = rotationMatrix3.get([1, 1])
+  const n23 = rotationMatrix3.get([2, 1])
+  const n31 = rotationMatrix3.get([0, 2])
+  const n32 = rotationMatrix3.get([1, 2])
+  const n33 = rotationMatrix3.get([2, 2])
+  return new THREE.Matrix4().set(
+    n11, n12, n13, 0,
+    n21, n22, n23, 0,
+    n31, n32, n33, 0,
     0, 0, 0, 1)
+}
 
 const ROTATION_MATRICES = {
   [L.yawTop90]: makeRotationMatrix4(R.Y90),
@@ -231,10 +240,9 @@ const pieceMaterial = new THREE.MeshBasicMaterial({
   vertexColors: THREE.FaceColors
 })
 
-const makeKey = piece =>
-  `${piece.x}:${piece.y}:${piece.z}:${piece.colours}`
+const makeKey = piece => `${piece.x}:${piece.y}:${piece.z}`
 
-const createUiPiece = (piece, move) => {
+const createUiPiece = piece => {
 
   const setFaceColour = (face, colours, coloursIndex) => {
     const ch = colours[coloursIndex]
@@ -243,8 +251,6 @@ const createUiPiece = (piece, move) => {
 
   const geometry = new PieceGeometry(PIECE_SIZE, NUM_SEGMENTS, MARGIN)
   const uiPiece = new THREE.Mesh(geometry, pieceMaterial)
-
-  updateUiPiece(piece, uiPiece, move)
 
   uiPiece.geometry.faces.forEach(face => {
     const closeTo = (a, b) => Math.abs(a - b) <= 1e-12
@@ -256,19 +262,24 @@ const createUiPiece = (piece, move) => {
     closeTo(face.normal.z, -1) && setFaceColour(face, piece.colours, C.BACK)
   })
 
+  resetUiPiece(uiPiece, piece)
+
   return uiPiece
 }
 
-const updateUiPiece = (piece, uiPiece, move) => {
-  if (move) {
-    uiPiece.applyMatrix(ROTATION_MATRICES[move])
+const resetUiPiece = (uiPiece, piece) => {
+  uiPiece.position.x = piece.x
+  uiPiece.position.y = piece.y
+  uiPiece.position.z = piece.z
+  uiPiece.setRotationFromMatrix(makeRotationMatrix4(piece.accTransform))
+  uiPiece.userData = {
+    id: piece.id,
+    key: makeKey(piece)
   }
-  else {
-    uiPiece.position.x = piece.x
-    uiPiece.position.y = piece.y
-    uiPiece.position.z = piece.z
-    uiPiece.setRotationFromMatrix(makeRotationMatrix4(piece.accTransform))
-  }
+}
+
+const updateUiPiece = (uiPiece, piece, move) => {
+  uiPiece.applyMatrix(ROTATION_MATRICES[move])
   uiPiece.userData = {
     id: piece.id,
     key: makeKey(piece)
@@ -332,17 +343,23 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix()
 })
 
-const renderCube = (cube, move) => {
+const createCube = cube => {
+  cube.forEach(piece => puzzleGroup.add(createUiPiece(piece)))
+}
+
+const resetCube = cube => {
   cube.forEach(piece => {
     const uiPiece = findUiPiece(piece)
-    if (uiPiece) {
-      const key = makeKey(piece)
-      if (uiPiece.userData.key !== key) {
-        updateUiPiece(piece, uiPiece, move)
-      }
-    }
-    else {
-      puzzleGroup.add(createUiPiece(piece, move))
+    resetUiPiece(uiPiece, piece)
+  })
+}
+
+const renderCubeMove = (cube, move) => {
+  cube.forEach(piece => {
+    const uiPiece = findUiPiece(piece)
+    const key = makeKey(piece)
+    if (uiPiece.userData.key !== key) {
+      updateUiPiece(uiPiece, piece, move)
     }
   })
 }
@@ -358,13 +375,14 @@ const animate = () => {
   renderer.render(scene, camera)
 }
 
-let cube = L.solvedCube
-renderCube(cube)
+let cube = L.SOLVED_CUBE
+createCube(cube)
 
 animate()
 
 const ANIMATION_SPEED_PER_TURN_MS = 750
 const DELAY_BETWEEN_MOVES_MS = 500
+const DELAY_BEFORE_SOLVING_MS = 2000
 
 const animateMoves = (moves, nextMoveIndex = 0) => {
 
@@ -405,12 +423,17 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
     scene.remove(sliceGroup)
     puzzleGroup.add(...uiPieces)
     cube = move(cube)
-    renderCube(cube, move)
-    setTimeout(() => animateMoves(moves, nextMoveIndex + 1), DELAY_BETWEEN_MOVES_MS)
+    renderCubeMove(cube, move)
+    setTimeout(animateMoves, DELAY_BETWEEN_MOVES_MS, moves, nextMoveIndex + 1)
   }
 
   mixer.addEventListener('finished', onFinished)
   clipAction.play()
+}
+
+const solveByCheating = randomMoves => {
+  const solutionMoves = randomMoves.map(move => L.OPPOSITE_MOVES[move]).reverse()
+  animateMoves(solutionMoves)
 }
 
 const enableScrambleButton = () => {
@@ -430,15 +453,10 @@ const scramble = () => {
   const randomMoves = Array.from(Array(numRandomMoves).keys()).map(L.randomMove)
   L.removeRedundantMoves(randomMoves)
 
-  cube = randomMoves.reduce((c, m) => m(c), L.solvedCube)
-  renderCube(cube)
+  cube = randomMoves.reduce((c, m) => m(c), L.SOLVED_CUBE)
+  resetCube(cube)
 
-  setTimeout(
-    () => {
-      const solutionMoves = randomMoves.map(move => L.OPPOSITE_MOVES[move]).reverse()
-      animateMoves(solutionMoves)
-    },
-    1000)
+  setTimeout(solveByCheating, DELAY_BEFORE_SOLVING_MS, randomMoves)
 }
 
 document.getElementById('btnScramble')

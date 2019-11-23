@@ -1,4 +1,6 @@
-import { matrix } from 'mathjs'
+import { matrix, identity } from 'mathjs'
+
+export const Identity = identity(3)
 
 export const X90 = matrix([
   [1, 0, 0],
