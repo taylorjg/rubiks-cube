@@ -4,6 +4,7 @@ import * as S from '../solving';
 import * as C from '../solving/constants';
 import * as R from '../solving/rotations';
 import * as CL from '../solving/coordsLists';
+import { PieceGeometry } from './PieceGeometry'
 
 const COLOUR_TABLE = {
   'B': new THREE.Color('blue'),
@@ -174,7 +175,7 @@ const COORDS_LIST = {
   [S.rollAll270]: CL.allCoordsList
 };
 
-const DURATIONS = {
+const NUM_TURNS = {
   [S.yawTop90]: 1,
   [S.yawTop180]: 2,
   [S.yawTop270]: 1,
@@ -221,7 +222,9 @@ const DURATIONS = {
   [S.rollAll270]: 1
 };
 
-const PIECE_SIZE = 0.92;
+const PIECE_SIZE = 1;
+const NUM_SEGMENTS = 12;
+const MARGIN = 0.05;
 
 const pieceMaterial = new THREE.MeshBasicMaterial({
   color: 0xffffff,
@@ -238,18 +241,19 @@ const createUiPiece = (piece, move) => {
     face.color = COLOUR_TABLE[ch !== "-" ? ch : "H"];
   };
 
-  const geometry = new THREE.BoxGeometry(PIECE_SIZE, PIECE_SIZE, PIECE_SIZE);
+  const geometry = new PieceGeometry(PIECE_SIZE, NUM_SEGMENTS, MARGIN);
   const uiPiece = new THREE.Mesh(geometry, pieceMaterial);
 
   updateUiPiece(piece, uiPiece, move);
 
   uiPiece.geometry.faces.forEach(face => {
-    face.normal.x === 1 && setFaceColour(face, piece.colours, C.RIGHT);
-    face.normal.x === -1 && setFaceColour(face, piece.colours, C.LEFT);
-    face.normal.y === 1 && setFaceColour(face, piece.colours, C.TOP);
-    face.normal.y === -1 && setFaceColour(face, piece.colours, C.BOTTOM);
-    face.normal.z === 1 && setFaceColour(face, piece.colours, C.FRONT);
-    face.normal.z === -1 && setFaceColour(face, piece.colours, C.BACK);
+    const closeTo = (a, b) => Math.abs(a - b) <= 1e-12
+    closeTo(face.normal.x, 1) && setFaceColour(face, piece.colours, C.RIGHT)
+    closeTo(face.normal.x, -1) && setFaceColour(face, piece.colours, C.LEFT)
+    closeTo(face.normal.y, 1) && setFaceColour(face, piece.colours, C.TOP)
+    closeTo(face.normal.y, -1) && setFaceColour(face, piece.colours, C.BOTTOM)
+    closeTo(face.normal.z, 1) && setFaceColour(face, piece.colours, C.FRONT)
+    closeTo(face.normal.z, -1) && setFaceColour(face, piece.colours, C.BACK)
   });
 
   return uiPiece;
@@ -359,10 +363,17 @@ renderCube(cube);
 
 animate();
 
-const animateMoves = (nextMove, state, done, speed = 1) => {
+const ANIMATION_SPEED_PER_TURN_MS = 750
+const DELAY_BETWEEN_MOVES_MS = 500
 
-  const move = nextMove(state);
-  if (!move) return done(state);
+const animateMoves = (moves, nextMoveIndex = 0) => {
+
+  const move = moves[nextMoveIndex];
+
+  if (!move) {
+    enableScrambleButton();
+    return
+  }
 
   const pieces = S.getPieces(cube, COORDS_LIST[move]);
   const uiPieces = pieces.map(findUiPiece);
@@ -371,7 +382,10 @@ const animateMoves = (nextMove, state, done, speed = 1) => {
   sliceGroup.add(...uiPieces);
   scene.add(sliceGroup);
 
-  const times = [0, 0.75 * DURATIONS[move] * speed];
+  const animationSpeedPerTurn = ANIMATION_SPEED_PER_TURN_MS / 1000;
+  const t0 = 0
+  const t1 = NUM_TURNS[move] * animationSpeedPerTurn;
+  const times = [t0, t1];
   const values = [];
   const startQuaternion = new THREE.Quaternion();
   const endQuaternion = END_QUATERNIONS[move];
@@ -392,7 +406,7 @@ const animateMoves = (nextMove, state, done, speed = 1) => {
     puzzleGroup.add(...uiPieces);
     cube = move(cube);
     renderCube(cube, move);
-    setTimeout(animateMoves, 500 * speed, nextMove, state, done, speed);
+    setTimeout(() => animateMoves(moves, nextMoveIndex + 1), DELAY_BETWEEN_MOVES_MS);
   };
 
   mixer.addEventListener("finished", onFinished);
@@ -415,23 +429,16 @@ const scramble = () => {
   const numRandomMoves = 25 + Math.floor(Math.random() * 25);
   const randomMoves = Array.from(Array(numRandomMoves).keys()).map(S.randomMove);
   S.removeRedundantMoves(randomMoves)
+
   cube = randomMoves.reduce((c, m) => m(c), S.solvedCube);
   renderCube(cube);
 
   setTimeout(
     () => {
-      const solution = randomMoves.map(move => S.OPPOSITE_MOVES[move]).reverse();
-      animateMoves(
-        sequenceOfMoves,
-        { moves: solution, next: 0 },
-        enableScrambleButton);
+      const solutionMoves = randomMoves.map(move => S.OPPOSITE_MOVES[move]).reverse();
+      animateMoves(solutionMoves);
     },
     1000);
-};
-
-const sequenceOfMoves = state => {
-  if (state.next >= state.moves.length) return null;
-  return state.moves[state.next++];
 };
 
 document.getElementById("btnScramble")
