@@ -13,6 +13,26 @@ const COLOUR_TABLE = {
   'H': new THREE.Color('black') // H for hidden
 }
 
+const PIECE_SIZE = 1
+const NUM_SEGMENTS = 12
+const MARGIN = 0.05
+
+const ANIMATION_SPEED_PER_TURN_MS = 750
+const DELAY_BETWEEN_MOVES_MS = 500
+const DELAY_BEFORE_SOLVING_MS = 2000
+
+const globals = {
+  cube: undefined,
+  renderer: undefined,
+  camera: undefined,
+  scene: undefined,
+  puzzleGroup: undefined,
+  animationGroup: undefined,
+  controls: undefined,
+  clock: undefined,
+  animationMixer: undefined
+}
+
 const makeRotationMatrix4 = rotationMatrix3 => {
   const n11 = rotationMatrix3.get([0, 0])
   const n12 = rotationMatrix3.get([1, 0])
@@ -30,11 +50,7 @@ const makeRotationMatrix4 = rotationMatrix3 => {
     0, 0, 0, 1)
 }
 
-const PIECE_SIZE = 1
-const NUM_SEGMENTS = 12
-const MARGIN = 0.05
-
-const pieceMaterial = new THREE.MeshBasicMaterial({
+const PIECE_MATERIAL = new THREE.MeshBasicMaterial({
   color: 0xffffff,
   vertexColors: THREE.FaceColors
 })
@@ -47,7 +63,7 @@ const createUiPiece = piece => {
   }
 
   const geometry = new PieceGeometry(PIECE_SIZE, NUM_SEGMENTS, MARGIN)
-  const uiPiece = new THREE.Mesh(geometry, pieceMaterial)
+  const uiPiece = new THREE.Mesh(geometry, PIECE_MATERIAL)
   uiPiece.userData = piece.id
 
   uiPiece.geometry.faces.forEach(face => {
@@ -73,110 +89,43 @@ const resetUiPiece = (uiPiece, piece) => {
 }
 
 const findUiPiece = piece =>
-  puzzleGroup.children.find(child => child.userData === piece.id)
-
-const container = document.getElementById('container')
-const w = container.offsetWidth
-const h = container.offsetHeight
-const renderer = new THREE.WebGLRenderer({ antialias: true })
-renderer.setSize(w, h)
-container.appendChild(renderer.domElement)
-
-const scene = new THREE.Scene()
-const camera = new THREE.PerspectiveCamera(34, w / h, 1, 100)
-camera.position.set(3.45, 7.35, 9.40)
-camera.lookAt(new THREE.Vector3(0, 0, 0))
-scene.add(camera)
-
-const light1 = new THREE.DirectionalLight(0xffffff, 0.8)
-light1.position.set(0, 0, 10)
-scene.add(light1)
-
-const light2 = new THREE.DirectionalLight(0xffffff, 0.8)
-light2.position.set(0, 0, -10)
-scene.add(light2)
-
-const light3 = new THREE.DirectionalLight(0xffffff, 0.8)
-light3.position.set(0, 10, 0)
-scene.add(light3)
-
-const light4 = new THREE.DirectionalLight(0xffffff, 0.4)
-light4.position.set(0, -10, 0)
-scene.add(light4)
-
-const light5 = new THREE.DirectionalLight(0xffffff, 0.4)
-light5.position.set(10, 0, 0)
-scene.add(light5)
-
-const light6 = new THREE.DirectionalLight(0xffffff, 0.4)
-light6.position.set(-10, 0, 0)
-scene.add(light6)
-
-const puzzleGroup = new THREE.Group()
-scene.add(puzzleGroup)
-
-const controls = new OrbitControls(camera, renderer.domElement)
-controls.minDistance = 5.0
-controls.maxDistance = 40.0
-controls.enableDamping = true
-controls.dampingFactor = 0.9
-controls.autoRotate = true
-controls.autoRotateSpeed = 1.0
+  globals.puzzleGroup.children.find(child => child.userData === piece.id)
 
 window.addEventListener('resize', () => {
-  renderer.setSize(container.offsetWidth, container.offsetHeight)
-  camera.aspect = container.offsetWidth / container.offsetHeight
-  camera.updateProjectionMatrix()
+  const container = document.getElementById('container')
+  globals.renderer.setSize(container.offsetWidth, container.offsetHeight)
+  globals.camera.aspect = container.offsetWidth / container.offsetHeight
+  globals.camera.updateProjectionMatrix()
 })
 
-const createCube = cube => {
-  cube.forEach(piece => puzzleGroup.add(createUiPiece(piece)))
+const createUiPieces = cube => {
+  cube.forEach(piece => {
+    const uiPiece = createUiPiece(piece)
+    globals.puzzleGroup.add(uiPiece)
+  })
 }
 
-const displayCube = cube => {
+const resetUiPieces = cube => {
   cube.forEach(piece => {
     const uiPiece = findUiPiece(piece)
     resetUiPiece(uiPiece, piece)
   })
 }
 
-const clock = new THREE.Clock()
-const mixer = new THREE.AnimationMixer()
-
 const animate = () => {
   window.requestAnimationFrame(animate)
-  controls.update()
-  const delta = clock.getDelta() * mixer.timeScale
-  mixer.update(delta)
-  renderer.render(scene, camera)
+  globals.controls.update()
+  const delta = globals.clock.getDelta() * globals.animationMixer.timeScale
+  globals.animationMixer.update(delta)
+  globals.renderer.render(globals.scene, globals.camera)
 }
 
-let cube = L.SOLVED_CUBE
-createCube(cube)
+const movePiecesBetweenGroups = (uiPieces, fromGroup, toGroup) => {
+  fromGroup.remove(...uiPieces)
+  toGroup.add(...uiPieces)
+}
 
-animate()
-
-const ANIMATION_SPEED_PER_TURN_MS = 750
-const DELAY_BETWEEN_MOVES_MS = 500
-const DELAY_BEFORE_SOLVING_MS = 2000
-
-const animateMoves = (moves, nextMoveIndex = 0) => {
-
-  const move = moves[nextMoveIndex]
-
-  if (!move) {
-    enableScrambleButton()
-    return
-  }
-
-  const moveData = L.MOVE_DATA.get(move)
-  const pieces = L.getPieces(cube, moveData.coordsList)
-  const uiPieces = pieces.map(findUiPiece)
-  puzzleGroup.remove(...uiPieces)
-  const sliceGroup = new THREE.Group()
-  sliceGroup.add(...uiPieces)
-  scene.add(sliceGroup)
-
+const createAnimationClip = (move, moveData) => {
   const numTurns = moveData.numTurns
   const animationSpeedPerTurn = ANIMATION_SPEED_PER_TURN_MS / 1000
   const t0 = 0
@@ -192,24 +141,42 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
   endQuaternion.toArray(values, values.length)
   const duration = -1
   const tracks = [new THREE.QuaternionKeyframeTrack('.quaternion', times, values)]
-  const clip = new THREE.AnimationClip(move, duration, tracks)
+  return new THREE.AnimationClip(move, duration, tracks)
+}
 
-  const clipAction = mixer.clipAction(clip, sliceGroup)
-  clipAction.setLoop(THREE.LoopOnce)
+const animateMoves = (moves, nextMoveIndex = 0) => {
+
+  const move = moves[nextMoveIndex]
+
+  if (!move) {
+    enableScrambleButton()
+    return
+  }
+
+  const moveData = L.MOVE_DATA.get(move)
+  const pieces = L.getPieces(globals.cube, moveData.coordsList)
+  const uiPieces = pieces.map(findUiPiece)
+  movePiecesBetweenGroups(uiPieces, globals.puzzleGroup, globals.animationGroup)
 
   const onFinished = () => {
-    mixer.removeEventListener('finished', onFinished)
-    sliceGroup.remove(...uiPieces)
-    scene.remove(sliceGroup)
-    puzzleGroup.add(...uiPieces)
-    cube = moveData.makeMove(cube)
+    globals.animationMixer.removeEventListener('finished', onFinished)
+    movePiecesBetweenGroups(uiPieces, globals.animationGroup, globals.puzzleGroup)
+    globals.cube = moveData.makeMove(globals.cube)
+    const rotationMatrix3 = moveData.rotationMatrix3
+    const rotationMatrix4 = makeRotationMatrix4(rotationMatrix3)
     for (const uiPiece of uiPieces) {
       uiPiece.applyMatrix(rotationMatrix4)
     }
     setTimeout(animateMoves, DELAY_BETWEEN_MOVES_MS, moves, nextMoveIndex + 1)
   }
 
-  mixer.addEventListener('finished', onFinished)
+  globals.animationMixer.addEventListener('finished', onFinished)
+
+  const animationClip = createAnimationClip(move, moveData)
+  const clipAction = globals.animationMixer.clipAction(
+    animationClip,
+    globals.animationGroup)
+  clipAction.setLoop(THREE.LoopOnce)
   clipAction.play()
 }
 
@@ -237,19 +204,81 @@ const scramble = () => {
   const randomMoves = Array.from(Array(numRandomMoves).keys()).map(L.randomMove)
   L.removeRedundantMoves(randomMoves)
 
-  cube = randomMoves.reduce(
+  globals.cube = randomMoves.reduce(
     (accCube, move) => {
       const moveData = L.MOVE_DATA.get(move)
       return moveData.makeMove(accCube)
     },
     L.SOLVED_CUBE)
 
-  displayCube(cube)
+  resetUiPieces(globals.cube)
 
   setTimeout(showSolutionByCheating, DELAY_BEFORE_SOLVING_MS, randomMoves)
 }
 
-document.getElementById('btnScramble')
-  .addEventListener('click', scramble)
+const init = () => {
 
-scramble()
+  document.getElementById('btnScramble').addEventListener('click', scramble)
+
+  const container = document.getElementById('container')
+  const w = container.offsetWidth
+  const h = container.offsetHeight
+  globals.renderer = new THREE.WebGLRenderer({ antialias: true })
+  globals.renderer.setSize(w, h)
+  container.appendChild(globals.renderer.domElement)
+
+  globals.scene = new THREE.Scene()
+  globals.camera = new THREE.PerspectiveCamera(34, w / h, 1, 100)
+  globals.camera.position.set(3.45, 7.35, 9.40)
+  globals.camera.lookAt(new THREE.Vector3(0, 0, 0))
+  globals.scene.add(globals.camera)
+
+  const light1 = new THREE.DirectionalLight(0xffffff, 0.8)
+  light1.position.set(0, 0, 10)
+  globals.scene.add(light1)
+
+  const light2 = new THREE.DirectionalLight(0xffffff, 0.8)
+  light2.position.set(0, 0, -10)
+  globals.scene.add(light2)
+
+  const light3 = new THREE.DirectionalLight(0xffffff, 0.8)
+  light3.position.set(0, 10, 0)
+  globals.scene.add(light3)
+
+  const light4 = new THREE.DirectionalLight(0xffffff, 0.4)
+  light4.position.set(0, -10, 0)
+  globals.scene.add(light4)
+
+  const light5 = new THREE.DirectionalLight(0xffffff, 0.4)
+  light5.position.set(10, 0, 0)
+  globals.scene.add(light5)
+
+  const light6 = new THREE.DirectionalLight(0xffffff, 0.4)
+  light6.position.set(-10, 0, 0)
+  globals.scene.add(light6)
+
+  globals.puzzleGroup = new THREE.Group()
+  globals.scene.add(globals.puzzleGroup)
+
+  globals.animationGroup = new THREE.Group()
+  globals.scene.add(globals.animationGroup)
+
+  globals.controls = new OrbitControls(globals.camera, globals.renderer.domElement)
+  globals.controls.minDistance = 5.0
+  globals.controls.maxDistance = 40.0
+  globals.controls.enableDamping = true
+  globals.controls.dampingFactor = 0.9
+  globals.controls.autoRotate = true
+  globals.controls.autoRotateSpeed = 1.0
+
+  globals.clock = new THREE.Clock()
+  globals.animationMixer = new THREE.AnimationMixer()
+
+  globals.cube = L.SOLVED_CUBE
+  createUiPieces(globals.cube)
+
+  animate()
+  scramble()
+}
+
+init()
