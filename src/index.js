@@ -190,10 +190,9 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
   endQuaternion.setFromRotationMatrix(rotationMatrix4)
   startQuaternion.toArray(values, values.length)
   endQuaternion.toArray(values, values.length)
-  const clip = new THREE.AnimationClip(
-    move.name,
-    -1,
-    [new THREE.QuaternionKeyframeTrack('.quaternion', times, values)])
+  const duration = -1
+  const tracks = [new THREE.QuaternionKeyframeTrack('.quaternion', times, values)]
+  const clip = new THREE.AnimationClip(move, duration, tracks)
 
   const clipAction = mixer.clipAction(clip, sliceGroup)
   clipAction.setLoop(THREE.LoopOnce)
@@ -203,7 +202,7 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
     sliceGroup.remove(...uiPieces)
     scene.remove(sliceGroup)
     puzzleGroup.add(...uiPieces)
-    cube = move(cube)
+    cube = moveData.makeMove(cube)
     for (const uiPiece of uiPieces) {
       uiPiece.applyMatrix(rotationMatrix4)
     }
@@ -238,7 +237,13 @@ const scramble = () => {
   const randomMoves = Array.from(Array(numRandomMoves).keys()).map(L.randomMove)
   L.removeRedundantMoves(randomMoves)
 
-  cube = randomMoves.reduce((c, m) => m(c), L.SOLVED_CUBE)
+  cube = randomMoves.reduce(
+    (accCube, move) => {
+      const moveData = L.MOVE_DATA.get(move)
+      return moveData.makeMove(accCube)
+    },
+    L.SOLVED_CUBE)
+
   displayCube(cube)
 
   setTimeout(showSolutionByCheating, DELAY_BEFORE_SOLVING_MS, randomMoves)

@@ -56,173 +56,84 @@ export const getPieces = (cube, coordsList) =>
 const isPieceInCoordsList = (piece, coordsList) =>
   coordsList.findIndex(coords => pieceHasCoords(piece, coords)) >= 0
 
-const transformPiece = (piece, rotationMatrix3) => {
-  const vector = math.matrix([piece.x, piece.y, piece.z])
-  const rotatedVector = math.multiply(vector, rotationMatrix3)
+const rotatePiece = (piece, rotationMatrix3) => {
+  const vector3 = math.matrix([piece.x, piece.y, piece.z])
+  const rotatedVector3 = math.multiply(vector3, rotationMatrix3)
   return {
     ...piece,
-    x: rotatedVector.get([0]),
-    y: rotatedVector.get([1]),
-    z: rotatedVector.get([2]),
+    x: rotatedVector3.get([0]),
+    y: rotatedVector3.get([1]),
+    z: rotatedVector3.get([2]),
     accTransform3: math.multiply(piece.accTransform3, rotationMatrix3)
   }
 }
 
-const transformPieces = (coordsList, rotationMatrix3) => cube =>
+const rotatePieces = (coordsList, rotationMatrix3) => cube =>
   cube.map(piece => isPieceInCoordsList(piece, coordsList)
-    ? transformPiece(piece, rotationMatrix3)
+    ? rotatePiece(piece, rotationMatrix3)
     : piece)
 
-export const yawTop90 = transformPieces(CL.topCoordsList, R.Y90)
-export const yawTop180 = transformPieces(CL.topCoordsList, R.Y180)
-export const yawTop270 = transformPieces(CL.topCoordsList, R.Y270)
-export const yawMiddle90 = transformPieces(CL.yawMiddleCoordsList, R.Y90)
-export const yawMiddle270 = transformPieces(CL.yawMiddleCoordsList, R.Y270)
-export const yawBottom90 = transformPieces(CL.bottomCoordsList, R.Y90)
-export const yawBottom180 = transformPieces(CL.bottomCoordsList, R.Y180)
-export const yawBottom270 = transformPieces(CL.bottomCoordsList, R.Y270)
-export const yawTopAndMiddle90 = transformPieces(CL.topAndMiddleCoordsList, R.Y90)
-export const yawTopAndMiddle270 = transformPieces(CL.topAndMiddleCoordsList, R.Y270)
-export const yawBottomAndMiddle90 = transformPieces(CL.bottomAndMiddleCoordsList, R.Y90)
-export const yawBottomAndMiddle270 = transformPieces(CL.bottomAndMiddleCoordsList, R.Y270)
-export const yawAll90 = transformPieces(CL.allCoordsList, R.Y90)
-export const yawAll270 = transformPieces(CL.allCoordsList, R.Y270)
-
-export const pitchLeft90 = transformPieces(CL.leftCoordsList, R.X90)
-export const pitchLeft180 = transformPieces(CL.leftCoordsList, R.X180)
-export const pitchLeft270 = transformPieces(CL.leftCoordsList, R.X270)
-export const pitchMiddle90 = transformPieces(CL.pitchMiddleCoordsList, R.X90)
-export const pitchMiddle270 = transformPieces(CL.pitchMiddleCoordsList, R.X270)
-export const pitchRight90 = transformPieces(CL.rightCoordsList, R.X90)
-export const pitchRight180 = transformPieces(CL.rightCoordsList, R.X180)
-export const pitchRight270 = transformPieces(CL.rightCoordsList, R.X270)
-export const pitchLeftAndMiddle90 = transformPieces(CL.leftAndMiddleCoordsList, R.X90)
-export const pitchLeftAndMiddle270 = transformPieces(CL.leftAndMiddleCoordsList, R.X270)
-export const pitchRightAndMiddle90 = transformPieces(CL.rightAndMiddleCoordsList, R.X90)
-export const pitchRightAndMiddle270 = transformPieces(CL.rightAndMiddleCoordsList, R.X270)
-export const pitchAll90 = transformPieces(CL.allCoordsList, R.X90)
-export const pitchAll270 = transformPieces(CL.allCoordsList, R.X270)
-
-export const rollFront90 = transformPieces(CL.frontCoordsList, R.Z90)
-export const rollFront180 = transformPieces(CL.frontCoordsList, R.Z180)
-export const rollFront270 = transformPieces(CL.frontCoordsList, R.Z270)
-export const rollMiddle90 = transformPieces(CL.rollMiddleCoordsList, R.Z90)
-export const rollMiddle270 = transformPieces(CL.rollMiddleCoordsList, R.Z270)
-export const rollBack90 = transformPieces(CL.backCoordsList, R.Z90)
-export const rollBack180 = transformPieces(CL.backCoordsList, R.Z180)
-export const rollBack270 = transformPieces(CL.backCoordsList, R.Z270)
-export const rollFrontAndMiddle90 = transformPieces(CL.frontAndMiddleCoordsList, R.Z90)
-export const rollFrontAndMiddle270 = transformPieces(CL.frontAndMiddleCoordsList, R.Z270)
-export const rollBackAndMiddle90 = transformPieces(CL.backAndMiddleCoordsList, R.Z90)
-export const rollBackAndMiddle270 = transformPieces(CL.backAndMiddleCoordsList, R.Z270)
-export const rollAll90 = transformPieces(CL.allCoordsList, R.Z90)
-export const rollAll270 = transformPieces(CL.allCoordsList, R.Z270)
-
-// https://ruwix.com/the-rubiks-cube/notation/advanced/
-export const MOVES = [
-  yawTop90, // U'
-  yawTop180, // U2
-  yawTop270, // U
-  yawMiddle90, // E
-  yawMiddle270, // E'
-  yawBottom90, // D'
-  yawBottom180, // D2
-  yawBottom270, // D
-  yawTopAndMiddle90, // u'
-  yawTopAndMiddle270, // u
-  yawBottomAndMiddle90, // d
-  yawBottomAndMiddle270, // d'
-  yawAll90, // Y'
-  yawAll270, // Y
-
-  pitchLeft90, // L
-  pitchLeft180, // L2
-  pitchLeft270, // L'
-  pitchMiddle90, // M
-  pitchMiddle270, // M'
-  pitchRight90, // R'
-  pitchRight180, // R2
-  pitchRight270, // R
-  pitchLeftAndMiddle90, // l
-  pitchLeftAndMiddle270, // l'
-  pitchRightAndMiddle90, // r'
-  pitchRightAndMiddle270, // r
-  pitchAll90, // X'
-  pitchAll270, // X
-
-  rollFront90, // F'
-  rollFront180, // F2
-  rollFront270, // F
-  rollMiddle90, // S'
-  rollMiddle270, // S
-  rollBack90, // B
-  rollBack180, // B2
-  rollBack270, // B'
-  rollFrontAndMiddle90, // f'
-  rollFrontAndMiddle270, // f
-  rollBackAndMiddle90, // b
-  rollBackAndMiddle270, // b'
-  rollAll90, // Z'
-  rollAll270 // Z
-]
-
 const makeMoveDataEntry = (rotationMatrix3, coordsList, numTurns, oppositeMove) => ({
+  makeMove: rotatePieces(coordsList, rotationMatrix3),
   rotationMatrix3,
   coordsList,
   numTurns,
   oppositeMove
 })
 
+// https://ruwix.com/the-rubiks-cube/notation/advanced/
 export const MOVE_DATA = new Map([
-  [yawTop90, makeMoveDataEntry(R.Y90, CL.topCoordsList, 1, yawTop270)],
-  [yawTop180, makeMoveDataEntry(R.Y180, CL.topCoordsList, 2, yawTop180)],
-  [yawTop270, makeMoveDataEntry(R.Y270, CL.topCoordsList, 1, yawTop90)],
-  [yawMiddle90, makeMoveDataEntry(R.Y90, CL.yawMiddleCoordsList, 1, yawMiddle270)],
-  [yawMiddle270, makeMoveDataEntry(R.Y270, CL.yawMiddleCoordsList, 1, yawMiddle90)],
-  [yawBottom90, makeMoveDataEntry(R.Y90, CL.bottomCoordsList, 1, yawBottom270)],
-  [yawBottom180, makeMoveDataEntry(R.Y180, CL.bottomCoordsList, 2, yawBottom180)],
-  [yawBottom270, makeMoveDataEntry(R.Y270, CL.bottomCoordsList, 1, yawBottom90)],
-  [yawTopAndMiddle90, makeMoveDataEntry(R.Y90, CL.topAndMiddleCoordsList, 1, yawTopAndMiddle270)],
-  [yawTopAndMiddle270, makeMoveDataEntry(R.Y270, CL.topAndMiddleCoordsList, 1, yawTopAndMiddle90)],
-  [yawBottomAndMiddle90, makeMoveDataEntry(R.Y90, CL.bottomAndMiddleCoordsList, 1, yawBottomAndMiddle270)],
-  [yawBottomAndMiddle270, makeMoveDataEntry(R.Y270, CL.bottomAndMiddleCoordsList, 1, yawBottomAndMiddle90)],
-  [yawAll90, makeMoveDataEntry(R.Y90, CL.allCoordsList, 1, yawAll270)],
-  [yawAll270, makeMoveDataEntry(R.Y270, CL.allCoordsList, 1, yawAll90)],
+  ['U\'', makeMoveDataEntry(R.Y90, CL.topCoordsList, 1, 'U')],
+  ['U2', makeMoveDataEntry(R.Y180, CL.topCoordsList, 2, 'U2')],
+  ['U', makeMoveDataEntry(R.Y270, CL.topCoordsList, 1, 'U\'')],
+  ['E', makeMoveDataEntry(R.Y90, CL.yawMiddleCoordsList, 1, 'E\'')],
+  ['E\'', makeMoveDataEntry(R.Y270, CL.yawMiddleCoordsList, 1, 'E')],
+  ['D\'', makeMoveDataEntry(R.Y90, CL.bottomCoordsList, 1, 'D')],
+  ['D2', makeMoveDataEntry(R.Y180, CL.bottomCoordsList, 2, 'D2')],
+  ['D', makeMoveDataEntry(R.Y270, CL.bottomCoordsList, 1, 'D\'')],
+  ['u\'', makeMoveDataEntry(R.Y90, CL.topAndMiddleCoordsList, 1, 'u')],
+  ['u', makeMoveDataEntry(R.Y270, CL.topAndMiddleCoordsList, 1, 'u\'')],
+  ['d', makeMoveDataEntry(R.Y90, CL.bottomAndMiddleCoordsList, 1, 'd\'')],
+  ['d\'', makeMoveDataEntry(R.Y270, CL.bottomAndMiddleCoordsList, 1, 'd')],
+  ['Y\'', makeMoveDataEntry(R.Y90, CL.allCoordsList, 1, 'Y')],
+  ['Y', makeMoveDataEntry(R.Y270, CL.allCoordsList, 1, 'Y\'')],
 
-  [pitchLeft90, makeMoveDataEntry(R.X90, CL.leftCoordsList, 1, pitchLeft270)],
-  [pitchLeft180, makeMoveDataEntry(R.X180, CL.leftCoordsList, 2, pitchLeft180)],
-  [pitchLeft270, makeMoveDataEntry(R.X270, CL.leftCoordsList, 1, pitchLeft90)],
-  [pitchMiddle90, makeMoveDataEntry(R.X90, CL.pitchMiddleCoordsList, 1, pitchMiddle270)],
-  [pitchMiddle270, makeMoveDataEntry(R.X270, CL.pitchMiddleCoordsList, 1, pitchMiddle90)],
-  [pitchRight90, makeMoveDataEntry(R.X90, CL.rightCoordsList, 1, pitchRight270)],
-  [pitchRight180, makeMoveDataEntry(R.X180, CL.rightCoordsList, 2, pitchRight180)],
-  [pitchRight270, makeMoveDataEntry(R.X270, CL.rightCoordsList, 1, pitchRight90)],
-  [pitchLeftAndMiddle90, makeMoveDataEntry(R.X90, CL.leftAndMiddleCoordsList, 1, pitchLeftAndMiddle270)],
-  [pitchLeftAndMiddle270, makeMoveDataEntry(R.X270, CL.leftAndMiddleCoordsList, 1, pitchLeftAndMiddle90)],
-  [pitchRightAndMiddle90, makeMoveDataEntry(R.X90, CL.rightAndMiddleCoordsList, 1, pitchRightAndMiddle270)],
-  [pitchRightAndMiddle270, makeMoveDataEntry(R.X270, CL.rightAndMiddleCoordsList, 1, pitchRightAndMiddle90)],
-  [pitchAll90, makeMoveDataEntry(R.X90, CL.allCoordsList, 1, pitchAll270)],
-  [pitchAll270, makeMoveDataEntry(R.X270, CL.allCoordsList, 1, pitchAll90)],
+  ['L', makeMoveDataEntry(R.X90, CL.leftCoordsList, 1, 'L\'')],
+  ['L2', makeMoveDataEntry(R.X180, CL.leftCoordsList, 2, 'L2')],
+  ['L\'', makeMoveDataEntry(R.X270, CL.leftCoordsList, 1, 'L')],
+  ['M', makeMoveDataEntry(R.X90, CL.pitchMiddleCoordsList, 1, 'M\'')],
+  ['M\'', makeMoveDataEntry(R.X270, CL.pitchMiddleCoordsList, 1, 'M')],
+  ['R\'', makeMoveDataEntry(R.X90, CL.rightCoordsList, 1, 'R')],
+  ['R2', makeMoveDataEntry(R.X180, CL.rightCoordsList, 2, 'R2')],
+  ['R', makeMoveDataEntry(R.X270, CL.rightCoordsList, 1, 'R\'')],
+  ['l', makeMoveDataEntry(R.X90, CL.leftAndMiddleCoordsList, 1, 'l\'')],
+  ['l\'', makeMoveDataEntry(R.X270, CL.leftAndMiddleCoordsList, 1, 'l')],
+  ['r\'', makeMoveDataEntry(R.X90, CL.rightAndMiddleCoordsList, 1, 'r')],
+  ['r', makeMoveDataEntry(R.X270, CL.rightAndMiddleCoordsList, 1, 'r\'')],
+  ['X\'', makeMoveDataEntry(R.X90, CL.allCoordsList, 1, 'X')],
+  ['X', makeMoveDataEntry(R.X270, CL.allCoordsList, 1, 'X\'')],
 
-  [rollFront90, makeMoveDataEntry(R.Z90, CL.frontCoordsList, 1, rollFront270)],
-  [rollFront180, makeMoveDataEntry(R.Z180, CL.frontCoordsList, 2, rollFront180)],
-  [rollFront270, makeMoveDataEntry(R.Z270, CL.frontCoordsList, 1, rollFront90)],
-  [rollMiddle90, makeMoveDataEntry(R.Z90, CL.rollMiddleCoordsList, 1, rollMiddle270)],
-  [rollMiddle270, makeMoveDataEntry(R.Z270, CL.rollMiddleCoordsList, 1, rollMiddle90)],
-  [rollBack90, makeMoveDataEntry(R.Z90, CL.backCoordsList, 1, rollBack270)],
-  [rollBack180, makeMoveDataEntry(R.Z180, CL.backCoordsList, 2, rollBack180)],
-  [rollBack270, makeMoveDataEntry(R.Z270, CL.backCoordsList, 1, rollBack90)],
-  [rollFrontAndMiddle90, makeMoveDataEntry(R.Z90, CL.frontAndMiddleCoordsList, 1, rollFrontAndMiddle270)],
-  [rollFrontAndMiddle270, makeMoveDataEntry(R.Z270, CL.frontAndMiddleCoordsList, 1, rollFrontAndMiddle90)],
-  [rollBackAndMiddle90, makeMoveDataEntry(R.Z90, CL.backAndMiddleCoordsList, 1, rollBackAndMiddle270)],
-  [rollBackAndMiddle270, makeMoveDataEntry(R.Z270, CL.backAndMiddleCoordsList, 1, rollBackAndMiddle90)],
-  [rollAll90, makeMoveDataEntry(R.Z90, CL.allCoordsList, 1, rollAll270)],
-  [rollAll270, makeMoveDataEntry(R.Z270, CL.allCoordsList, 1, rollAll90)]
+  ['F\'', makeMoveDataEntry(R.Z90, CL.frontCoordsList, 1, 'F')],
+  ['F2', makeMoveDataEntry(R.Z180, CL.frontCoordsList, 2, 'F2')],
+  ['F', makeMoveDataEntry(R.Z270, CL.frontCoordsList, 1, 'F\'')],
+  ['S\'', makeMoveDataEntry(R.Z90, CL.rollMiddleCoordsList, 1, 'S')],
+  ['S', makeMoveDataEntry(R.Z270, CL.rollMiddleCoordsList, 1, 'S\'')],
+  ['B', makeMoveDataEntry(R.Z90, CL.backCoordsList, 1, 'B\'')],
+  ['B2', makeMoveDataEntry(R.Z180, CL.backCoordsList, 2, 'B2')],
+  ['B\'', makeMoveDataEntry(R.Z270, CL.backCoordsList, 1, 'B')],
+  ['f\'', makeMoveDataEntry(R.Z90, CL.frontAndMiddleCoordsList, 1, 'f')],
+  ['f', makeMoveDataEntry(R.Z270, CL.frontAndMiddleCoordsList, 1, 'f\'')],
+  ['b', makeMoveDataEntry(R.Z90, CL.backAndMiddleCoordsList, 1, 'b\'')],
+  ['b\'', makeMoveDataEntry(R.Z270, CL.backAndMiddleCoordsList, 1, 'b')],
+  ['Z\'', makeMoveDataEntry(R.Z90, CL.allCoordsList, 1, 'Z')],
+  ['Z', makeMoveDataEntry(R.Z270, CL.allCoordsList, 1, 'Z\'')]
 ])
 
+const MOVE_NAMES = Array.from(MOVE_DATA.keys())
+
 export const randomMove = () => {
-  const randomIndex = Math.floor(Math.random() * MOVES.length)
-  return MOVES[randomIndex]
+  const randomIndex = Math.floor(Math.random() * MOVE_NAMES.length)
+  return MOVE_NAMES[randomIndex]
 }
 
 export const removeRedundantMoves = moves => {
