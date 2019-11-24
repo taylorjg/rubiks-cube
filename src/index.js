@@ -2,7 +2,6 @@ import * as THREE from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import { PieceGeometry } from './PieceGeometry'
 import * as L from '../logic'
-import * as C from '../logic/constants'
 
 const COLOUR_TABLE = {
   'B': new THREE.Color('blue'),
@@ -40,8 +39,6 @@ const pieceMaterial = new THREE.MeshBasicMaterial({
   vertexColors: THREE.FaceColors
 })
 
-const makeKey = piece => `${piece.x}:${piece.y}:${piece.z}`
-
 const createUiPiece = piece => {
 
   const setFaceColour = (face, colours, coloursIndex) => {
@@ -51,15 +48,16 @@ const createUiPiece = piece => {
 
   const geometry = new PieceGeometry(PIECE_SIZE, NUM_SEGMENTS, MARGIN)
   const uiPiece = new THREE.Mesh(geometry, pieceMaterial)
+  uiPiece.userData = piece.id
 
   uiPiece.geometry.faces.forEach(face => {
     const closeTo = (a, b) => Math.abs(a - b) <= 1e-12
-    closeTo(face.normal.x, 1) && setFaceColour(face, piece.colours, C.RIGHT)
-    closeTo(face.normal.x, -1) && setFaceColour(face, piece.colours, C.LEFT)
-    closeTo(face.normal.y, 1) && setFaceColour(face, piece.colours, C.TOP)
-    closeTo(face.normal.y, -1) && setFaceColour(face, piece.colours, C.BOTTOM)
-    closeTo(face.normal.z, 1) && setFaceColour(face, piece.colours, C.FRONT)
-    closeTo(face.normal.z, -1) && setFaceColour(face, piece.colours, C.BACK)
+    closeTo(face.normal.x, 1) && setFaceColour(face, piece.colours, L.RIGHT)
+    closeTo(face.normal.x, -1) && setFaceColour(face, piece.colours, L.LEFT)
+    closeTo(face.normal.y, 1) && setFaceColour(face, piece.colours, L.TOP)
+    closeTo(face.normal.y, -1) && setFaceColour(face, piece.colours, L.BOTTOM)
+    closeTo(face.normal.z, 1) && setFaceColour(face, piece.colours, L.FRONT)
+    closeTo(face.normal.z, -1) && setFaceColour(face, piece.colours, L.BACK)
   })
 
   resetUiPiece(uiPiece, piece)
@@ -72,24 +70,10 @@ const resetUiPiece = (uiPiece, piece) => {
   uiPiece.position.y = piece.y
   uiPiece.position.z = piece.z
   uiPiece.setRotationFromMatrix(makeRotationMatrix4(piece.accTransform3))
-  uiPiece.userData = {
-    id: piece.id,
-    key: makeKey(piece)
-  }
-}
-
-const updateUiPiece = (uiPiece, piece, move) => {
-  const rotationMatrix3 = L.MOVE_DATA.get(move).rotationMatrix3
-  const rotationMatrix4 = makeRotationMatrix4(rotationMatrix3)
-  uiPiece.applyMatrix(rotationMatrix4)
-  uiPiece.userData = {
-    id: piece.id,
-    key: makeKey(piece)
-  }
 }
 
 const findUiPiece = piece =>
-  puzzleGroup.children.find(child => child.userData.id === piece.id)
+  puzzleGroup.children.find(child => child.userData === piece.id)
 
 const container = document.getElementById('container')
 const w = container.offsetWidth
@@ -149,20 +133,10 @@ const createCube = cube => {
   cube.forEach(piece => puzzleGroup.add(createUiPiece(piece)))
 }
 
-const resetCube = cube => {
+const displayCube = cube => {
   cube.forEach(piece => {
     const uiPiece = findUiPiece(piece)
     resetUiPiece(uiPiece, piece)
-  })
-}
-
-const renderCubeMove = (cube, move) => {
-  cube.forEach(piece => {
-    const uiPiece = findUiPiece(piece)
-    const key = makeKey(piece)
-    if (uiPiece.userData.key !== key) {
-      updateUiPiece(uiPiece, piece, move)
-    }
   })
 }
 
@@ -230,7 +204,9 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
     scene.remove(sliceGroup)
     puzzleGroup.add(...uiPieces)
     cube = move(cube)
-    renderCubeMove(cube, move)
+    for (const uiPiece of uiPieces) {
+      uiPiece.applyMatrix(rotationMatrix4)
+    }
     setTimeout(animateMoves, DELAY_BETWEEN_MOVES_MS, moves, nextMoveIndex + 1)
   }
 
@@ -238,7 +214,7 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
   clipAction.play()
 }
 
-const solveByCheating = randomMoves => {
+const showSolutionByCheating = randomMoves => {
   const solutionMoves = randomMoves
     .map(move => L.MOVE_DATA.get(move).oppositeMove)
     .reverse()
@@ -263,9 +239,9 @@ const scramble = () => {
   L.removeRedundantMoves(randomMoves)
 
   cube = randomMoves.reduce((c, m) => m(c), L.SOLVED_CUBE)
-  resetCube(cube)
+  displayCube(cube)
 
-  setTimeout(solveByCheating, DELAY_BEFORE_SOLVING_MS, randomMoves)
+  setTimeout(showSolutionByCheating, DELAY_BEFORE_SOLVING_MS, randomMoves)
 }
 
 document.getElementById('btnScramble')

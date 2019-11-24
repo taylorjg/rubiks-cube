@@ -2,6 +2,13 @@ import * as math from 'mathjs'
 import * as CL from './coordsLists'
 import * as R from './rotations'
 
+export const TOP = 0
+export const LEFT = 1
+export const FRONT = 2
+export const RIGHT = 3
+export const BACK = 4
+export const BOTTOM = 5
+
 export const SOLVED_CUBE = [
   // top layer
   { id: 1, x: -1, y: 1, z: 1, colours: 'BRY---', accTransform3: R.Identity },
