@@ -17,8 +17,6 @@ const PIECE_SIZE = 1
 const NUM_SEGMENTS = 12
 const MARGIN = 0.05
 
-const ANIMATION_SPEED_PER_TURN_MS = 750
-const DELAY_BETWEEN_MOVES_MS = 500
 const DELAY_BEFORE_SOLVING_MS = 2000
 
 const globals = {
@@ -32,6 +30,25 @@ const globals = {
   clock: undefined,
   animationMixer: undefined
 }
+
+const url = new URL(document.location)
+const searchParams = url.searchParams
+
+const queryParamInt = (paramName, defaultValue, min, max) => {
+  const clamp = v => {
+    const localMin = min !== undefined ? min : Number.MIN_SAFE_INTEGER
+    const localMax = max !== undefined ? max : Number.MAX_SAFE_INTEGER
+    return Math.max(localMin, Math.min(localMax, v))
+  }
+  if (!searchParams.has(paramName)) return clamp(defaultValue)
+  const valueString = searchParams.get(paramName)
+  const valueInteger = Number(valueString)
+  const value = Number.isInteger(valueInteger) ? valueInteger : defaultValue
+  return clamp(value)
+}
+
+const speedMilliseconds = queryParamInt('speed', 750, 100, 1000)
+const numRandomMoves = queryParamInt('numRandomMoves', 25, 1, 100)
 
 const makeRotationMatrix4 = rotationMatrix3 => {
   const n11 = rotationMatrix3.get([0, 0])
@@ -127,9 +144,8 @@ const movePiecesBetweenGroups = (uiPieces, fromGroup, toGroup) => {
 
 const createAnimationClip = (move, moveData) => {
   const numTurns = moveData.numTurns
-  const animationSpeedPerTurn = ANIMATION_SPEED_PER_TURN_MS / 1000
   const t0 = 0
-  const t1 = numTurns * animationSpeedPerTurn
+  const t1 = numTurns * (speedMilliseconds / 1000)
   const times = [t0, t1]
   const values = []
   const startQuaternion = new THREE.Quaternion()
@@ -167,7 +183,7 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
     for (const uiPiece of uiPieces) {
       uiPiece.applyMatrix(rotationMatrix4)
     }
-    setTimeout(animateMoves, DELAY_BETWEEN_MOVES_MS, moves, nextMoveIndex + 1)
+    setTimeout(animateMoves, speedMilliseconds, moves, nextMoveIndex + 1)
   }
 
   globals.animationMixer.addEventListener('finished', onFinished)
@@ -200,7 +216,6 @@ const scramble = () => {
 
   disableScrambleButton()
 
-  const numRandomMoves = 25 + Math.floor(Math.random() * 25)
   const randomMoves = Array.from(Array(numRandomMoves).keys()).map(L.randomMove)
   L.removeRedundantMoves(randomMoves)
 
