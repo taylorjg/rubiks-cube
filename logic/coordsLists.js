@@ -1,136 +1,36 @@
-export const topCoordsList = [
-  [-1, 1, -1],
-  [0, 1, -1],
-  [1, 1, -1],
-  [-1, 1, 0],
-  [0, 1, 0],
-  [1, 1, 0],
-  [-1, 1, 1],
-  [0, 1, 1],
-  [1, 1, 1]
-]
+function* allCoordsGenerator() {
+  const values = [-1, 0, 1]
+  for (const x of values) {
+    for (const y of values) {
+      for (const z of values) {
+        if (x || y || z) {
+          yield [x, y, z]
+        }
+      }
+    }
+  }
+}
 
-export const leftCoordsList = [
-  [-1, 1, -1],
-  [-1, 1, 0],
-  [-1, 1, 1],
-  [-1, 0, -1],
-  [-1, 0, 0],
-  [-1, 0, 1],
-  [-1, -1, -1],
-  [-1, -1, 0],
-  [-1, -1, 1]
-]
+export const allCoordsList = Array.from(allCoordsGenerator())
 
-export const frontCoordsList = [
-  [-1, 1, 1],
-  [0, 1, 1],
-  [1, 1, 1],
-  [-1, 0, 1],
-  [0, 0, 1],
-  [1, 0, 1],
-  [-1, -1, 1],
-  [0, -1, 1],
-  [1, -1, 1]
-]
+export const leftCoordsList = allCoordsList.filter(([x]) => x === -1)
+export const rightCoordsList = allCoordsList.filter(([x]) => x === 1)
 
-export const rightCoordsList = [
-  [1, 1, 1],
-  [1, 1, 0],
-  [1, 1, -1],
-  [1, 0, 1],
-  [1, 0, 0],
-  [1, 0, -1],
-  [1, -1, 1],
-  [1, -1, 0],
-  [1, -1, -1]
-]
+export const topCoordsList = allCoordsList.filter(([, y]) => y === 1)
+export const bottomCoordsList = allCoordsList.filter(([, y]) => y === -1)
 
-export const backCoordsList = [
-  [1, 1, -1],
-  [0, 1, -1],
-  [-1, 1, -1],
-  [1, 0, -1],
-  [0, 0, -1],
-  [-1, 0, -1],
-  [1, -1, -1],
-  [0, -1, -1],
-  [-1, -1, -1]
-]
+export const frontCoordsList = allCoordsList.filter(([, , z]) => z === 1)
+export const backCoordsList = allCoordsList.filter(([, , z]) => z === -1)
 
-export const bottomCoordsList = [
-  [-1, -1, 1],
-  [0, -1, 1],
-  [1, -1, 1],
-  [-1, -1, 0],
-  [0, -1, 0],
-  [1, -1, 0],
-  [-1, -1, -1],
-  [0, -1, -1],
-  [1, -1, -1]
-]
+export const pitchMiddleCoordsList = allCoordsList.filter(([x]) => x === 0)
+export const yawMiddleCoordsList = allCoordsList.filter(([, y]) => y === 0)
+export const rollMiddleCoordsList = allCoordsList.filter(([, , z]) => z === 0)
 
-export const yawMiddleCoordsList = [
-  [-1, 0, 1],
-  [0, 0, 1],
-  [1, 0, 1],
-  [-1, 0, 0],
-  [1, 0, 0],
-  [-1, 0, -1],
-  [0, 0, -1],
-  [1, 0, -1]
-]
+export const leftAndMiddleCoordsList = leftCoordsList.concat(pitchMiddleCoordsList)
+export const rightAndMiddleCoordsList = rightCoordsList.concat(pitchMiddleCoordsList)
 
-export const pitchMiddleCoordsList = [
-  [0, 1, -1],
-  [0, 1, 0],
-  [0, 1, 1],
-  [0, 0, -1],
-  [0, 0, 1],
-  [0, -1, -1],
-  [0, -1, 0],
-  [0, -1, 1]
-]
+export const topAndMiddleCoordsList = topCoordsList.concat(yawMiddleCoordsList)
+export const bottomAndMiddleCoordsList = bottomCoordsList.concat(yawMiddleCoordsList)
 
-export const rollMiddleCoordsList = [
-  [-1, 1, 0],
-  [0, 1, 0],
-  [1, 1, 0],
-  [-1, 0, 0],
-  [1, 0, 0],
-  [-1, -1, 0],
-  [0, -1, 0],
-  [1, -1, 0]
-]
-
-// u and u'
-export const topAndMiddleCoordsList =
-  topCoordsList.concat(yawMiddleCoordsList)
-
-// l and l'
-export const leftAndMiddleCoordsList =
-  leftCoordsList.concat(pitchMiddleCoordsList)
-
-// f and f'
-export const frontAndMiddleCoordsList =
-  frontCoordsList.concat(rollMiddleCoordsList)
-
-// r and r'
-export const rightAndMiddleCoordsList =
-  rightCoordsList.concat(pitchMiddleCoordsList)
-
-// b and b'
-export const backAndMiddleCoordsList =
-  backCoordsList.concat(rollMiddleCoordsList)
-
-// d and d'
-export const bottomAndMiddleCoordsList =
-  bottomCoordsList.concat(yawMiddleCoordsList)
-
-// X, X', Y, Y', Z, Z'
-export const allCoordsList =
-  [].concat(
-    frontCoordsList,
-    rollMiddleCoordsList,
-    backCoordsList
-  )
+export const frontAndMiddleCoordsList = frontCoordsList.concat(rollMiddleCoordsList)
+export const backAndMiddleCoordsList = backCoordsList.concat(rollMiddleCoordsList)

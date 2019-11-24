@@ -159,51 +159,58 @@ export const MOVES = [
   rollAll270 // Z
 ]
 
-export const OPPOSITE_MOVES = new Map([
-  [yawTop90, yawTop270],
-  [yawTop180, yawTop180],
-  [yawTop270, yawTop90],
-  [yawMiddle90, yawMiddle270],
-  [yawMiddle270, yawMiddle90],
-  [yawBottom90, yawBottom270],
-  [yawBottom180, yawBottom180],
-  [yawBottom270, yawBottom90],
-  [yawTopAndMiddle90, yawTopAndMiddle270],
-  [yawTopAndMiddle270, yawTopAndMiddle90],
-  [yawBottomAndMiddle90, yawBottomAndMiddle270],
-  [yawBottomAndMiddle270, yawBottomAndMiddle90],
-  [yawAll90, yawAll270],
-  [yawAll270, yawAll90],
+const makeMoveDataEntry = (rotationMatrix3, coordsList, numTurns, oppositeMove) => ({
+  rotationMatrix3,
+  coordsList,
+  numTurns,
+  oppositeMove
+})
 
-  [pitchLeft90, pitchLeft270],
-  [pitchLeft180, pitchLeft180],
-  [pitchLeft270, pitchLeft90],
-  [pitchMiddle90, pitchMiddle270],
-  [pitchMiddle270, pitchMiddle90],
-  [pitchRight90, pitchRight270],
-  [pitchRight180, pitchRight180],
-  [pitchRight270, pitchRight90],
-  [pitchLeftAndMiddle90, pitchLeftAndMiddle270],
-  [pitchLeftAndMiddle270, pitchLeftAndMiddle90],
-  [pitchRightAndMiddle90, pitchRightAndMiddle270],
-  [pitchRightAndMiddle270, pitchRightAndMiddle90],
-  [pitchAll90, pitchAll270],
-  [pitchAll270, pitchAll90],
+export const MOVE_DATA = new Map([
+  [yawTop90, makeMoveDataEntry(R.Y90, CL.topCoordsList, 1, yawTop270)],
+  [yawTop180, makeMoveDataEntry(R.Y180, CL.topCoordsList, 2, yawTop180)],
+  [yawTop270, makeMoveDataEntry(R.Y270, CL.topCoordsList, 1, yawTop90)],
+  [yawMiddle90, makeMoveDataEntry(R.Y90, CL.yawMiddleCoordsList, 1, yawMiddle270)],
+  [yawMiddle270, makeMoveDataEntry(R.Y270, CL.yawMiddleCoordsList, 1, yawMiddle90)],
+  [yawBottom90, makeMoveDataEntry(R.Y90, CL.bottomCoordsList, 1, yawBottom270)],
+  [yawBottom180, makeMoveDataEntry(R.Y180, CL.bottomCoordsList, 2, yawBottom180)],
+  [yawBottom270, makeMoveDataEntry(R.Y270, CL.bottomCoordsList, 1, yawBottom90)],
+  [yawTopAndMiddle90, makeMoveDataEntry(R.Y90, CL.topAndMiddleCoordsList, 1, yawTopAndMiddle270)],
+  [yawTopAndMiddle270, makeMoveDataEntry(R.Y270, CL.topAndMiddleCoordsList, 1, yawTopAndMiddle90)],
+  [yawBottomAndMiddle90, makeMoveDataEntry(R.Y90, CL.bottomAndMiddleCoordsList, 1, yawBottomAndMiddle270)],
+  [yawBottomAndMiddle270, makeMoveDataEntry(R.Y270, CL.bottomAndMiddleCoordsList, 1, yawBottomAndMiddle90)],
+  [yawAll90, makeMoveDataEntry(R.Y90, CL.allCoordsList, 1, yawAll270)],
+  [yawAll270, makeMoveDataEntry(R.Y270, CL.allCoordsList, 1, yawAll90)],
 
-  [rollFront90, rollFront270],
-  [rollFront180, rollFront180],
-  [rollFront270, rollFront90],
-  [rollMiddle90, rollMiddle270],
-  [rollMiddle270, rollMiddle90],
-  [rollBack90, rollBack270],
-  [rollBack180, rollBack180],
-  [rollBack270, rollBack90],
-  [rollFrontAndMiddle90, rollFrontAndMiddle270],
-  [rollFrontAndMiddle270, rollFrontAndMiddle90],
-  [rollBackAndMiddle90, rollBackAndMiddle270],
-  [rollBackAndMiddle270, rollBackAndMiddle90],
-  [rollAll90, rollAll270],
-  [rollAll270, rollAll90]
+  [pitchLeft90, makeMoveDataEntry(R.X90, CL.leftCoordsList, 1, pitchLeft270)],
+  [pitchLeft180, makeMoveDataEntry(R.X180, CL.leftCoordsList, 2, pitchLeft180)],
+  [pitchLeft270, makeMoveDataEntry(R.X270, CL.leftCoordsList, 1, pitchLeft90)],
+  [pitchMiddle90, makeMoveDataEntry(R.X90, CL.pitchMiddleCoordsList, 1, pitchMiddle270)],
+  [pitchMiddle270, makeMoveDataEntry(R.X270, CL.pitchMiddleCoordsList, 1, pitchMiddle90)],
+  [pitchRight90, makeMoveDataEntry(R.X90, CL.rightCoordsList, 1, pitchRight270)],
+  [pitchRight180, makeMoveDataEntry(R.X180, CL.rightCoordsList, 2, pitchRight180)],
+  [pitchRight270, makeMoveDataEntry(R.X270, CL.rightCoordsList, 1, pitchRight90)],
+  [pitchLeftAndMiddle90, makeMoveDataEntry(R.X90, CL.leftAndMiddleCoordsList, 1, pitchLeftAndMiddle270)],
+  [pitchLeftAndMiddle270, makeMoveDataEntry(R.X270, CL.leftAndMiddleCoordsList, 1, pitchLeftAndMiddle90)],
+  [pitchRightAndMiddle90, makeMoveDataEntry(R.X90, CL.rightAndMiddleCoordsList, 1, pitchRightAndMiddle270)],
+  [pitchRightAndMiddle270, makeMoveDataEntry(R.X270, CL.rightAndMiddleCoordsList, 1, pitchRightAndMiddle90)],
+  [pitchAll90, makeMoveDataEntry(R.X90, CL.allCoordsList, 1, pitchAll270)],
+  [pitchAll270, makeMoveDataEntry(R.X270, CL.allCoordsList, 1, pitchAll90)],
+
+  [rollFront90, makeMoveDataEntry(R.Z90, CL.frontCoordsList, 1, rollFront270)],
+  [rollFront180, makeMoveDataEntry(R.Z180, CL.frontCoordsList, 2, rollFront180)],
+  [rollFront270, makeMoveDataEntry(R.Z270, CL.frontCoordsList, 1, rollFront90)],
+  [rollMiddle90, makeMoveDataEntry(R.Z90, CL.rollMiddleCoordsList, 1, rollMiddle270)],
+  [rollMiddle270, makeMoveDataEntry(R.Z270, CL.rollMiddleCoordsList, 1, rollMiddle90)],
+  [rollBack90, makeMoveDataEntry(R.Z90, CL.backCoordsList, 1, rollBack270)],
+  [rollBack180, makeMoveDataEntry(R.Z180, CL.backCoordsList, 2, rollBack180)],
+  [rollBack270, makeMoveDataEntry(R.Z270, CL.backCoordsList, 1, rollBack90)],
+  [rollFrontAndMiddle90, makeMoveDataEntry(R.Z90, CL.frontAndMiddleCoordsList, 1, rollFrontAndMiddle270)],
+  [rollFrontAndMiddle270, makeMoveDataEntry(R.Z270, CL.frontAndMiddleCoordsList, 1, rollFrontAndMiddle90)],
+  [rollBackAndMiddle90, makeMoveDataEntry(R.Z90, CL.backAndMiddleCoordsList, 1, rollBackAndMiddle270)],
+  [rollBackAndMiddle270, makeMoveDataEntry(R.Z270, CL.backAndMiddleCoordsList, 1, rollBackAndMiddle90)],
+  [rollAll90, makeMoveDataEntry(R.Z90, CL.allCoordsList, 1, rollAll270)],
+  [rollAll270, makeMoveDataEntry(R.Z270, CL.allCoordsList, 1, rollAll90)]
 ])
 
 export const randomMove = () => {
@@ -219,7 +226,7 @@ export const removeRedundantMoves = moves => {
       if (index === 0) continue
       const move = moves[index]
       const previousMove = moves[index - 1]
-      if (move === OPPOSITE_MOVES.get(previousMove)) {
+      if (move === MOVE_DATA.get(previousMove).oppositeMove) {
         moves.splice(index, 1)
         removedSomething = true
         break
