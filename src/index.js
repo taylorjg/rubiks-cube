@@ -2,6 +2,22 @@ import * as THREE from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import { PieceGeometry } from './PieceGeometry'
 import * as L from '../logic'
+import * as U from '../logic/utils'
+
+const queryParamInt = (paramName, defaultValue, min, max) => {
+  const url = new URL(document.location)
+  const searchParams = url.searchParams
+  const clamp = v => {
+    const localMin = min !== undefined ? min : Number.MIN_SAFE_INTEGER
+    const localMax = max !== undefined ? max : Number.MAX_SAFE_INTEGER
+    return Math.max(localMin, Math.min(localMax, v))
+  }
+  if (!searchParams.has(paramName)) return clamp(defaultValue)
+  const valueString = searchParams.get(paramName)
+  const valueInteger = Number(valueString)
+  const value = Number.isInteger(valueInteger) ? valueInteger : defaultValue
+  return clamp(value)
+}
 
 const COLOUR_TABLE = {
   'B': new THREE.Color('blue'),
@@ -16,8 +32,14 @@ const COLOUR_TABLE = {
 const PIECE_SIZE = 1
 const NUM_SEGMENTS = 12
 const MARGIN = 0.05
+const DELAY_MS = queryParamInt('delay', 1000, 0, 5000)
+const SPEED_MILLISECONDS = queryParamInt('speed', 750, 100, 1000)
+const NUM_RANDOM_MOVES = queryParamInt('numRandomMoves', 25, 1, 1000)
 
-const DELAY_BEFORE_SOLVING_MS = 2000
+const PIECE_MATERIAL = new THREE.MeshBasicMaterial({
+  color: 0xffffff,
+  vertexColors: THREE.FaceColors
+})
 
 const globals = {
   cube: undefined,
@@ -30,25 +52,6 @@ const globals = {
   clock: undefined,
   animationMixer: undefined
 }
-
-const url = new URL(document.location)
-const searchParams = url.searchParams
-
-const queryParamInt = (paramName, defaultValue, min, max) => {
-  const clamp = v => {
-    const localMin = min !== undefined ? min : Number.MIN_SAFE_INTEGER
-    const localMax = max !== undefined ? max : Number.MAX_SAFE_INTEGER
-    return Math.max(localMin, Math.min(localMax, v))
-  }
-  if (!searchParams.has(paramName)) return clamp(defaultValue)
-  const valueString = searchParams.get(paramName)
-  const valueInteger = Number(valueString)
-  const value = Number.isInteger(valueInteger) ? valueInteger : defaultValue
-  return clamp(value)
-}
-
-const speedMilliseconds = queryParamInt('speed', 750, 100, 1000)
-const numRandomMoves = queryParamInt('numRandomMoves', 25, 1, 100)
 
 const makeRotationMatrix4 = rotationMatrix3 => {
   const n11 = rotationMatrix3.get([0, 0])
@@ -67,11 +70,6 @@ const makeRotationMatrix4 = rotationMatrix3 => {
     0, 0, 0, 1)
 }
 
-const PIECE_MATERIAL = new THREE.MeshBasicMaterial({
-  color: 0xffffff,
-  vertexColors: THREE.FaceColors
-})
-
 const createUiPiece = piece => {
 
   const setFaceColour = (face, colours, coloursIndex) => {
@@ -79,12 +77,13 @@ const createUiPiece = piece => {
     face.color = COLOUR_TABLE[ch !== '-' ? ch : 'H']
   }
 
+  const closeTo = (a, b) => Math.abs(a - b) <= 1e-12
+
   const geometry = new PieceGeometry(PIECE_SIZE, NUM_SEGMENTS, MARGIN)
   const uiPiece = new THREE.Mesh(geometry, PIECE_MATERIAL)
   uiPiece.userData = piece.id
 
   uiPiece.geometry.faces.forEach(face => {
-    const closeTo = (a, b) => Math.abs(a - b) <= 1e-12
     closeTo(face.normal.x, 1) && setFaceColour(face, piece.colours, L.RIGHT)
     closeTo(face.normal.x, -1) && setFaceColour(face, piece.colours, L.LEFT)
     closeTo(face.normal.y, 1) && setFaceColour(face, piece.colours, L.TOP)
@@ -107,13 +106,6 @@ const resetUiPiece = (uiPiece, piece) => {
 
 const findUiPiece = piece =>
   globals.puzzleGroup.children.find(child => child.userData === piece.id)
-
-window.addEventListener('resize', () => {
-  const container = document.getElementById('container')
-  globals.renderer.setSize(container.offsetWidth, container.offsetHeight)
-  globals.camera.aspect = container.offsetWidth / container.offsetHeight
-  globals.camera.updateProjectionMatrix()
-})
 
 const createUiPieces = cube => {
   cube.forEach(piece => {
@@ -142,22 +134,22 @@ const movePiecesBetweenGroups = (uiPieces, fromGroup, toGroup) => {
   toGroup.add(...uiPieces)
 }
 
-const createAnimationClip = (move, moveData) => {
-  const numTurns = moveData.numTurns
+const createAnimationClip = move => {
+  const numTurns = move.numTurns
   const t0 = 0
-  const t1 = numTurns * (speedMilliseconds / 1000)
+  const t1 = numTurns * (SPEED_MILLISECONDS / 1000)
   const times = [t0, t1]
   const values = []
   const startQuaternion = new THREE.Quaternion()
   const endQuaternion = new THREE.Quaternion()
-  const rotationMatrix3 = moveData.rotationMatrix3
+  const rotationMatrix3 = move.rotationMatrix3
   const rotationMatrix4 = makeRotationMatrix4(rotationMatrix3)
   endQuaternion.setFromRotationMatrix(rotationMatrix4)
   startQuaternion.toArray(values, values.length)
   endQuaternion.toArray(values, values.length)
   const duration = -1
   const tracks = [new THREE.QuaternionKeyframeTrack('.quaternion', times, values)]
-  return new THREE.AnimationClip(move, duration, tracks)
+  return new THREE.AnimationClip(move.name, duration, tracks)
 }
 
 const animateMoves = (moves, nextMoveIndex = 0) => {
@@ -169,26 +161,25 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
     return
   }
 
-  const moveData = L.MOVE_DATA.get(move)
-  const pieces = L.getPieces(globals.cube, moveData.coordsList)
+  const pieces = L.getPieces(globals.cube, move.coordsList)
   const uiPieces = pieces.map(findUiPiece)
   movePiecesBetweenGroups(uiPieces, globals.puzzleGroup, globals.animationGroup)
 
   const onFinished = () => {
     globals.animationMixer.removeEventListener('finished', onFinished)
     movePiecesBetweenGroups(uiPieces, globals.animationGroup, globals.puzzleGroup)
-    globals.cube = moveData.makeMove(globals.cube)
-    const rotationMatrix3 = moveData.rotationMatrix3
+    globals.cube = move.makeMove(globals.cube)
+    const rotationMatrix3 = move.rotationMatrix3
     const rotationMatrix4 = makeRotationMatrix4(rotationMatrix3)
     for (const uiPiece of uiPieces) {
       uiPiece.applyMatrix(rotationMatrix4)
     }
-    setTimeout(animateMoves, speedMilliseconds, moves, nextMoveIndex + 1)
+    setTimeout(animateMoves, SPEED_MILLISECONDS, moves, nextMoveIndex + 1)
   }
 
   globals.animationMixer.addEventListener('finished', onFinished)
 
-  const animationClip = createAnimationClip(move, moveData)
+  const animationClip = createAnimationClip(move)
   const clipAction = globals.animationMixer.clipAction(
     animationClip,
     globals.animationGroup)
@@ -198,8 +189,10 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
 
 const showSolutionByCheating = randomMoves => {
   const solutionMoves = randomMoves
-    .map(move => L.MOVE_DATA.get(move).oppositeMove)
+    .map(move => move.oppositeMoveName)
+    .map(L.lookupMoveName)
     .reverse()
+  console.log(`solution moves: ${solutionMoves.map(move => move.name).join(' ')}`)
   animateMoves(solutionMoves)
 }
 
@@ -213,22 +206,13 @@ const disableScrambleButton = () =>
   document.getElementById('btnScramble').disabled = true
 
 const scramble = () => {
-
   disableScrambleButton()
-
-  const randomMoves = Array.from(Array(numRandomMoves).keys()).map(L.randomMove)
+  const randomMoves = U.range(NUM_RANDOM_MOVES).map(L.getRandomMove)
   L.removeRedundantMoves(randomMoves)
-
-  globals.cube = randomMoves.reduce(
-    (accCube, move) => {
-      const moveData = L.MOVE_DATA.get(move)
-      return moveData.makeMove(accCube)
-    },
-    L.SOLVED_CUBE)
-
+  console.log(`random moves: ${randomMoves.map(move => move.name).join(' ')}`)
+  globals.cube = L.makeMoves(randomMoves)
   resetUiPieces(globals.cube)
-
-  setTimeout(showSolutionByCheating, DELAY_BEFORE_SOLVING_MS, randomMoves)
+  setTimeout(showSolutionByCheating, DELAY_MS, randomMoves)
 }
 
 const init = () => {
@@ -241,6 +225,12 @@ const init = () => {
   globals.renderer = new THREE.WebGLRenderer({ antialias: true })
   globals.renderer.setSize(w, h)
   container.appendChild(globals.renderer.domElement)
+
+  window.addEventListener('resize', () => {
+    globals.renderer.setSize(container.offsetWidth, container.offsetHeight)
+    globals.camera.aspect = container.offsetWidth / container.offsetHeight
+    globals.camera.updateProjectionMatrix()
+  })
 
   globals.scene = new THREE.Scene()
   globals.camera = new THREE.PerspectiveCamera(34, w / h, 1, 100)

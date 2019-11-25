@@ -1,6 +1,7 @@
 import * as math from 'mathjs'
 import * as CL from './coordsLists'
 import * as R from './rotations'
+import * as U from './utils'
 
 export const TOP = 0
 export const LEFT = 1
@@ -73,78 +74,84 @@ const rotatePieces = (coordsList, rotationMatrix3) => cube =>
     ? rotatePiece(piece, rotationMatrix3)
     : piece)
 
-const makeMoveDataEntry = (rotationMatrix3, coordsList, numTurns, oppositeMove) => ({
-  makeMove: rotatePieces(coordsList, rotationMatrix3),
-  rotationMatrix3,
-  coordsList,
-  numTurns,
-  oppositeMove
-})
+const makeKvp = (name, oppositeMoveName, rotationMatrix3, coordsList, numTurns) => {
+  const key = name
+  const value = {
+    name,
+    oppositeMoveName,
+    makeMove: rotatePieces(coordsList, rotationMatrix3),
+    rotationMatrix3,
+    coordsList,
+    numTurns
+  }
+  return [key, value]
+}
 
 // https://ruwix.com/the-rubiks-cube/notation/advanced/
-export const MOVE_DATA = new Map([
-  ['U\'', makeMoveDataEntry(R.Y90, CL.topCoordsList, 1, 'U')],
-  ['U2', makeMoveDataEntry(R.Y180, CL.topCoordsList, 2, 'U2')],
-  ['U', makeMoveDataEntry(R.Y270, CL.topCoordsList, 1, 'U\'')],
-  ['E', makeMoveDataEntry(R.Y90, CL.yawMiddleCoordsList, 1, 'E\'')],
-  ['E\'', makeMoveDataEntry(R.Y270, CL.yawMiddleCoordsList, 1, 'E')],
-  ['D\'', makeMoveDataEntry(R.Y90, CL.bottomCoordsList, 1, 'D')],
-  ['D2', makeMoveDataEntry(R.Y180, CL.bottomCoordsList, 2, 'D2')],
-  ['D', makeMoveDataEntry(R.Y270, CL.bottomCoordsList, 1, 'D\'')],
-  ['u\'', makeMoveDataEntry(R.Y90, CL.topAndMiddleCoordsList, 1, 'u')],
-  ['u', makeMoveDataEntry(R.Y270, CL.topAndMiddleCoordsList, 1, 'u\'')],
-  ['d', makeMoveDataEntry(R.Y90, CL.bottomAndMiddleCoordsList, 1, 'd\'')],
-  ['d\'', makeMoveDataEntry(R.Y270, CL.bottomAndMiddleCoordsList, 1, 'd')],
-  ['Y\'', makeMoveDataEntry(R.Y90, CL.allCoordsList, 1, 'Y')],
-  ['Y', makeMoveDataEntry(R.Y270, CL.allCoordsList, 1, 'Y\'')],
+const MOVE_NAMES_TO_MOVES = new Map([
+  makeKvp('U\'', 'U', R.Y90, CL.topCoordsList, 1),
+  makeKvp('U2', 'U2', R.Y180, CL.topCoordsList, 2),
+  makeKvp('U', 'U\'', R.Y270, CL.topCoordsList, 1),
+  makeKvp('E', 'E\'', R.Y90, CL.yawMiddleCoordsList, 1),
+  makeKvp('E\'', 'E', R.Y270, CL.yawMiddleCoordsList, 1),
+  makeKvp('D\'', 'D', R.Y90, CL.bottomCoordsList, 1),
+  makeKvp('D2', 'D2', R.Y180, CL.bottomCoordsList, 2),
+  makeKvp('D', 'D\'', R.Y270, CL.bottomCoordsList, 1),
+  makeKvp('u\'', 'u', R.Y90, CL.topAndMiddleCoordsList, 1),
+  makeKvp('u', 'u\'', R.Y270, CL.topAndMiddleCoordsList, 1),
+  makeKvp('d', 'd\'', R.Y90, CL.bottomAndMiddleCoordsList, 1),
+  makeKvp('d\'', 'd', R.Y270, CL.bottomAndMiddleCoordsList, 1),
+  makeKvp('Y\'', 'Y', R.Y90, CL.allCoordsList, 1),
+  makeKvp('Y', 'Y\'', R.Y270, CL.allCoordsList, 1),
 
-  ['L', makeMoveDataEntry(R.X90, CL.leftCoordsList, 1, 'L\'')],
-  ['L2', makeMoveDataEntry(R.X180, CL.leftCoordsList, 2, 'L2')],
-  ['L\'', makeMoveDataEntry(R.X270, CL.leftCoordsList, 1, 'L')],
-  ['M', makeMoveDataEntry(R.X90, CL.pitchMiddleCoordsList, 1, 'M\'')],
-  ['M\'', makeMoveDataEntry(R.X270, CL.pitchMiddleCoordsList, 1, 'M')],
-  ['R\'', makeMoveDataEntry(R.X90, CL.rightCoordsList, 1, 'R')],
-  ['R2', makeMoveDataEntry(R.X180, CL.rightCoordsList, 2, 'R2')],
-  ['R', makeMoveDataEntry(R.X270, CL.rightCoordsList, 1, 'R\'')],
-  ['l', makeMoveDataEntry(R.X90, CL.leftAndMiddleCoordsList, 1, 'l\'')],
-  ['l\'', makeMoveDataEntry(R.X270, CL.leftAndMiddleCoordsList, 1, 'l')],
-  ['r\'', makeMoveDataEntry(R.X90, CL.rightAndMiddleCoordsList, 1, 'r')],
-  ['r', makeMoveDataEntry(R.X270, CL.rightAndMiddleCoordsList, 1, 'r\'')],
-  ['X\'', makeMoveDataEntry(R.X90, CL.allCoordsList, 1, 'X')],
-  ['X', makeMoveDataEntry(R.X270, CL.allCoordsList, 1, 'X\'')],
+  makeKvp('L', 'L\'', R.X90, CL.leftCoordsList, 1),
+  makeKvp('L2', 'L2', R.X180, CL.leftCoordsList, 2),
+  makeKvp('L\'', 'L', R.X270, CL.leftCoordsList, 1),
+  makeKvp('M', 'M\'', R.X90, CL.pitchMiddleCoordsList, 1),
+  makeKvp('M\'', 'M', R.X270, CL.pitchMiddleCoordsList, 1),
+  makeKvp('R\'', 'R', R.X90, CL.rightCoordsList, 1),
+  makeKvp('R2', 'R2', R.X180, CL.rightCoordsList, 2),
+  makeKvp('R', 'R\'', R.X270, CL.rightCoordsList, 1),
+  makeKvp('l', 'l\'', R.X90, CL.leftAndMiddleCoordsList, 1),
+  makeKvp('l\'', 'l', R.X270, CL.leftAndMiddleCoordsList, 1),
+  makeKvp('r\'', 'r', R.X90, CL.rightAndMiddleCoordsList, 1),
+  makeKvp('r', 'r\'', R.X270, CL.rightAndMiddleCoordsList, 1),
+  makeKvp('X\'', 'X', R.X90, CL.allCoordsList, 1),
+  makeKvp('X', 'X\'', R.X270, CL.allCoordsList, 1),
 
-  ['F\'', makeMoveDataEntry(R.Z90, CL.frontCoordsList, 1, 'F')],
-  ['F2', makeMoveDataEntry(R.Z180, CL.frontCoordsList, 2, 'F2')],
-  ['F', makeMoveDataEntry(R.Z270, CL.frontCoordsList, 1, 'F\'')],
-  ['S\'', makeMoveDataEntry(R.Z90, CL.rollMiddleCoordsList, 1, 'S')],
-  ['S', makeMoveDataEntry(R.Z270, CL.rollMiddleCoordsList, 1, 'S\'')],
-  ['B', makeMoveDataEntry(R.Z90, CL.backCoordsList, 1, 'B\'')],
-  ['B2', makeMoveDataEntry(R.Z180, CL.backCoordsList, 2, 'B2')],
-  ['B\'', makeMoveDataEntry(R.Z270, CL.backCoordsList, 1, 'B')],
-  ['f\'', makeMoveDataEntry(R.Z90, CL.frontAndMiddleCoordsList, 1, 'f')],
-  ['f', makeMoveDataEntry(R.Z270, CL.frontAndMiddleCoordsList, 1, 'f\'')],
-  ['b', makeMoveDataEntry(R.Z90, CL.backAndMiddleCoordsList, 1, 'b\'')],
-  ['b\'', makeMoveDataEntry(R.Z270, CL.backAndMiddleCoordsList, 1, 'b')],
-  ['Z\'', makeMoveDataEntry(R.Z90, CL.allCoordsList, 1, 'Z')],
-  ['Z', makeMoveDataEntry(R.Z270, CL.allCoordsList, 1, 'Z\'')]
+  makeKvp('F\'', 'F', R.Z90, CL.frontCoordsList, 1),
+  makeKvp('F2', 'F2', R.Z180, CL.frontCoordsList, 2),
+  makeKvp('F', 'F\'', R.Z270, CL.frontCoordsList, 1),
+  makeKvp('S\'', 'S', R.Z90, CL.rollMiddleCoordsList, 1),
+  makeKvp('S', 'S\'', R.Z270, CL.rollMiddleCoordsList, 1),
+  makeKvp('B', 'B\'', R.Z90, CL.backCoordsList, 1),
+  makeKvp('B2', 'B2', R.Z180, CL.backCoordsList, 2),
+  makeKvp('B\'', 'B', R.Z270, CL.backCoordsList, 1),
+  makeKvp('f\'', 'f', R.Z90, CL.frontAndMiddleCoordsList, 1),
+  makeKvp('f', 'f\'', R.Z270, CL.frontAndMiddleCoordsList, 1),
+  makeKvp('b', 'b\'', R.Z90, CL.backAndMiddleCoordsList, 1),
+  makeKvp('b\'', 'b', R.Z270, CL.backAndMiddleCoordsList, 1),
+  makeKvp('Z\'', 'Z', R.Z90, CL.allCoordsList, 1),
+  makeKvp('Z', 'Z\'', R.Z270, CL.allCoordsList, 1)
 ])
 
-const MOVE_NAMES = Array.from(MOVE_DATA.keys())
+const MOVES = Array.from(MOVE_NAMES_TO_MOVES.values())
 
-export const randomMove = () => {
-  const randomIndex = Math.floor(Math.random() * MOVE_NAMES.length)
-  return MOVE_NAMES[randomIndex]
+export const lookupMoveName = moveName => MOVE_NAMES_TO_MOVES.get(moveName)
+
+export const getRandomMove = () => {
+  const randomIndex = Math.floor(Math.random() * MOVES.length)
+  return MOVES[randomIndex]
 }
 
 export const removeRedundantMoves = moves => {
   for (; ;) {
     let removedSomething = false
-    const indexes = Array.from(Array(moves.length).keys())
-    for (const index of indexes) {
-      if (index === 0) continue
+    const indexes = U.range(moves.length)
+    for (const index of indexes.slice(1)) {
       const move = moves[index]
       const previousMove = moves[index - 1]
-      if (move === MOVE_DATA.get(previousMove).oppositeMove) {
+      if (move.name === previousMove.oppositeMoveName) {
         moves.splice(index, 1)
         removedSomething = true
         break
@@ -153,3 +160,6 @@ export const removeRedundantMoves = moves => {
     if (!removedSomething) break
   }
 }
+
+export const makeMoves = (moves, initialCube = SOLVED_CUBE) =>
+  moves.reduce((cube, move) => move.makeMove(cube), initialCube)
