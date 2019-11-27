@@ -4,9 +4,10 @@ import { PieceGeometry } from './PieceGeometry'
 import * as L from '../logic'
 import * as U from '../logic/utils'
 
+const url = new URL(document.location)
+const searchParams = url.searchParams
+
 const queryParamInt = (paramName, defaultValue, min, max) => {
-  const url = new URL(document.location)
-  const searchParams = url.searchParams
   const clamp = v => {
     const localMin = min !== undefined ? min : Number.MIN_SAFE_INTEGER
     const localMax = max !== undefined ? max : Number.MAX_SAFE_INTEGER
@@ -20,21 +21,22 @@ const queryParamInt = (paramName, defaultValue, min, max) => {
 }
 
 const COLOUR_TABLE = {
-  'B': new THREE.Color('blue'),
-  'R': new THREE.Color('red'),
-  'Y': new THREE.Color('yellow'),
-  'O': new THREE.Color('darkorange'),
-  'W': new THREE.Color('ghostwhite'),
-  'G': new THREE.Color('green'),
-  'H': new THREE.Color('black') // H for hidden
+  'U': new THREE.Color('blue'),
+  'L': new THREE.Color('red'),
+  'F': new THREE.Color('yellow'),
+  'R': new THREE.Color('darkorange'),
+  'B': new THREE.Color('ghostwhite'),
+  'D': new THREE.Color('green'),
+  '-': new THREE.Color('black')
 }
 
 const PIECE_SIZE = 1
-const NUM_SEGMENTS = 12
+const NUM_SEGMENTS = 1
 const MARGIN = 0.05
 const DELAY_MS = queryParamInt('delay', 1000, 0, 5000)
 const SPEED_MILLISECONDS = queryParamInt('speed', 750, 100, 1000)
-const NUM_RANDOM_MOVES = queryParamInt('numRandomMoves', 25, 1, 1000)
+const NUM_RANDOM_MOVES = queryParamInt('numRandomMoves', 25, 0, 1000)
+const AXES_ENABLED = searchParams.has('axes')
 
 const PIECE_MATERIAL = new THREE.MeshBasicMaterial({
   color: 0xffffff,
@@ -74,7 +76,7 @@ const createUiPiece = piece => {
 
   const setFaceColour = (face, colours, coloursIndex) => {
     const ch = colours[coloursIndex]
-    face.color = COLOUR_TABLE[ch !== '-' ? ch : 'H']
+    face.color = COLOUR_TABLE[ch]
   }
 
   const closeTo = (a, b) => Math.abs(a - b) <= 1e-12
@@ -261,6 +263,11 @@ const init = () => {
   const light6 = new THREE.DirectionalLight(0xffffff, 0.4)
   light6.position.set(-10, 0, 0)
   globals.scene.add(light6)
+
+  if (AXES_ENABLED) {
+    const axesHelper = new THREE.AxesHelper(5)
+    globals.scene.add(axesHelper)
+  }
 
   globals.puzzleGroup = new THREE.Group()
   globals.scene.add(globals.puzzleGroup)

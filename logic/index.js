@@ -10,40 +10,22 @@ export const RIGHT = 3
 export const BACK = 4
 export const BOTTOM = 5
 
-export const SOLVED_CUBE = [
-  // top layer
-  { id: 1, x: -1, y: 1, z: 1, colours: 'BRY---', accTransform3: R.Identity },
-  { id: 2, x: 0, y: 1, z: 1, colours: 'B-Y---', accTransform3: R.Identity },
-  { id: 3, x: 1, y: 1, z: 1, colours: 'B-YO--', accTransform3: R.Identity },
-  { id: 4, x: -1, y: 1, z: 0, colours: 'BR----', accTransform3: R.Identity },
-  { id: 5, x: 0, y: 1, z: 0, colours: 'B-----', accTransform3: R.Identity },
-  { id: 6, x: 1, y: 1, z: 0, colours: 'B--O--', accTransform3: R.Identity },
-  { id: 7, x: -1, y: 1, z: -1, colours: 'BR--W-', accTransform3: R.Identity },
-  { id: 8, x: 0, y: 1, z: -1, colours: 'B---W-', accTransform3: R.Identity },
-  { id: 9, x: 1, y: 1, z: -1, colours: 'B--OW-', accTransform3: R.Identity },
+const coordsToColours = (x, y, z) =>
+  [
+    y === CL.VMAX ? 'U' : '-',
+    x === CL.VMIN ? 'L' : '-',
+    z === CL.VMAX ? 'F' : '-',
+    x === CL.VMAX ? 'R' : '-',
+    z === CL.VMIN ? 'B' : '-',
+    y === CL.VMIN ? 'D' : '-'
+  ].join('')
 
-  // middle layer
-  { id: 10, x: -1, y: 0, z: 1, colours: '-RY---', accTransform3: R.Identity },
-  { id: 11, x: 0, y: 0, z: 1, colours: '--Y---', accTransform3: R.Identity },
-  { id: 12, x: 1, y: 0, z: 1, colours: '--YO--', accTransform3: R.Identity },
-  { id: 13, x: -1, y: 0, z: 0, colours: '-R----', accTransform3: R.Identity },
-  // Note: there is no piece at the centre i.e. x: 0, y: 0, z: 0
-  { id: 14, x: 1, y: 0, z: 0, colours: '---O--', accTransform3: R.Identity },
-  { id: 15, x: -1, y: 0, z: -1, colours: '-R--W-', accTransform3: R.Identity },
-  { id: 16, x: 0, y: 0, z: -1, colours: '----W-', accTransform3: R.Identity },
-  { id: 17, x: 1, y: 0, z: -1, colours: '---OW-', accTransform3: R.Identity },
-
-  // bottom layer
-  { id: 18, x: -1, y: -1, z: 1, colours: '-RY--G', accTransform3: R.Identity },
-  { id: 19, x: 0, y: -1, z: 1, colours: '--Y--G', accTransform3: R.Identity },
-  { id: 20, x: 1, y: -1, z: 1, colours: '--YO-G', accTransform3: R.Identity },
-  { id: 21, x: -1, y: -1, z: 0, colours: '-R---G', accTransform3: R.Identity },
-  { id: 22, x: 0, y: -1, z: 0, colours: '-----G', accTransform3: R.Identity },
-  { id: 23, x: 1, y: -1, z: 0, colours: '---O-G', accTransform3: R.Identity },
-  { id: 24, x: -1, y: -1, z: -1, colours: '-R--WG', accTransform3: R.Identity },
-  { id: 25, x: 0, y: -1, z: -1, colours: '----WG', accTransform3: R.Identity },
-  { id: 26, x: 1, y: -1, z: -1, colours: '---OWG', accTransform3: R.Identity }
-]
+export const SOLVED_CUBE = CL.allCoordsList.map(([x, y, z], index) => ({
+  id: index + 1,
+  x, y, z,
+  colours: coordsToColours(x, y, z),
+  accTransform3: R.Identity
+}))
 
 const pieceHasCoords = (piece, coords) =>
   piece.x === coords[0] &&
