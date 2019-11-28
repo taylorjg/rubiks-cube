@@ -1,15 +1,15 @@
 import * as U from './utils'
 
-// Currently, only odd numbers work.
 export const CUBE_SIZE = 3
-
 export const HALF_CUBE_SIZE = Math.floor(CUBE_SIZE / 2)
 export const VMIN = -HALF_CUBE_SIZE
 export const VMAX = +HALF_CUBE_SIZE
 export const VMID = 0
 
 function* allCoordsGenerator() {
-  const values = U.range(CUBE_SIZE).map(v => v - HALF_CUBE_SIZE)
+  const values = U.range(CUBE_SIZE)
+    .map(v => v - HALF_CUBE_SIZE)
+    .map(v => CUBE_SIZE % 2 === 0 && v >= 0 ? v + 1 : v)
   const isFace = v => v === VMIN || v === VMAX
   for (const x of values) {
     for (const y of values) {
