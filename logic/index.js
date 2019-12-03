@@ -69,7 +69,7 @@ const makeKvp = (id, oppositeMoveId, rotationMatrix3, coordsList, numTurns) => {
   return [key, value]
 }
 
-const makeSetOfMoves = (baseId, rotationMatrices3, coordsList) => {
+const makeKvpsForSlice = (baseId, rotationMatrices3, coordsList) => {
   const move90Id = baseId * 3
   const move180Id = move90Id + 1
   const move270Id = move90Id + 2
@@ -83,22 +83,14 @@ const xRotations = [R.X90, R.X180, R.X270]
 const yRotations = [R.Y90, R.Y180, R.Y270]
 const zRotations = [R.Z90, R.Z180, R.Z270]
 
-let baseId = 0
+const slices = [
+  ...CL.VALUES.map(xSlice => [xRotations, CL.pitchSliceCoordsList(xSlice)]),
+  ...CL.VALUES.map(ySlice => [yRotations, CL.yawSliceCoordsList(ySlice)]),
+  ...CL.VALUES.map(zSlice => [zRotations, CL.rollSliceCoordsList(zSlice)])
+]
 
-const MOVE_IDS_TO_MOVES = new Map([
-  ...makeSetOfMoves(baseId++, xRotations, CL.leftCoordsList),
-  ...makeSetOfMoves(baseId++, xRotations, CL.rightCoordsList),
-  ...makeSetOfMoves(baseId++, yRotations, CL.topCoordsList),
-  ...makeSetOfMoves(baseId++, yRotations, CL.bottomCoordsList),
-  ...makeSetOfMoves(baseId++, zRotations, CL.frontCoordsList),
-  ...makeSetOfMoves(baseId++, zRotations, CL.backCoordsList),
-  ...U.flatten(CL.INNER_VALUES.map(xSlice =>
-    makeSetOfMoves(baseId++, xRotations, CL.pitchSliceCoordsList(xSlice)))),
-  ...U.flatten(CL.INNER_VALUES.map(ySlice =>
-    makeSetOfMoves(baseId++, yRotations, CL.yawSliceCoordsList(ySlice)))),
-  ...U.flatten(CL.INNER_VALUES.map(zSlice =>
-    makeSetOfMoves(baseId++, zRotations, CL.rollSliceCoordsList(zSlice))))
-])
+const nestedKvps = slices.map((slice, index) => [...makeKvpsForSlice(index, ...slice)])
+const MOVE_IDS_TO_MOVES = new Map(U.flatten(nestedKvps))
 
 const MOVES = Array.from(MOVE_IDS_TO_MOVES.values())
 
