@@ -36,7 +36,7 @@ const NUM_SEGMENTS = 1
 const MARGIN = 0.05
 const DELAY_MS = queryParamInt('delay', 1000, 0, 5000)
 const SPEED_MILLISECONDS = queryParamInt('speed', 750, 100, 1000)
-const NUM_RANDOM_MOVES = queryParamInt('numRandomMoves', 25, 0, 1000)
+const NUM_RANDOM_MOVES = queryParamInt('moves', 25, 0, 1000)
 const AXES_ENABLED = searchParams.has('axes')
 
 const PIECE_MATERIAL = new THREE.MeshBasicMaterial({
@@ -156,7 +156,7 @@ const createAnimationClip = move => {
   endQuaternion.toArray(values, values.length)
   const duration = -1
   const tracks = [new THREE.QuaternionKeyframeTrack('.quaternion', times, values)]
-  return new THREE.AnimationClip(move.name, duration, tracks)
+  return new THREE.AnimationClip(move.id, duration, tracks)
 }
 
 const animateMoves = (moves, nextMoveIndex = 0) => {
@@ -196,10 +196,10 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
 
 const showSolutionByCheating = randomMoves => {
   const solutionMoves = randomMoves
-    .map(move => move.oppositeMoveName)
-    .map(L.lookupMoveName)
+    .map(move => move.oppositeMoveId)
+    .map(L.lookupMoveId)
     .reverse()
-  console.log(`solution moves: ${solutionMoves.map(move => move.name).join(' ')}`)
+  console.log(`solution moves: ${solutionMoves.map(move => move.id).join(' ')}`)
   animateMoves(solutionMoves)
 }
 
@@ -216,7 +216,7 @@ const scramble = () => {
   disableScrambleButton()
   const randomMoves = U.range(NUM_RANDOM_MOVES).map(L.getRandomMove)
   L.removeRedundantMoves(randomMoves)
-  console.log(`random moves: ${randomMoves.map(move => move.name).join(' ')}`)
+  console.log(`random moves: ${randomMoves.map(move => move.id).join(' ')}`)
   globals.cube = L.makeMoves(randomMoves)
   resetUiPieces(globals.cube)
   setTimeout(showSolutionByCheating, DELAY_MS, randomMoves)

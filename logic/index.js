@@ -56,11 +56,11 @@ const rotatePieces = (coordsList, rotationMatrix3) => cube =>
     ? rotatePiece(piece, rotationMatrix3)
     : piece)
 
-const makeKvp = (name, oppositeMoveName, rotationMatrix3, coordsList, numTurns) => {
-  const key = name
+const makeKvp = (id, oppositeMoveId, rotationMatrix3, coordsList, numTurns) => {
+  const key = id
   const value = {
-    name,
-    oppositeMoveName,
+    id,
+    oppositeMoveId,
     makeMove: rotatePieces(coordsList, rotationMatrix3),
     rotationMatrix3,
     coordsList,
@@ -69,57 +69,40 @@ const makeKvp = (name, oppositeMoveName, rotationMatrix3, coordsList, numTurns) 
   return [key, value]
 }
 
-// https://ruwix.com/the-rubiks-cube/notation/advanced/
-const MOVE_NAMES_TO_MOVES = new Map([
-  makeKvp('U\'', 'U', R.Y90, CL.topCoordsList, 1),
-  makeKvp('U2', 'U2', R.Y180, CL.topCoordsList, 2),
-  makeKvp('U', 'U\'', R.Y270, CL.topCoordsList, 1),
-  makeKvp('E', 'E\'', R.Y90, CL.yawMiddleCoordsList, 1),
-  makeKvp('E\'', 'E', R.Y270, CL.yawMiddleCoordsList, 1),
-  makeKvp('D\'', 'D', R.Y90, CL.bottomCoordsList, 1),
-  makeKvp('D2', 'D2', R.Y180, CL.bottomCoordsList, 2),
-  makeKvp('D', 'D\'', R.Y270, CL.bottomCoordsList, 1),
-  makeKvp('u\'', 'u', R.Y90, CL.topAndMiddleCoordsList, 1),
-  makeKvp('u', 'u\'', R.Y270, CL.topAndMiddleCoordsList, 1),
-  makeKvp('d', 'd\'', R.Y90, CL.bottomAndMiddleCoordsList, 1),
-  makeKvp('d\'', 'd', R.Y270, CL.bottomAndMiddleCoordsList, 1),
-  makeKvp('Y\'', 'Y', R.Y90, CL.allCoordsList, 1),
-  makeKvp('Y', 'Y\'', R.Y270, CL.allCoordsList, 1),
+const makeSetOfMoves = (baseId, rotationMatrices3, coordsList) => {
+  const move90Id = baseId * 3
+  const move180Id = move90Id + 1
+  const move270Id = move90Id + 2
+  const move90 = makeKvp(move90Id, move270Id, rotationMatrices3[0], coordsList, 1)
+  const move180 = makeKvp(move180Id, move180Id, rotationMatrices3[1], coordsList, 2)
+  const move270 = makeKvp(move270Id, move90Id, rotationMatrices3[2], coordsList, 1)
+  return [move90, move180, move270]
+}
 
-  makeKvp('L', 'L\'', R.X90, CL.leftCoordsList, 1),
-  makeKvp('L2', 'L2', R.X180, CL.leftCoordsList, 2),
-  makeKvp('L\'', 'L', R.X270, CL.leftCoordsList, 1),
-  makeKvp('M', 'M\'', R.X90, CL.pitchMiddleCoordsList, 1),
-  makeKvp('M\'', 'M', R.X270, CL.pitchMiddleCoordsList, 1),
-  makeKvp('R\'', 'R', R.X90, CL.rightCoordsList, 1),
-  makeKvp('R2', 'R2', R.X180, CL.rightCoordsList, 2),
-  makeKvp('R', 'R\'', R.X270, CL.rightCoordsList, 1),
-  makeKvp('l', 'l\'', R.X90, CL.leftAndMiddleCoordsList, 1),
-  makeKvp('l\'', 'l', R.X270, CL.leftAndMiddleCoordsList, 1),
-  makeKvp('r\'', 'r', R.X90, CL.rightAndMiddleCoordsList, 1),
-  makeKvp('r', 'r\'', R.X270, CL.rightAndMiddleCoordsList, 1),
-  makeKvp('X\'', 'X', R.X90, CL.allCoordsList, 1),
-  makeKvp('X', 'X\'', R.X270, CL.allCoordsList, 1),
+const xRotations = [R.X90, R.X180, R.X270]
+const yRotations = [R.Y90, R.Y180, R.Y270]
+const zRotations = [R.Z90, R.Z180, R.Z270]
 
-  makeKvp('F\'', 'F', R.Z90, CL.frontCoordsList, 1),
-  makeKvp('F2', 'F2', R.Z180, CL.frontCoordsList, 2),
-  makeKvp('F', 'F\'', R.Z270, CL.frontCoordsList, 1),
-  makeKvp('S\'', 'S', R.Z90, CL.rollMiddleCoordsList, 1),
-  makeKvp('S', 'S\'', R.Z270, CL.rollMiddleCoordsList, 1),
-  makeKvp('B', 'B\'', R.Z90, CL.backCoordsList, 1),
-  makeKvp('B2', 'B2', R.Z180, CL.backCoordsList, 2),
-  makeKvp('B\'', 'B', R.Z270, CL.backCoordsList, 1),
-  makeKvp('f\'', 'f', R.Z90, CL.frontAndMiddleCoordsList, 1),
-  makeKvp('f', 'f\'', R.Z270, CL.frontAndMiddleCoordsList, 1),
-  makeKvp('b', 'b\'', R.Z90, CL.backAndMiddleCoordsList, 1),
-  makeKvp('b\'', 'b', R.Z270, CL.backAndMiddleCoordsList, 1),
-  makeKvp('Z\'', 'Z', R.Z90, CL.allCoordsList, 1),
-  makeKvp('Z', 'Z\'', R.Z270, CL.allCoordsList, 1)
+let baseId = 0
+
+const MOVE_IDS_TO_MOVES = new Map([
+  ...makeSetOfMoves(baseId++, xRotations, CL.leftCoordsList),
+  ...makeSetOfMoves(baseId++, xRotations, CL.rightCoordsList),
+  ...makeSetOfMoves(baseId++, yRotations, CL.topCoordsList),
+  ...makeSetOfMoves(baseId++, yRotations, CL.bottomCoordsList),
+  ...makeSetOfMoves(baseId++, zRotations, CL.frontCoordsList),
+  ...makeSetOfMoves(baseId++, zRotations, CL.backCoordsList),
+  ...U.flatten(CL.INNER_VALUES.map(xSlice =>
+    makeSetOfMoves(baseId++, xRotations, CL.pitchSliceCoordsList(xSlice)))),
+  ...U.flatten(CL.INNER_VALUES.map(ySlice =>
+    makeSetOfMoves(baseId++, yRotations, CL.yawSliceCoordsList(ySlice)))),
+  ...U.flatten(CL.INNER_VALUES.map(zSlice =>
+    makeSetOfMoves(baseId++, zRotations, CL.rollSliceCoordsList(zSlice))))
 ])
 
-const MOVES = Array.from(MOVE_NAMES_TO_MOVES.values())
+const MOVES = Array.from(MOVE_IDS_TO_MOVES.values())
 
-export const lookupMoveName = moveName => MOVE_NAMES_TO_MOVES.get(moveName)
+export const lookupMoveId = id => MOVE_IDS_TO_MOVES.get(id)
 
 export const getRandomMove = () => {
   const randomIndex = Math.floor(Math.random() * MOVES.length)
@@ -133,7 +116,7 @@ export const removeRedundantMoves = moves => {
     for (const index of indexes.slice(1)) {
       const move = moves[index]
       const previousMove = moves[index - 1]
-      if (move.name === previousMove.oppositeMoveName) {
+      if (move.id === previousMove.oppositeMoveId) {
         moves.splice(index, 1)
         removedSomething = true
         break
