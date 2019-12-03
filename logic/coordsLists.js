@@ -1,18 +1,22 @@
 import * as U from './utils'
 
-export const CUBE_SIZE = 3
-export const HALF_CUBE_SIZE = Math.floor(CUBE_SIZE / 2)
-export const VALUES = U.range(CUBE_SIZE)
-  .map(v => v - HALF_CUBE_SIZE)
-  .map(v => CUBE_SIZE % 2 === 0 && v >= 0 ? v + 1 : v)
-export const VMIN = Math.min(...VALUES)
-export const VMAX = Math.max(...VALUES)
+export const getCubeDimensions = cubeSize => {
+  const isEvenSizedCube = cubeSize % 2 === 0
+  const HALF_CUBE_SIZE = Math.floor(cubeSize / 2)
+  const values = U.range(cubeSize)
+    .map(v => v - HALF_CUBE_SIZE)
+    .map(v => isEvenSizedCube && v >= 0 ? v + 1 : v)
+  const vmin = Math.min(...values)
+  const vmax = Math.max(...values)
+  return { values, vmin, vmax, isEvenSizedCube }
+}
 
-function* allCoordsGenerator() {
-  const isFace = v => v === VMIN || v === VMAX
-  for (const x of VALUES) {
-    for (const y of VALUES) {
-      for (const z of VALUES) {
+function* allCoordsGenerator(cubeSize) {
+  const { values, vmin, vmax } = getCubeDimensions(cubeSize)
+  const isFace = v => v === vmin || v === vmax
+  for (const x of values) {
+    for (const y of values) {
+      for (const z of values) {
         if (isFace(x) || isFace(y) || isFace(z)) {
           yield [x, y, z]
         }
@@ -21,8 +25,8 @@ function* allCoordsGenerator() {
   }
 }
 
-export const allCoordsList = Array.from(allCoordsGenerator())
+export const makeAllCoordsList = cubeSize => Array.from(allCoordsGenerator(cubeSize))
 
-export const pitchSliceCoordsList = xSlice => allCoordsList.filter(([x]) => x === xSlice)
-export const yawSliceCoordsList = ySlice => allCoordsList.filter(([, y]) => y === ySlice)
-export const rollSliceCoordsList = zSlice => allCoordsList.filter(([, , z]) => z === zSlice)
+export const pitchSliceCoordsList = (allCoordsList, xSlice) => allCoordsList.filter(([x]) => x === xSlice)
+export const yawSliceCoordsList = (allCoordsList, ySlice) => allCoordsList.filter(([, y]) => y === ySlice)
+export const rollSliceCoordsList = (allCoordsList, zSlice) => allCoordsList.filter(([, , z]) => z === zSlice)

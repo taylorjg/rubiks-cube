@@ -3,21 +3,16 @@ import * as CL from './coordsLists'
 import * as R from './rotations'
 import * as U from './utils'
 
-const coordsToFaces = (x, y, z) => ({
-  up: y === CL.VMAX ? 'U' : '-',
-  down: y === CL.VMIN ? 'D' : '-',
-  left: x === CL.VMIN ? 'L' : '-',
-  right: x === CL.VMAX ? 'R' : '-',
-  front: z === CL.VMAX ? 'F' : '-',
-  back: z === CL.VMIN ? 'B' : '-'
-})
+export const CUBE_SIZE = 4
 
-export const SOLVED_CUBE = CL.allCoordsList.map(([x, y, z], index) => ({
-  id: index,
-  x, y, z,
-  faces: coordsToFaces(x, y, z),
-  accTransform3: R.Identity
-}))
+const coordsToFaces = (vmin, vmax, x, y, z) => ({
+  up: y === vmax ? 'U' : '-',
+  down: y === vmin ? 'D' : '-',
+  left: x === vmin ? 'L' : '-',
+  right: x === vmax ? 'R' : '-',
+  front: z === vmax ? 'F' : '-',
+  back: z === vmin ? 'B' : '-'
+})
 
 const pieceHasCoords = (piece, coords) =>
   piece.x === coords[0] &&
@@ -75,22 +70,59 @@ const xRotations = [R.X90, R.X180, R.X270]
 const yRotations = [R.Y90, R.Y180, R.Y270]
 const zRotations = [R.Z90, R.Z180, R.Z270]
 
-const slices = [
-  ...CL.VALUES.map(xSlice => [xRotations, CL.pitchSliceCoordsList(xSlice)]),
-  ...CL.VALUES.map(ySlice => [yRotations, CL.yawSliceCoordsList(ySlice)]),
-  ...CL.VALUES.map(zSlice => [zRotations, CL.rollSliceCoordsList(zSlice)])
-]
+const makeMoveIdsToMoves = cubeSize => {
+  const { values } = CL.getCubeDimensions(cubeSize)
+  const allCoordsList = CL.makeAllCoordsList(cubeSize)
+  const slices = [
+    ...values.map(xSlice => [xRotations, CL.pitchSliceCoordsList(allCoordsList, xSlice)]),
+    ...values.map(ySlice => [yRotations, CL.yawSliceCoordsList(allCoordsList, ySlice)]),
+    ...values.map(zSlice => [zRotations, CL.rollSliceCoordsList(allCoordsList, zSlice)])
+  ]
+  const nestedKvps = slices.map((slice, index) => [...makeKvpsForSlice(index, ...slice)])
+  return new Map(U.flatten(nestedKvps))
+}
 
-const nestedKvps = slices.map((slice, index) => [...makeKvpsForSlice(index, ...slice)])
-const MOVE_IDS_TO_MOVES = new Map(U.flatten(nestedKvps))
+const makeSolvedCube = cubeSize => {
+  const { vmin, vmax } = CL.getCubeDimensions(cubeSize)
+  const allCoordsList = CL.makeAllCoordsList(cubeSize)
+  return allCoordsList.map(([x, y, z], index) => ({
+    id: index,
+    x, y, z,
+    faces: coordsToFaces(vmin, vmax, x, y, z),
+    accTransform3: R.Identity
+  }))
+}
 
-const MOVES = Array.from(MOVE_IDS_TO_MOVES.values())
+const makePerCubeSizeDataEntry = cubeSize => {
+  const moveIdsToMoves = makeMoveIdsToMoves(cubeSize)
+  const moves = Array.from(moveIdsToMoves.values())
+  const solvedCube = makeSolvedCube(cubeSize)
+  return [cubeSize, { moveIdsToMoves, moves, solvedCube }]
+}
 
-export const lookupMoveId = id => MOVE_IDS_TO_MOVES.get(id)
+const PER_CUBE_SIZE_DATA = new Map([
+  makePerCubeSizeDataEntry(2),
+  makePerCubeSizeDataEntry(3),
+  makePerCubeSizeDataEntry(4),
+  makePerCubeSizeDataEntry(5)
+])
 
+export const getSolvedCube = cubeSize => {
+  const perCubeSizeData = PER_CUBE_SIZE_DATA.get(cubeSize)
+  return perCubeSizeData.solvedCube
+}
+
+// TODO: pass cubeSize
+export const lookupMoveId = id => {
+  const perCubeSizeData = PER_CUBE_SIZE_DATA.get(CUBE_SIZE)
+  return perCubeSizeData.moveIdsToMoves.get(id)
+}
+
+// TODO: pass cubeSize
 export const getRandomMove = () => {
-  const randomIndex = Math.floor(Math.random() * MOVES.length)
-  return MOVES[randomIndex]
+  const perCubeSizeData = PER_CUBE_SIZE_DATA.get(CUBE_SIZE)
+  const randomIndex = Math.floor(Math.random() * perCubeSizeData.moves.length)
+  return perCubeSizeData.moves[randomIndex]
 }
 
 export const removeRedundantMoves = moves => {
@@ -110,5 +142,9 @@ export const removeRedundantMoves = moves => {
   }
 }
 
-export const makeMoves = (moves, initialCube = SOLVED_CUBE) =>
-  moves.reduce((cube, move) => move.makeMove(cube), initialCube)
+// TODO: pass cubeSize
+export const makeMoves = (moves, initialCube) => {
+  const perCubeSizeData = PER_CUBE_SIZE_DATA.get(CUBE_SIZE)
+  const seed = initialCube || perCubeSizeData.solvedCube
+  return moves.reduce((cube, move) => move.makeMove(cube), seed)
+}

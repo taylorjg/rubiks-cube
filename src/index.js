@@ -3,7 +3,6 @@ import OrbitControls from 'three-orbitcontrols'
 import { PieceGeometry } from './PieceGeometry'
 import * as L from '../logic'
 import * as U from '../logic/utils'
-import { CUBE_SIZE } from '../logic/coordsLists'
 
 const url = new URL(document.location)
 const searchParams = url.searchParams
@@ -94,7 +93,7 @@ const createUiPiece = piece => {
 }
 
 const resetUiPiece = (uiPiece, piece) => {
-  const isEvenSizedCube = CUBE_SIZE % 2 === 0
+  const isEvenSizedCube = L.CUBE_SIZE % 2 === 0
   const adjustValue = v => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v
   uiPiece.position.x = adjustValue(piece.x)
   uiPiece.position.y = adjustValue(piece.y)
@@ -284,7 +283,7 @@ const init = () => {
   globals.clock = new THREE.Clock()
   globals.animationMixer = new THREE.AnimationMixer()
 
-  globals.cube = L.SOLVED_CUBE
+  globals.cube = L.getSolvedCube(L.CUBE_SIZE)
   createUiPieces(globals.cube)
 
   animate()
