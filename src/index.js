@@ -23,11 +23,11 @@ const queryParamInt = (paramName, defaultValue, min, max) => {
 
 const COLOUR_TABLE = {
   'U': new THREE.Color('blue'),
-  'L': new THREE.Color('red'),
-  'F': new THREE.Color('yellow'),
-  'R': new THREE.Color('darkorange'),
-  'B': new THREE.Color('ghostwhite'),
   'D': new THREE.Color('green'),
+  'L': new THREE.Color('red'),
+  'R': new THREE.Color('darkorange'),
+  'F': new THREE.Color('yellow'),
+  'B': new THREE.Color('ghostwhite'),
   '-': new THREE.Color('black')
 }
 
@@ -75,24 +75,17 @@ const makeRotationMatrix4 = rotationMatrix3 => {
 
 const createUiPiece = piece => {
 
-  const setFaceColour = (face, colours, coloursIndex) => {
-    const ch = colours[coloursIndex]
-    face.color = COLOUR_TABLE[ch]
-  }
-
-  const closeTo = (a, b) => Math.abs(a - b) <= 1e-12
-
   const geometry = new PieceGeometry(PIECE_SIZE, NUM_SEGMENTS, MARGIN)
   const uiPiece = new THREE.Mesh(geometry, PIECE_MATERIAL)
   uiPiece.userData = piece.id
 
   uiPiece.geometry.faces.forEach(face => {
-    closeTo(face.normal.x, 1) && setFaceColour(face, piece.colours, L.RIGHT)
-    closeTo(face.normal.x, -1) && setFaceColour(face, piece.colours, L.LEFT)
-    closeTo(face.normal.y, 1) && setFaceColour(face, piece.colours, L.TOP)
-    closeTo(face.normal.y, -1) && setFaceColour(face, piece.colours, L.BOTTOM)
-    closeTo(face.normal.z, 1) && setFaceColour(face, piece.colours, L.FRONT)
-    closeTo(face.normal.z, -1) && setFaceColour(face, piece.colours, L.BACK)
+    U.closeTo(face.normal.y, 1) && (face.color = COLOUR_TABLE[piece.faces.up])
+    U.closeTo(face.normal.y, -1) && (face.color = COLOUR_TABLE[piece.faces.down])
+    U.closeTo(face.normal.x, -1) && (face.color = COLOUR_TABLE[piece.faces.left])
+    U.closeTo(face.normal.x, 1) && (face.color = COLOUR_TABLE[piece.faces.right])
+    U.closeTo(face.normal.z, 1) && (face.color = COLOUR_TABLE[piece.faces.front])
+    U.closeTo(face.normal.z, -1) && (face.color = COLOUR_TABLE[piece.faces.back])
   })
 
   resetUiPiece(uiPiece, piece)

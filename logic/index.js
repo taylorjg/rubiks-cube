@@ -3,27 +3,19 @@ import * as CL from './coordsLists'
 import * as R from './rotations'
 import * as U from './utils'
 
-export const TOP = 0
-export const LEFT = 1
-export const FRONT = 2
-export const RIGHT = 3
-export const BACK = 4
-export const BOTTOM = 5
-
-const coordsToColours = (x, y, z) =>
-  [
-    y === CL.VMAX ? 'U' : '-',
-    x === CL.VMIN ? 'L' : '-',
-    z === CL.VMAX ? 'F' : '-',
-    x === CL.VMAX ? 'R' : '-',
-    z === CL.VMIN ? 'B' : '-',
-    y === CL.VMIN ? 'D' : '-'
-  ].join('')
+const coordsToFaces = (x, y, z) => ({
+  up: y === CL.VMAX ? 'U' : '-',
+  down: y === CL.VMIN ? 'D' : '-',
+  left: x === CL.VMIN ? 'L' : '-',
+  right: x === CL.VMAX ? 'R' : '-',
+  front: z === CL.VMAX ? 'F' : '-',
+  back: z === CL.VMIN ? 'B' : '-'
+})
 
 export const SOLVED_CUBE = CL.allCoordsList.map(([x, y, z], index) => ({
-  id: index + 1,
+  id: index,
   x, y, z,
-  colours: coordsToColours(x, y, z),
+  faces: coordsToFaces(x, y, z),
   accTransform3: R.Identity
 }))
 
