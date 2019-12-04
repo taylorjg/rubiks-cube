@@ -9,6 +9,30 @@ A [three.js](https://threejs.org/) visualisation of solving a Rubik's cube.
 Currently, I have not implemented the solving part. Instead, I am cheating
 by using a reversed list of opposite moves as the solution.
 
+# Query Params
+
+The following query params can be added:
+
+| Query Param | Description | Values | Default |
+| ----------- | ----------- | ------ | ------- |
+| size        | The size of the cube | 2-5 | 3 |
+| speed       | How quickly to animate the moves | 100-1000 ms | 750 |
+| moves       | The number of random moves used to shuffle the cube | 0-1000 | 25 |
+| delay       | Length of delay before starting to 'solve' the cube | 0-5000 ms | 1000 |
+| axes        | Draw the X, Y and Z axes | present = on<br />absent = off | off |
+
+## Examples
+
+* https://rubiks-cube-jt.herokuapp.com?speed=250
+* https://rubiks-cube-jt.herokuapp.com?speed=250&moves=10&size=2
+* https://rubiks-cube-jt.herokuapp.com?speed=250&size=4
+* https://rubiks-cube-jt.herokuapp.com?speed=250&size=4&axes
+
+# TODO
+
+* Improve the look of the cube pieces
+* Implement an algorithm to solve the cube properly
+
 # Links
 
 * [Rubik's Cube - Wikipedia](https://en.wikipedia.org/wiki/Rubik%27s_Cube)
