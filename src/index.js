@@ -33,9 +33,10 @@ const COLOUR_TABLE = {
 const PIECE_SIZE = 1
 const NUM_SEGMENTS = 1
 const MARGIN = 0.05
-const DELAY_MS = queryParamInt('delay', 1000, 0, 5000)
+const CUBE_SIZE = queryParamInt('size', 3, 2, 5)
 const SPEED_MILLISECONDS = queryParamInt('speed', 750, 100, 1000)
 const NUM_RANDOM_MOVES = queryParamInt('moves', 25, 0, 1000)
+const DELAY_MS = queryParamInt('delay', 1000, 0, 5000)
 const AXES_ENABLED = searchParams.has('axes')
 
 const PIECE_MATERIAL = new THREE.MeshBasicMaterial({
@@ -93,7 +94,7 @@ const createUiPiece = piece => {
 }
 
 const resetUiPiece = (uiPiece, piece) => {
-  const isEvenSizedCube = L.CUBE_SIZE % 2 === 0
+  const isEvenSizedCube = CUBE_SIZE % 2 === 0
   const adjustValue = v => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v
   uiPiece.position.x = adjustValue(piece.x)
   uiPiece.position.y = adjustValue(piece.y)
@@ -189,7 +190,7 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
 const showSolutionByCheating = randomMoves => {
   const solutionMoves = randomMoves
     .map(move => move.oppositeMoveId)
-    .map(L.lookupMoveId)
+    .map(id => L.lookupMoveId(CUBE_SIZE, id))
     .reverse()
   console.log(`solution moves: ${solutionMoves.map(move => move.id).join(' ')}`)
   animateMoves(solutionMoves)
@@ -206,10 +207,10 @@ const disableScrambleButton = () =>
 
 const scramble = () => {
   disableScrambleButton()
-  const randomMoves = U.range(NUM_RANDOM_MOVES).map(L.getRandomMove)
+  const randomMoves = U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(CUBE_SIZE))
   L.removeRedundantMoves(randomMoves)
   console.log(`random moves: ${randomMoves.map(move => move.id).join(' ')}`)
-  globals.cube = L.makeMoves(randomMoves)
+  globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(CUBE_SIZE))
   resetUiPieces(globals.cube)
   setTimeout(showSolutionByCheating, DELAY_MS, randomMoves)
 }
@@ -283,7 +284,7 @@ const init = () => {
   globals.clock = new THREE.Clock()
   globals.animationMixer = new THREE.AnimationMixer()
 
-  globals.cube = L.getSolvedCube(L.CUBE_SIZE)
+  globals.cube = L.getSolvedCube(CUBE_SIZE)
   createUiPieces(globals.cube)
 
   animate()

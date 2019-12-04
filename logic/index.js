@@ -3,8 +3,6 @@ import * as CL from './coordsLists'
 import * as R from './rotations'
 import * as U from './utils'
 
-export const CUBE_SIZE = 4
-
 const coordsToFaces = (vmin, vmax, x, y, z) => ({
   up: y === vmax ? 'U' : '-',
   down: y === vmin ? 'D' : '-',
@@ -112,15 +110,13 @@ export const getSolvedCube = cubeSize => {
   return perCubeSizeData.solvedCube
 }
 
-// TODO: pass cubeSize
-export const lookupMoveId = id => {
-  const perCubeSizeData = PER_CUBE_SIZE_DATA.get(CUBE_SIZE)
+export const lookupMoveId = (cubeSize, id) => {
+  const perCubeSizeData = PER_CUBE_SIZE_DATA.get(cubeSize)
   return perCubeSizeData.moveIdsToMoves.get(id)
 }
 
-// TODO: pass cubeSize
-export const getRandomMove = () => {
-  const perCubeSizeData = PER_CUBE_SIZE_DATA.get(CUBE_SIZE)
+export const getRandomMove = cubeSize => {
+  const perCubeSizeData = PER_CUBE_SIZE_DATA.get(cubeSize)
   const randomIndex = Math.floor(Math.random() * perCubeSizeData.moves.length)
   return perCubeSizeData.moves[randomIndex]
 }
@@ -142,9 +138,5 @@ export const removeRedundantMoves = moves => {
   }
 }
 
-// TODO: pass cubeSize
-export const makeMoves = (moves, initialCube) => {
-  const perCubeSizeData = PER_CUBE_SIZE_DATA.get(CUBE_SIZE)
-  const seed = initialCube || perCubeSizeData.solvedCube
-  return moves.reduce((cube, move) => move.makeMove(cube), seed)
-}
+export const makeMoves = (moves, initialCube) =>
+  moves.reduce((cube, move) => move.makeMove(cube), initialCube)
