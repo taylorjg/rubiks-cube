@@ -17,7 +17,9 @@ module.exports = {
   plugins: [
     new CopyWebpackPlugin([
       { context: './src', from: '*.html' },
-      { context: './src', from: '*.css' }
+      { context: './src', from: '*.css' },
+      { context: './src', from: '*.png' },
+      { context: './src', from: '*.json' }
     ]),
     new HtmlWebpackPlugin({
       template: './src/index.html',

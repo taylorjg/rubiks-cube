@@ -1,0 +1,12 @@
+{
+  "name": "Rubik's Cube",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "fullscreen"
+}
