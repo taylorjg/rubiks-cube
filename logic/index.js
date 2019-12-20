@@ -54,29 +54,31 @@ const makeKvp = (id, oppositeMoveId, rotationMatrix3, coordsList, numTurns) => {
   return [key, value]
 }
 
-const makeKvpsForSlice = (baseId, rotationMatrices3, coordsList) => {
-  const move90Id = baseId * 3
-  const move180Id = move90Id + 1
-  const move270Id = move90Id + 2
+const makeKvpsForSlice = ([rotationMatrices3, coordsList], index) => {
+  const baseId = index * 3
+  const move90Id = baseId
+  const move180Id = baseId + 1
+  const move270Id = baseId + 2
   const move90 = makeKvp(move90Id, move270Id, rotationMatrices3[0], coordsList, 1)
   const move180 = makeKvp(move180Id, move180Id, rotationMatrices3[1], coordsList, 2)
   const move270 = makeKvp(move270Id, move90Id, rotationMatrices3[2], coordsList, 1)
   return [move90, move180, move270]
 }
 
-const xRotations = [R.X90, R.X180, R.X270]
-const yRotations = [R.Y90, R.Y180, R.Y270]
-const zRotations = [R.Z90, R.Z180, R.Z270]
+const angles = [90, 180, 270]
+const xRotationMatrices3 = angles.map(R.makeXRotation)
+const yRotationMatrices3 = angles.map(R.makeYRotation)
+const zRotationMatrices3 = angles.map(R.makeZRotation)
 
 const makeMoveIdsToMoves = cubeSize => {
   const { values } = CL.getCubeDimensions(cubeSize)
   const allCoordsList = CL.makeAllCoordsList(cubeSize)
   const slices = [
-    ...values.map(xSlice => [xRotations, CL.pitchSliceCoordsList(allCoordsList, xSlice)]),
-    ...values.map(ySlice => [yRotations, CL.yawSliceCoordsList(allCoordsList, ySlice)]),
-    ...values.map(zSlice => [zRotations, CL.rollSliceCoordsList(allCoordsList, zSlice)])
+    ...values.map(xSlice => [xRotationMatrices3, CL.pitchSliceCoordsList(allCoordsList, xSlice)]),
+    ...values.map(ySlice => [yRotationMatrices3, CL.yawSliceCoordsList(allCoordsList, ySlice)]),
+    ...values.map(zSlice => [zRotationMatrices3, CL.rollSliceCoordsList(allCoordsList, zSlice)])
   ]
-  const nestedKvps = slices.map((slice, index) => [...makeKvpsForSlice(index, ...slice)])
+  const nestedKvps = slices.map(makeKvpsForSlice)
   return new Map(U.flatten(nestedKvps))
 }
 
