@@ -89,22 +89,9 @@ const loadGeometry = url =>
       reject)
   })
 
-const createUiPieces = (cube, pieceGeometry) => {
-  cube.forEach(piece => {
-    const uiPiece = createUiPiece(piece, pieceGeometry)
-    globals.puzzleGroup.add(uiPiece)
-  })
-}
-
-const createUiPiece = (piece, pieceGeometry) => {
-
+const setGeometryFaceColors = (piece, pieceGeometry) => {
   const clonedPieceGeoemtry = pieceGeometry.clone()
-  const uiPiece = new THREE.Mesh(clonedPieceGeoemtry, PIECE_MATERIAL)
-  uiPiece.scale.set(0.5, 0.5, 0.5)
-
-  uiPiece.userData = piece.id
-
-  uiPiece.geometry.faces.forEach(face => {
+  clonedPieceGeoemtry.faces.forEach(face => {
     face.color = COLOUR_TABLE['-']
     U.closeTo(face.normal.y, 1) && (face.color = COLOUR_TABLE[piece.faces.up])
     U.closeTo(face.normal.y, -1) && (face.color = COLOUR_TABLE[piece.faces.down])
@@ -113,9 +100,22 @@ const createUiPiece = (piece, pieceGeometry) => {
     U.closeTo(face.normal.z, 1) && (face.color = COLOUR_TABLE[piece.faces.front])
     U.closeTo(face.normal.z, -1) && (face.color = COLOUR_TABLE[piece.faces.back])
   })
+  return clonedPieceGeoemtry
+}
 
+const createUiPieces = (cube, pieceGeometry) => {
+  cube.forEach(piece => {
+    const uiPiece = createUiPiece(piece, pieceGeometry)
+    globals.puzzleGroup.add(uiPiece)
+  })
+}
+
+const createUiPiece = (piece, pieceGeometry) => {
+  const pieceGeometryWithColors = setGeometryFaceColors(piece, pieceGeometry)
+  const uiPiece = new THREE.Mesh(pieceGeometryWithColors, PIECE_MATERIAL)
+  uiPiece.scale.set(0.5, 0.5, 0.5)
+  uiPiece.userData = piece.id
   resetUiPiece(uiPiece, piece)
-
   return uiPiece
 }
 
