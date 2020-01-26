@@ -27,7 +27,7 @@ const COLOUR_TABLE = {
   'R': new THREE.Color('darkorange'),
   'F': new THREE.Color('yellow'),
   'B': new THREE.Color('ghostwhite'),
-  '-': new THREE.Color('black')
+  '-': new THREE.Color(0x282828)
 }
 
 const CUBE_SIZE = queryParamInt('size', 3, 2, 5)
@@ -74,12 +74,11 @@ const makeRotationMatrix4 = rotationMatrix3 => {
     0, 0, 0, 1)
 }
 
-const createUiPiece = async piece => {
-
-  const promise = new Promise((resolve, reject) => {
+const loadGeometry = url =>
+  new Promise((resolve, reject) => {
     const loader = new GLTFLoader()
     loader.load(
-      '/cube-bevelled.glb',
+      url,
       gltf => {
         const bufferGeometry = gltf.scene.children[0].geometry
         const geometry = new THREE.Geometry()
@@ -89,8 +88,18 @@ const createUiPiece = async piece => {
       undefined,
       reject)
   })
-  const geometry = await promise
-  const uiPiece = new THREE.Mesh(geometry, PIECE_MATERIAL)
+
+const createUiPieces = (cube, pieceGeometry) => {
+  cube.forEach(piece => {
+    const uiPiece = createUiPiece(piece, pieceGeometry)
+    globals.puzzleGroup.add(uiPiece)
+  })
+}
+
+const createUiPiece = (piece, pieceGeometry) => {
+
+  const clonedPieceGeoemtry = pieceGeometry.clone()
+  const uiPiece = new THREE.Mesh(clonedPieceGeoemtry, PIECE_MATERIAL)
   uiPiece.scale.set(0.5, 0.5, 0.5)
 
   uiPiece.userData = piece.id
@@ -121,14 +130,6 @@ const resetUiPiece = (uiPiece, piece) => {
 
 const findUiPiece = piece =>
   globals.puzzleGroup.children.find(child => child.userData === piece.id)
-
-const createUiPieces = async cube => {
-  const promises = cube.map(async piece => {
-    const uiPiece = await createUiPiece(piece)
-    globals.puzzleGroup.add(uiPiece)
-  })
-  return Promise.all(promises)
-}
 
 const resetUiPieces = cube => {
   cube.forEach(piece => {
@@ -251,14 +252,14 @@ const init = async () => {
   })
 
   globals.scene = new THREE.Scene()
-  globals.scene.background = new THREE.Color(0x101010)
+  globals.scene.background = new THREE.Color(0x000000)
   globals.camera = new THREE.PerspectiveCamera(34, w / h, 1, 100)
-  globals.camera.position.set(3.45, 3.35, 9.40)
+  globals.camera.position.set(3, 3, 12)
   globals.camera.lookAt(new THREE.Vector3(0, 0, 0))
   globals.scene.add(globals.camera)
 
   const LIGHT_COLOUR = 0xffffff
-  const LIGHT_INTENSITY = 1
+  const LIGHT_INTENSITY = 1.2
   const LIGHT_DISTANCE = 10
 
   const light1 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
@@ -308,7 +309,8 @@ const init = async () => {
   globals.animationMixer = new THREE.AnimationMixer()
 
   globals.cube = L.getSolvedCube(CUBE_SIZE)
-  await createUiPieces(globals.cube)
+  const pieceGeometry = await loadGeometry('/cube-bevelled.glb')
+  createUiPieces(globals.cube, pieceGeometry)
 
   animate()
   scramble()
