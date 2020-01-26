@@ -1,6 +1,6 @@
 import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import OrbitControls from 'three-orbitcontrols'
-import { PieceGeometry } from './PieceGeometry'
 import * as L from '../logic'
 import * as U from '../logic/utils'
 
@@ -30,18 +30,19 @@ const COLOUR_TABLE = {
   '-': new THREE.Color('black')
 }
 
-const PIECE_SIZE = 1
-const NUM_SEGMENTS = 1
-const MARGIN = 0.05
 const CUBE_SIZE = queryParamInt('size', 3, 2, 5)
 const SPEED_MILLISECONDS = queryParamInt('speed', 750, 100, 1000)
 const NUM_RANDOM_MOVES = queryParamInt('moves', 25, 0, 1000)
 const DELAY_MS = queryParamInt('delay', 1000, 0, 5000)
 const AXES_ENABLED = searchParams.has('axes')
 
-const PIECE_MATERIAL = new THREE.MeshBasicMaterial({
+const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
   color: 0xffffff,
-  vertexColors: THREE.FaceColors
+  vertexColors: THREE.FaceColors,
+  metalness: 0,
+  roughness: 0,
+  clearcoat: 1,
+  reflectivity: 1
 })
 
 const globals = {
@@ -73,13 +74,29 @@ const makeRotationMatrix4 = rotationMatrix3 => {
     0, 0, 0, 1)
 }
 
-const createUiPiece = piece => {
+const createUiPiece = async piece => {
 
-  const geometry = new PieceGeometry(PIECE_SIZE, NUM_SEGMENTS, MARGIN)
+  const promise = new Promise((resolve, reject) => {
+    const loader = new GLTFLoader()
+    loader.load(
+      '/cube-bevelled.glb',
+      gltf => {
+        const bufferGeometry = gltf.scene.children[0].geometry
+        const geometry = new THREE.Geometry()
+        geometry.fromBufferGeometry(bufferGeometry)
+        resolve(geometry)
+      },
+      undefined,
+      reject)
+  })
+  const geometry = await promise
   const uiPiece = new THREE.Mesh(geometry, PIECE_MATERIAL)
+  uiPiece.scale.set(0.5, 0.5, 0.5)
+
   uiPiece.userData = piece.id
 
   uiPiece.geometry.faces.forEach(face => {
+    face.color = COLOUR_TABLE['-']
     U.closeTo(face.normal.y, 1) && (face.color = COLOUR_TABLE[piece.faces.up])
     U.closeTo(face.normal.y, -1) && (face.color = COLOUR_TABLE[piece.faces.down])
     U.closeTo(face.normal.x, -1) && (face.color = COLOUR_TABLE[piece.faces.left])
@@ -105,11 +122,12 @@ const resetUiPiece = (uiPiece, piece) => {
 const findUiPiece = piece =>
   globals.puzzleGroup.children.find(child => child.userData === piece.id)
 
-const createUiPieces = cube => {
-  cube.forEach(piece => {
-    const uiPiece = createUiPiece(piece)
+const createUiPieces = async cube => {
+  const promises = cube.map(async piece => {
+    const uiPiece = await createUiPiece(piece)
     globals.puzzleGroup.add(uiPiece)
   })
+  return Promise.all(promises)
 }
 
 const resetUiPieces = cube => {
@@ -215,7 +233,7 @@ const scramble = () => {
   setTimeout(showSolutionByCheating, DELAY_MS, randomMoves)
 }
 
-const init = () => {
+const init = async () => {
 
   document.getElementById('btnScramble').addEventListener('click', scramble)
 
@@ -233,33 +251,38 @@ const init = () => {
   })
 
   globals.scene = new THREE.Scene()
+  globals.scene.background = new THREE.Color(0x101010)
   globals.camera = new THREE.PerspectiveCamera(34, w / h, 1, 100)
-  globals.camera.position.set(3.45, 7.35, 9.40)
+  globals.camera.position.set(3.45, 3.35, 9.40)
   globals.camera.lookAt(new THREE.Vector3(0, 0, 0))
   globals.scene.add(globals.camera)
 
-  const light1 = new THREE.DirectionalLight(0xffffff, 0.8)
-  light1.position.set(0, 0, 10)
+  const LIGHT_COLOUR = 0xffffff
+  const LIGHT_INTENSITY = 1
+  const LIGHT_DISTANCE = 10
+
+  const light1 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  light1.position.set(0, 0, LIGHT_DISTANCE)
   globals.scene.add(light1)
 
-  const light2 = new THREE.DirectionalLight(0xffffff, 0.8)
-  light2.position.set(0, 0, -10)
+  const light2 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  light2.position.set(0, 0, -LIGHT_DISTANCE)
   globals.scene.add(light2)
 
-  const light3 = new THREE.DirectionalLight(0xffffff, 0.8)
-  light3.position.set(0, 10, 0)
+  const light3 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  light3.position.set(0, LIGHT_DISTANCE, 0)
   globals.scene.add(light3)
 
-  const light4 = new THREE.DirectionalLight(0xffffff, 0.4)
-  light4.position.set(0, -10, 0)
+  const light4 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  light4.position.set(0, -LIGHT_DISTANCE, 0)
   globals.scene.add(light4)
 
-  const light5 = new THREE.DirectionalLight(0xffffff, 0.4)
-  light5.position.set(10, 0, 0)
+  const light5 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  light5.position.set(LIGHT_DISTANCE, 0, 0)
   globals.scene.add(light5)
 
-  const light6 = new THREE.DirectionalLight(0xffffff, 0.4)
-  light6.position.set(-10, 0, 0)
+  const light6 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  light6.position.set(-LIGHT_DISTANCE, 0, 0)
   globals.scene.add(light6)
 
   if (AXES_ENABLED) {
@@ -285,7 +308,7 @@ const init = () => {
   globals.animationMixer = new THREE.AnimationMixer()
 
   globals.cube = L.getSolvedCube(CUBE_SIZE)
-  createUiPieces(globals.cube)
+  await createUiPieces(globals.cube)
 
   animate()
   scramble()
