@@ -236,6 +236,15 @@ const scramble = () => {
 
 const init = async () => {
 
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register('service-worker.js')
+      console.log('Successfully registered service worker', registration)
+    } catch (error) {
+      console.error(`Failed to register service worker: ${error.message}`)
+    }
+  }
+
   document.getElementById('btnScramble').addEventListener('click', scramble)
 
   const container = document.getElementById('container')

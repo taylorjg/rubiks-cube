@@ -21,7 +21,8 @@ module.exports = {
       { context: './src', from: '*.png' },
       { context: './src', from: '*.json' },
       { context: './src', from: '*.glb' },
-      { context: './src', from: '*.gltf' }
+      { context: './src', from: '*.gltf' },
+      { context: './src', from: 'service-worker.js' }
     ]),
     new HtmlWebpackPlugin({
       template: './src/index.html',
