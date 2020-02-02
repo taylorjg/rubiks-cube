@@ -20,7 +20,8 @@ module.exports = {
       { context: './src', from: '*.css' },
       { context: './src', from: '*.png' },
       { context: './src', from: '*.json' },
-      { context: './src', from: '*.glb' }
+      { context: './src', from: '*.glb' },
+      { context: './src', from: '*.gltf' }
     ]),
     new HtmlWebpackPlugin({
       template: './src/index.html',
