@@ -9,7 +9,7 @@ html, body {
   height: 100%;
 }
 
-#btnScramble {
+#scramble-btn {
   position: absolute;
   top: 20px;
   right: 20px;

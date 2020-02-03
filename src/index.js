@@ -54,7 +54,8 @@ const globals = {
   animationGroup: undefined,
   controls: undefined,
   clock: undefined,
-  animationMixer: undefined
+  animationMixer: undefined,
+  scrambleButton: undefined
 }
 
 const makeRotationMatrix4 = rotationMatrix3 => {
@@ -176,7 +177,7 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
   const move = moves[nextMoveIndex]
 
   if (!move) {
-    enableScrambleButton()
+    showScrambleButton()
     return
   }
 
@@ -215,17 +216,17 @@ const showSolutionByCheating = randomMoves => {
   animateMoves(solutionMoves)
 }
 
-const enableScrambleButton = () => {
-  const element = document.getElementById('btnScramble')
-  element.disabled = false
-  element.focus()
+const showScrambleButton = () => {
+  globals.scrambleButton.style.visibility = 'visible'
+  globals.scrambleButton.focus()
 }
 
-const disableScrambleButton = () =>
-  document.getElementById('btnScramble').disabled = true
+const hideScrambleButton = () => {
+  globals.scrambleButton.style.visibility = 'hidden'
+}
 
 const scramble = () => {
-  disableScrambleButton()
+  hideScrambleButton()
   const randomMoves = U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(CUBE_SIZE))
   L.removeRedundantMoves(randomMoves)
   console.log(`random moves: ${randomMoves.map(move => move.id).join(' ')}`)
@@ -245,7 +246,8 @@ const init = async () => {
     }
   }
 
-  document.getElementById('btnScramble').addEventListener('click', scramble)
+  globals.scrambleButton = document.getElementById('scramble-btn')
+  globals.scrambleButton.addEventListener('click', scramble)
 
   const container = document.getElementById('container')
   const w = container.offsetWidth
