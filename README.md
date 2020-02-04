@@ -30,7 +30,9 @@ The following query params can be added:
 
 # TODO
 
-* Improve the look of the cube pieces
+* ~~Improve the look of the cube pieces~~
+* Add a slide-out panel to configure the size, speed etc
+  * Currently, these values can only be set via query string parameters
 * Implement an algorithm to solve the cube properly
 
 # Links
