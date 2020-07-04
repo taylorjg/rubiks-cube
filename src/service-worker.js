@@ -1,11 +1,10 @@
-const CURRENT_CACHE_VERSION = 3
+const CURRENT_CACHE_VERSION = 4
 const CURRENT_CACHE_NAME = `cache-v${CURRENT_CACHE_VERSION}`
 const URLS_TO_CACHE = [
   '/',
   '/styles.css',
   '/bundle.js',
-  '/cube-bevelled.glb',
-  'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css'
+  '/cube-bevelled.glb'
 ]
 
 self.addEventListener('install', async () => {

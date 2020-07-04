@@ -54,8 +54,7 @@ const globals = {
   animationGroup: undefined,
   controls: undefined,
   clock: undefined,
-  animationMixer: undefined,
-  scrambleButton: undefined
+  animationMixer: undefined
 }
 
 const makeRotationMatrix4 = rotationMatrix3 => {
@@ -177,8 +176,7 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
   const move = moves[nextMoveIndex]
 
   if (!move) {
-    showScrambleButton()
-    return
+    return setTimeout(scramble, 2000)
   }
 
   const pieces = L.getPieces(globals.cube, move.coordsList)
@@ -192,7 +190,7 @@ const animateMoves = (moves, nextMoveIndex = 0) => {
     const rotationMatrix3 = move.rotationMatrix3
     const rotationMatrix4 = makeRotationMatrix4(rotationMatrix3)
     for (const uiPiece of uiPieces) {
-      uiPiece.applyMatrix(rotationMatrix4)
+      uiPiece.applyMatrix4(rotationMatrix4)
     }
     setTimeout(animateMoves, SPEED_MILLISECONDS, moves, nextMoveIndex + 1)
   }
@@ -216,17 +214,7 @@ const showSolutionByCheating = randomMoves => {
   animateMoves(solutionMoves)
 }
 
-const showScrambleButton = () => {
-  globals.scrambleButton.style.visibility = 'visible'
-  globals.scrambleButton.focus()
-}
-
-const hideScrambleButton = () => {
-  globals.scrambleButton.style.visibility = 'hidden'
-}
-
 const scramble = () => {
-  hideScrambleButton()
   const randomMoves = U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(CUBE_SIZE))
   L.removeRedundantMoves(randomMoves)
   console.log(`random moves: ${randomMoves.map(move => move.id).join(' ')}`)
@@ -245,9 +233,6 @@ const init = async () => {
       console.error(`Failed to register service worker: ${error.message}`)
     }
   }
-
-  globals.scrambleButton = document.getElementById('scramble-btn')
-  globals.scrambleButton.addEventListener('click', scramble)
 
   const container = document.getElementById('container')
   const w = container.offsetWidth
