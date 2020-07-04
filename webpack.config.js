@@ -15,15 +15,17 @@ module.exports = {
     filename: 'bundle.js',
   },
   plugins: [
-    new CopyWebpackPlugin([
-      { context: './src', from: '*.html' },
-      { context: './src', from: '*.css' },
-      { context: './src', from: '*.png' },
-      { context: './src', from: '*.json' },
-      { context: './src', from: '*.glb' },
-      { context: './src', from: '*.gltf' },
-      { context: './src', from: 'service-worker.js' }
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { context: './src', from: '*.html' },
+        { context: './src', from: '*.css' },
+        { context: './src', from: '*.png' },
+        { context: './src', from: '*.json' },
+        { context: './src', from: '*.glb' },
+        { context: './src', from: '*.gltf' },
+        { context: './src', from: 'service-worker.js' }
+      ]
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html',
       version
