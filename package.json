@@ -7,7 +7,8 @@
     "build": "webpack",
     "start": "node server",
     "start:dev": "webpack-dev-server",
-    "test": "mocha -r esm"
+    "test": "mocha -r esm",
+    "deploy": "npm run build && gh-pages -d build"
   },
   "author": "Jonathan Taylor",
   "license": "MIT",
