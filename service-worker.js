@@ -1,10 +1,10 @@
 const CURRENT_CACHE_VERSION = 4
 const CURRENT_CACHE_NAME = `cache-v${CURRENT_CACHE_VERSION}`
 const URLS_TO_CACHE = [
-  '/',
-  '/styles.css',
-  '/bundle.js',
-  '/cube-bevelled.glb'
+  'index.html',
+  'styles.css',
+  'bundle.js',
+  'cube-bevelled.glb'
 ]
 
 self.addEventListener('install', async () => {
