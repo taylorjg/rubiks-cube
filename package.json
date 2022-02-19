@@ -13,7 +13,6 @@
   "author": "Jonathan Taylor",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1",
     "gh-pages": "^3.2.3",
     "mathjs": "^10.1.1",
     "three": "^0.137.5"
