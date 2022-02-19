@@ -345,7 +345,7 @@ const init = async () => {
   globals.animationMixer = new THREE.AnimationMixer()
 
   globals.cube = L.getSolvedCube(CUBE_SIZE)
-  const pieceGeometry = await loadGeometry('/cube-bevelled.glb')
+  const pieceGeometry = await loadGeometry('cube-bevelled.glb')
   createUiPieces(globals.cube, pieceGeometry)
 
   animate()

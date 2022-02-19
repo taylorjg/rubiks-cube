@@ -5,13 +5,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const { version } = require('./package.json')
 
-const serverPublic = path.join(__dirname, 'server', 'public')
+const BUILD_FOLDER = path.join(__dirname, 'build')
 
 module.exports = {
   mode: 'production',
   entry: './src/index.js',
   output: {
-    path: serverPublic,
+    path: BUILD_FOLDER,
     filename: 'bundle.js',
   },
   plugins: [
@@ -31,8 +31,5 @@ module.exports = {
       version
     })
   ],
-  devtool: 'source-map',
-  devServer: {
-    contentBase: serverPublic
-  }
+  devtool: 'source-map'
 }
