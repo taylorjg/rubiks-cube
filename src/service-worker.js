@@ -1,15 +1,19 @@
 import { version } from '../package.json'
 
+const pos = location.pathname.lastIndexOf('/')
+const pathname = pos >= 0 ? location.pathname.substr(0, pos) : pathname
+const base = location.origin + pathname
+
 const CURRENT_CACHE_NAME = `cache-${version}`
 
 const URLS_TO_CACHE = [
-  'manifest.json',
   '/',
-  'index.html',
-  'styles.css',
-  'bundle.js',
-  'cube-bevelled.glb',
-  'icon.png'
+  '/index.html',
+  '/styles.css',
+  '/bundle.js',
+  '/cube-bevelled.glb',
+  '/manifest.json',
+  '/icon.png'
 ]
 
 self.addEventListener('install', async () => {
@@ -19,8 +23,9 @@ self.addEventListener('install', async () => {
   console.log(FN, 'currentCache:', currentCache)
   if (currentCache) {
     for (const url of URLS_TO_CACHE) {
-      console.log(FN, 'currentCache.add:', url)
-      await currentCache.add(url)
+      const fullUrl = base + url
+      console.log(FN, 'currentCache.add:', fullUrl)
+      await currentCache.add(fullUrl)
     }
   }
 })
