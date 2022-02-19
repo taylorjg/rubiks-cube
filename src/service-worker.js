@@ -4,7 +4,7 @@ const CURRENT_CACHE_NAME = `cache-${version}`
 
 const URLS_TO_CACHE = [
   'manifest.json',
-  '',
+  '/',
   'index.html',
   'styles.css',
   'bundle.js',
