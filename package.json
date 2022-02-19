@@ -13,9 +13,9 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
-    "mathjs": "^7.0.2",
-    "three": "^0.118.3",
-    "three-orbitcontrols": "^2.110.3"
+    "gh-pages": "^3.2.3",
+    "mathjs": "^10.1.1",
+    "three": "^0.137.5"
   },
   "repository": {
     "type": "git",

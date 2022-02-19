@@ -1,6 +1,6 @@
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import OrbitControls from 'three-orbitcontrols'
 import * as L from '../logic'
 import * as U from '../logic/utils'
 
@@ -37,12 +37,11 @@ const DELAY_MS = queryParamInt('delay', 1000, 0, 5000)
 const AXES_ENABLED = searchParams.has('axes')
 
 const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
-  color: 0xffffff,
-  vertexColors: THREE.FaceColors,
-  metalness: 0,
-  roughness: 0,
-  clearcoat: 1,
-  reflectivity: 1
+  vertexColors: true,
+  metalness: .5,
+  roughness: .1,
+  clearcoat: .1,
+  reflectivity: .5
 })
 
 const globals = {
@@ -80,10 +79,8 @@ const loadGeometry = url =>
     loader.load(
       url,
       gltf => {
-        const bufferGeometry = gltf.scene.children[0].geometry
-        const geometry = new THREE.Geometry()
-        geometry.fromBufferGeometry(bufferGeometry)
-        resolve(geometry)
+        const bufferGeometry = gltf.scene.children[0].geometry.toNonIndexed()
+        resolve(bufferGeometry)
       },
       undefined,
       reject)
@@ -91,15 +88,58 @@ const loadGeometry = url =>
 
 const setGeometryFaceColors = (piece, pieceGeometry) => {
   const clonedPieceGeoemtry = pieceGeometry.clone()
-  clonedPieceGeoemtry.faces.forEach(face => {
-    face.color = COLOUR_TABLE['-']
-    U.closeTo(face.normal.y, 1) && (face.color = COLOUR_TABLE[piece.faces.up])
-    U.closeTo(face.normal.y, -1) && (face.color = COLOUR_TABLE[piece.faces.down])
-    U.closeTo(face.normal.x, -1) && (face.color = COLOUR_TABLE[piece.faces.left])
-    U.closeTo(face.normal.x, 1) && (face.color = COLOUR_TABLE[piece.faces.right])
-    U.closeTo(face.normal.z, 1) && (face.color = COLOUR_TABLE[piece.faces.front])
-    U.closeTo(face.normal.z, -1) && (face.color = COLOUR_TABLE[piece.faces.back])
-  })
+  const positions = clonedPieceGeoemtry.getAttribute('position')
+  const vertexCount = positions.count
+
+  const colors = []
+  const normals = []
+
+  const vA = new THREE.Vector3()
+  const vB = new THREE.Vector3()
+  const vC = new THREE.Vector3()
+  const cb = new THREE.Vector3()
+  const ab = new THREE.Vector3()
+
+  for (let triangleIndex = 0; triangleIndex < vertexCount; triangleIndex += 3) {
+    let base = triangleIndex * 3
+
+    vA.x = positions.array[base++]
+    vA.y = positions.array[base++]
+    vA.z = positions.array[base++]
+
+    vB.x = positions.array[base++]
+    vB.y = positions.array[base++]
+    vB.z = positions.array[base++]
+
+    vC.x = positions.array[base++]
+    vC.y = positions.array[base++]
+    vC.z = positions.array[base++]
+
+    cb.subVectors(vC, vB)
+    ab.subVectors(vA, vB)
+    cb.cross(ab)
+    cb.normalize()
+
+    const faceNormal = cb
+
+    normals.push(faceNormal.x, faceNormal.y, faceNormal.z)
+    normals.push(faceNormal.x, faceNormal.y, faceNormal.z)
+    normals.push(faceNormal.x, faceNormal.y, faceNormal.z)
+
+    let color = COLOUR_TABLE['-']
+    U.closeTo(faceNormal.y, 1) && (color = COLOUR_TABLE[piece.faces.up])
+    U.closeTo(faceNormal.y, -1) && (color = COLOUR_TABLE[piece.faces.down])
+    U.closeTo(faceNormal.x, -1) && (color = COLOUR_TABLE[piece.faces.left])
+    U.closeTo(faceNormal.x, 1) && (color = COLOUR_TABLE[piece.faces.right])
+    U.closeTo(faceNormal.z, 1) && (color = COLOUR_TABLE[piece.faces.front])
+    U.closeTo(faceNormal.z, -1) && (color = COLOUR_TABLE[piece.faces.back])
+    colors.push(color.r, color.g, color.b)
+    colors.push(color.r, color.g, color.b)
+    colors.push(color.r, color.g, color.b)
+  }
+
+  clonedPieceGeoemtry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
+  clonedPieceGeoemtry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3))
   return clonedPieceGeoemtry
 }
 
@@ -255,8 +295,8 @@ const init = async () => {
   globals.scene.add(globals.camera)
 
   const LIGHT_COLOUR = 0xffffff
-  const LIGHT_INTENSITY = 1.2
-  const LIGHT_DISTANCE = 10
+  const LIGHT_INTENSITY = 2
+  const LIGHT_DISTANCE = 4
 
   const light1 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
   light1.position.set(0, 0, LIGHT_DISTANCE)
