@@ -9,10 +9,13 @@ const BUILD_FOLDER = path.join(__dirname, 'build')
 
 module.exports = {
   mode: 'production',
-  entry: './src/index.js',
+  entry: {
+    'bundle': './src/index.js',
+    'service-worker': './src/service-worker.js'
+  },
   output: {
     path: BUILD_FOLDER,
-    filename: 'bundle.js',
+    filename: '[name].js'
   },
   plugins: [
     new CopyWebpackPlugin({
@@ -21,9 +24,7 @@ module.exports = {
         { context: './src', from: '*.css' },
         { context: './src', from: '*.png' },
         { context: './src', from: '*.json' },
-        { context: './src', from: '*.glb' },
-        { context: './src', from: '*.gltf' },
-        { context: './src', from: 'service-worker.js' }
+        { context: './src', from: '*.glb' }
       ]
     }),
     new HtmlWebpackPlugin({
