@@ -28,6 +28,7 @@ self.addEventListener('install', async () => {
       await currentCache.add(fullUrl)
     }
   }
+  self.skipWaiting()
 })
 
 self.addEventListener('activate', async () => {
