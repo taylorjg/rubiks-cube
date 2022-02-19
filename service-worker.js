@@ -4,7 +4,8 @@ const URLS_TO_CACHE = [
   'index.html',
   'styles.css',
   'bundle.js',
-  'cube-bevelled.glb'
+  'cube-bevelled.glb',
+  'icon.png'
 ]
 
 self.addEventListener('install', async () => {
