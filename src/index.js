@@ -32,7 +32,7 @@ const COLOR_TABLE = {
 
 const CUBE_SIZE = queryParamInt('size', 2, 5, 3)
 const SPEED_MILLISECONDS = queryParamInt('speed', 100, 1000, 750)
-const NUM_RANDOM_MOVES = queryParamInt('moves', 0, 100, 25)
+const NUM_RANDOM_MOVES = queryParamInt('moves', 10, 100, 25)
 const DELAY_MS = queryParamInt('delay', 0, 5000, 1000)
 const AXES_ENABLED = searchParams.has('axes')
 

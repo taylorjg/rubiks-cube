@@ -15,7 +15,7 @@ The following query params can be added:
 | ----------- | ----------- | ------ | ------- |
 | size        | The size of the cube | 2-5 | 3 |
 | speed       | How quickly to animate the moves | 100-1000 ms | 750 |
-| moves       | The number of random moves used to shuffle the cube | 0-1000 | 25 |
+| moves       | The number of random moves used to shuffle the cube | 10-100 | 25 |
 | delay       | Length of delay before starting to 'solve' the cube | 0-5000 ms | 1000 |
 | axes        | Draw the X, Y and Z axes | present = on<br />absent = off | off |
 
