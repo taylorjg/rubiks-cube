@@ -1,5 +1,3 @@
-[![CircleCI](https://circleci.com/gh/taylorjg/rubiks-cube/tree/master.svg?style=svg)](https://circleci.com/gh/taylorjg/rubiks-cube/tree/master)
-
 # Description
 
 A [three.js](https://threejs.org/) visualisation of solving a Rubik's cube.

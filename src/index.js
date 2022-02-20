@@ -79,8 +79,8 @@ const loadGeometry = url =>
     loader.load(
       url,
       gltf => {
-        const bufferGeometry = gltf.scene.children[0].geometry.toNonIndexed()
-        resolve(bufferGeometry)
+        const bufferGeometry = gltf.scene.children[0].geometry
+        resolve(bufferGeometry.toNonIndexed())
       },
       undefined,
       reject)
@@ -89,42 +89,18 @@ const loadGeometry = url =>
 const setGeometryFaceColors = (piece, pieceGeometry) => {
   const clonedPieceGeoemtry = pieceGeometry.clone()
   const positions = clonedPieceGeoemtry.getAttribute('position')
+  const normals = clonedPieceGeoemtry.getAttribute('normal')
   const vertexCount = positions.count
 
   const colors = []
-  const normals = []
-
-  const vA = new THREE.Vector3()
-  const vB = new THREE.Vector3()
-  const vC = new THREE.Vector3()
-  const cb = new THREE.Vector3()
-  const ab = new THREE.Vector3()
 
   for (let triangleIndex = 0; triangleIndex < vertexCount; triangleIndex += 3) {
-    let base = triangleIndex * 3
 
-    vA.x = positions.array[base++]
-    vA.y = positions.array[base++]
-    vA.z = positions.array[base++]
-
-    vB.x = positions.array[base++]
-    vB.y = positions.array[base++]
-    vB.z = positions.array[base++]
-
-    vC.x = positions.array[base++]
-    vC.y = positions.array[base++]
-    vC.z = positions.array[base++]
-
-    cb.subVectors(vC, vB)
-    ab.subVectors(vA, vB)
-    cb.cross(ab)
-    cb.normalize()
-
-    const faceNormal = cb
-
-    normals.push(faceNormal.x, faceNormal.y, faceNormal.z)
-    normals.push(faceNormal.x, faceNormal.y, faceNormal.z)
-    normals.push(faceNormal.x, faceNormal.y, faceNormal.z)
+    let arrayIndex = triangleIndex * 3
+    const normalX = normals.array[arrayIndex++]
+    const normalY = normals.array[arrayIndex++]
+    const normalZ = normals.array[arrayIndex++]
+    const faceNormal = new THREE.Vector3(normalX, normalY, normalZ)
 
     let color = COLOUR_TABLE['-']
     U.closeTo(faceNormal.y, 1) && (color = COLOUR_TABLE[piece.faces.up])
@@ -133,13 +109,14 @@ const setGeometryFaceColors = (piece, pieceGeometry) => {
     U.closeTo(faceNormal.x, 1) && (color = COLOUR_TABLE[piece.faces.right])
     U.closeTo(faceNormal.z, 1) && (color = COLOUR_TABLE[piece.faces.front])
     U.closeTo(faceNormal.z, -1) && (color = COLOUR_TABLE[piece.faces.back])
+
     colors.push(color.r, color.g, color.b)
     colors.push(color.r, color.g, color.b)
     colors.push(color.r, color.g, color.b)
   }
 
   clonedPieceGeoemtry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
-  clonedPieceGeoemtry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3))
+
   return clonedPieceGeoemtry
 }
 
