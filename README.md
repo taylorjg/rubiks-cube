@@ -21,10 +21,10 @@ The following query params can be added:
 
 ## Examples
 
-* https://rubiks-cube-jt.herokuapp.com?speed=250
-* https://rubiks-cube-jt.herokuapp.com?speed=250&moves=10&size=2
-* https://rubiks-cube-jt.herokuapp.com?speed=250&size=4
-* https://rubiks-cube-jt.herokuapp.com?speed=250&size=4&axes
+* https://taylorjg.github.io/rubiks-cube?speed=250
+* https://taylorjg.github.io/rubiks-cube?speed=250&moves=10&size=2
+* https://taylorjg.github.io/rubiks-cube?speed=250&size=4
+* https://taylorjg.github.io/rubiks-cube?speed=250&size=4&axes
 
 # TODO
 
