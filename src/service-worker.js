@@ -1,7 +1,7 @@
 import packageJson from '../package.json'
 
 const pos = location.pathname.lastIndexOf('/')
-const pathname = pos >= 0 ? location.pathname.substr(0, pos) : pathname
+const pathname = pos >= 0 ? location.pathname.substr(0, pos) : location.pathname
 const base = location.origin + pathname
 
 const CURRENT_CACHE_NAME = `cache-${packageJson.version}`
