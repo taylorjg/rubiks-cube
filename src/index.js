@@ -7,7 +7,7 @@ import * as U from '../logic/utils'
 const url = new URL(document.location)
 const searchParams = url.searchParams
 
-const queryParamInt = (paramName, defaultValue, min, max) => {
+const queryParamInt = (paramName, min, max, defaultValue) => {
   const clamp = v => {
     const localMin = min !== undefined ? min : Number.MIN_SAFE_INTEGER
     const localMax = max !== undefined ? max : Number.MAX_SAFE_INTEGER
@@ -20,7 +20,7 @@ const queryParamInt = (paramName, defaultValue, min, max) => {
   return clamp(value)
 }
 
-const COLOUR_TABLE = {
+const COLOR_TABLE = {
   'U': new THREE.Color('blue'),
   'D': new THREE.Color('green'),
   'L': new THREE.Color('red'),
@@ -30,10 +30,10 @@ const COLOUR_TABLE = {
   '-': new THREE.Color(0x282828)
 }
 
-const CUBE_SIZE = queryParamInt('size', 3, 2, 5)
-const SPEED_MILLISECONDS = queryParamInt('speed', 750, 100, 1000)
-const NUM_RANDOM_MOVES = queryParamInt('moves', 25, 0, 1000)
-const DELAY_MS = queryParamInt('delay', 1000, 0, 5000)
+const CUBE_SIZE = queryParamInt('size', 2, 5, 3)
+const SPEED_MILLISECONDS = queryParamInt('speed', 100, 1000, 750)
+const NUM_RANDOM_MOVES = queryParamInt('moves', 0, 100, 25)
+const DELAY_MS = queryParamInt('delay', 0, 5000, 1000)
 const AXES_ENABLED = searchParams.has('axes')
 
 const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
@@ -86,29 +86,30 @@ const loadGeometry = url =>
       reject)
   })
 
-const setGeometryFaceColors = (piece, pieceGeometry) => {
+const lookupColorForFaceNormal = (piece, normalX, normalY, normalZ) => {
+  if (U.closeTo(normalY, 1)) return COLOR_TABLE[piece.faces.up]
+  if (U.closeTo(normalY, -1)) return COLOR_TABLE[piece.faces.down]
+  if (U.closeTo(normalX, -1)) return COLOR_TABLE[piece.faces.left]
+  if (U.closeTo(normalX, 1)) return COLOR_TABLE[piece.faces.right]
+  if (U.closeTo(normalZ, 1)) return COLOR_TABLE[piece.faces.front]
+  if (U.closeTo(normalZ, -1)) return COLOR_TABLE[piece.faces.back]
+  return COLOR_TABLE['-']
+}
+
+const setGeometryVertexColors = (piece, pieceGeometry) => {
   const clonedPieceGeoemtry = pieceGeometry.clone()
-  const positions = clonedPieceGeoemtry.getAttribute('position')
-  const normals = clonedPieceGeoemtry.getAttribute('normal')
-  const vertexCount = positions.count
+  const normalAttribute = clonedPieceGeoemtry.getAttribute('normal')
 
   const colors = []
 
-  for (let triangleIndex = 0; triangleIndex < vertexCount; triangleIndex += 3) {
+  for (let normalIndex = 0; normalIndex < normalAttribute.count; normalIndex += 3) {
 
-    let arrayIndex = triangleIndex * 3
-    const normalX = normals.array[arrayIndex++]
-    const normalY = normals.array[arrayIndex++]
-    const normalZ = normals.array[arrayIndex++]
-    const faceNormal = new THREE.Vector3(normalX, normalY, normalZ)
+    let arrayIndex = normalIndex * normalAttribute.itemSize
+    const normalX = normalAttribute.array[arrayIndex++]
+    const normalY = normalAttribute.array[arrayIndex++]
+    const normalZ = normalAttribute.array[arrayIndex++]
 
-    let color = COLOUR_TABLE['-']
-    U.closeTo(faceNormal.y, 1) && (color = COLOUR_TABLE[piece.faces.up])
-    U.closeTo(faceNormal.y, -1) && (color = COLOUR_TABLE[piece.faces.down])
-    U.closeTo(faceNormal.x, -1) && (color = COLOUR_TABLE[piece.faces.left])
-    U.closeTo(faceNormal.x, 1) && (color = COLOUR_TABLE[piece.faces.right])
-    U.closeTo(faceNormal.z, 1) && (color = COLOUR_TABLE[piece.faces.front])
-    U.closeTo(faceNormal.z, -1) && (color = COLOUR_TABLE[piece.faces.back])
+    const color = lookupColorForFaceNormal(piece, normalX, normalY, normalZ)
 
     colors.push(color.r, color.g, color.b)
     colors.push(color.r, color.g, color.b)
@@ -128,7 +129,7 @@ const createUiPieces = (cube, pieceGeometry) => {
 }
 
 const createUiPiece = (piece, pieceGeometry) => {
-  const pieceGeometryWithColors = setGeometryFaceColors(piece, pieceGeometry)
+  const pieceGeometryWithColors = setGeometryVertexColors(piece, pieceGeometry)
   const uiPiece = new THREE.Mesh(pieceGeometryWithColors, PIECE_MATERIAL)
   uiPiece.scale.set(0.5, 0.5, 0.5)
   uiPiece.userData = piece.id
@@ -271,31 +272,31 @@ const init = async () => {
   globals.camera.lookAt(new THREE.Vector3(0, 0, 0))
   globals.scene.add(globals.camera)
 
-  const LIGHT_COLOUR = 0xffffff
+  const LIGHT_COLOR = 0xffffff
   const LIGHT_INTENSITY = 2
   const LIGHT_DISTANCE = 4
 
-  const light1 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  const light1 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY)
   light1.position.set(0, 0, LIGHT_DISTANCE)
   globals.scene.add(light1)
 
-  const light2 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  const light2 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY)
   light2.position.set(0, 0, -LIGHT_DISTANCE)
   globals.scene.add(light2)
 
-  const light3 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  const light3 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY)
   light3.position.set(0, LIGHT_DISTANCE, 0)
   globals.scene.add(light3)
 
-  const light4 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  const light4 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY)
   light4.position.set(0, -LIGHT_DISTANCE, 0)
   globals.scene.add(light4)
 
-  const light5 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  const light5 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY)
   light5.position.set(LIGHT_DISTANCE, 0, 0)
   globals.scene.add(light5)
 
-  const light6 = new THREE.DirectionalLight(LIGHT_COLOUR, LIGHT_INTENSITY)
+  const light6 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY)
   light6.position.set(-LIGHT_DISTANCE, 0, 0)
   globals.scene.add(light6)
 
