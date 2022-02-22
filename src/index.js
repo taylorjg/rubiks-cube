@@ -2,9 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { injectGlobal } from '@emotion/css'
 import { createTheme, ThemeProvider } from '@mui/material'
-import App from './App'
+import Settings from "./Settings"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-import { init } from './three-app'
+import threeApp from './three-app'
 
 const darkTheme = createTheme({
   palette: {
@@ -26,10 +26,12 @@ injectGlobal`
   }
 `
 
+const threeAppActions = threeApp()
+
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={darkTheme}>
-      <App />
+      <Settings threeAppActions={threeAppActions} />
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('container')
@@ -40,4 +42,4 @@ ReactDOM.render(
 // Learn more about service workers: https://cra.link/PWA
 serviceWorkerRegistration.unregister()
 
-init()
+threeAppActions.init()
