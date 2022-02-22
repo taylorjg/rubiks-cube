@@ -1,34 +1,61 @@
 {
   "name": "rubiks-cube",
+  "description": "Rubik's Cube",
   "version": "0.0.53",
-  "description": "Rubik's cube solver",
-  "scripts": {
-    "eslint": "eslint",
-    "build": "webpack",
-    "start": "webpack serve --port 3050 --mode development",
-    "deploy": "npm run build && gh-pages -d build",
-    "test": "mocha -r esm"
-  },
-  "author": "Jonathan Taylor",
-  "license": "MIT",
+  "private": true,
   "dependencies": {
-    "gh-pages": "^3.2.3",
+    "@emotion/css": "^11.7.1",
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.4.2",
+    "@mui/material": "^5.4.3",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
     "mathjs": "^10.1.1",
-    "three": "^0.137.5"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "5.0.0",
+    "three": "^0.137.5",
+    "web-vitals": "^0.2.4",
+    "workbox-background-sync": "^5.1.4",
+    "workbox-broadcast-update": "^5.1.4",
+    "workbox-cacheable-response": "^5.1.4",
+    "workbox-core": "^5.1.4",
+    "workbox-expiration": "^5.1.4",
+    "workbox-google-analytics": "^5.1.4",
+    "workbox-navigation-preload": "^5.1.4",
+    "workbox-precaching": "^5.1.4",
+    "workbox-range-requests": "^5.1.4",
+    "workbox-routing": "^5.1.4",
+    "workbox-strategies": "^5.1.4",
+    "workbox-streams": "^5.1.4"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/taylorjg/rubiks-cube.git"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "copy-webpack-plugin": "^10.2.4",
-    "eslint": "^7.4.0",
-    "esm": "^3.2.25",
-    "html-webpack-plugin": "^5.5.0",
-    "mocha": "^8.0.1",
-    "webpack": "^5.69.1",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
+    "gh-pages": "^3.2.3"
   }
 }
