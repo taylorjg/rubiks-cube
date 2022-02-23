@@ -3,6 +3,7 @@ import { Drawer } from '@mui/material'
 import SettingsIcon from '@mui/icons-material/Settings'
 import styled from '@emotion/styled'
 import SettingsContent from './SettingsContent'
+import { useQueryParams } from './useQueryParams'
 
 const StyledSettingsIcon = styled(SettingsIcon)`
   color: #ffffff;
@@ -20,11 +21,18 @@ const StyledSettingsIcon = styled(SettingsIcon)`
 const Settings = ({ threeAppActions }) => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const queryParams = useQueryParams()
 
   const [settings, setSettings] = useState({
     cubeSize: 3,
     autoRotate: true
   })
+
+  useEffect(() => {
+    const cubeSize = queryParams.getNumber('size', 3)
+    const autoRotate = queryParams.getBool('autoRotate', true)
+    setSettings({ cubeSize, autoRotate })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     threeAppActions.setCubeSize(settings.cubeSize)

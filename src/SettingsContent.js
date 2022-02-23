@@ -55,7 +55,7 @@ const SettingsContent = ({ initialValues, onOK, onCancel }) => {
           label="Auto Rotate"
         />
       </div>
-      <div style={{ marginTop: "2rem", display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ marginTop: "3rem", display: "flex", justifyContent: "flex-end" }}>
         <Button size="small" onClick={onCancel} style={{ marginRight: ".5rem" }}>Cancel</Button>
         <Button variant="contained" size="small" onClick={() => onOK(settings)}>OK</Button>
       </div>

@@ -333,7 +333,7 @@ const threeApp = () => {
   }
 
   const setCubeSize = cubeSize => {
-    // globals.cubeSize = cubeSize
+    // TODO: globals.cubeSize = cubeSize
   }
 
   const setAutoRotate = autoRotate => {
