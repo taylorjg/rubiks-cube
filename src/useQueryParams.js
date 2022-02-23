@@ -31,9 +31,9 @@ const parseBool = s => {
 
 const identity = value => value
 
-export const useQueryParams = () => {
+export const useQueryParams = search => {
 
-  const [searchParams] = useState(() => new URLSearchParams(window.location.search))
+  const [searchParams] = useState(() => new URLSearchParams(search ?? window.location.search))
 
   const getParam = (name, transform = identity) => {
     const value = searchParams.get(name)
@@ -41,13 +41,17 @@ export const useQueryParams = () => {
   }
 
   const getString = (name, defaultValue) => getParam(name) ?? defaultValue
-  const getNumber = (name, defaultValue) => getParam(name, Number) ?? defaultValue
+  const getNumber = (name, defaultValue) => searchParams.has(name) ? getParam(name, Number) : defaultValue
   const getBool = (name, defaultValue) => searchParams.has(name) ? getParam(name, parseBool) : defaultValue
 
+  const getStrings = (name, defaultValue) => searchParams.getAll(name) ?? defaultValue
+  const getNumbers = (name, defaultValue) => searchParams.getAll(name).map(Number) ?? defaultValue
+
   return {
-    searchParams,
     getString,
     getNumber,
-    getBool
+    getBool,
+    getStrings,
+    getNumbers
   }
 }
