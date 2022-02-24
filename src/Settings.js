@@ -25,17 +25,20 @@ const Settings = ({ threeAppActions }) => {
 
   const [settings, setSettings] = useState({
     cubeSize: 3,
-    autoRotate: true
+    autoRotate: true,
+    axesEnabled: false
   })
 
   useEffect(() => {
-    const cubeSize = queryParams.getNumber('size', 3)
+    const cubeSize = queryParams.getNumber('cubeSize', 3)
     const autoRotate = queryParams.getBool('autoRotate', true)
-    setSettings({ cubeSize, autoRotate })
+    const axesEnabled = queryParams.getBool('axesEnabled', false)
+    setSettings({ cubeSize, axesEnabled, autoRotate })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     threeAppActions.setCubeSize(settings.cubeSize)
+    threeAppActions.setAxesEnabled(settings.axesEnabled)
     threeAppActions.setAutoRotate(settings.autoRotate)
   }, [settings, threeAppActions])
 

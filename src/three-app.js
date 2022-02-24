@@ -30,12 +30,6 @@ const COLOR_TABLE = {
   '-': new THREE.Color(0x282828)
 }
 
-const CUBE_SIZE = queryParamInt('size', 2, 5, 3)
-const SPEED_MILLISECONDS = queryParamInt('speed', 100, 1000, 750)
-const NUM_RANDOM_MOVES = queryParamInt('moves', 10, 100, 25)
-const DELAY_MS = queryParamInt('delay', 0, 5000, 1000)
-const AXES_ENABLED = searchParams.has('axes')
-
 const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
   vertexColors: true,
   metalness: .5,
@@ -47,16 +41,27 @@ const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
 const threeApp = () => {
 
   const globals = {
+    pieceGeometry: undefined,
     cube: undefined,
     renderer: undefined,
     camera: undefined,
     scene: undefined,
     puzzleGroup: undefined,
     animationGroup: undefined,
+    axesHelper: undefined,
     controls: undefined,
     clock: undefined,
-    animationMixer: undefined
+    animationMixer: undefined,
+    cubeSize: 3,
+    cubeSizeChanged: true,
+    speed: 750,
+    axesEnabled: false
   }
+
+  globals.speed = queryParamInt('speed', 100, 1000, 750)
+  const NUM_RANDOM_MOVES = queryParamInt('randomMoves', 10, 100, 25)
+  const BEFORE_SOLVING_DELAY = queryParamInt('beforeDelay', 0, 5000, 2000)
+  const AFTER_SOLVING_DELAY = queryParamInt('afterDelay', 0, 5000, 2000)
 
   const makeRotationMatrix4 = rotationMatrix3 => {
     const n11 = rotationMatrix3.get([0, 0])
@@ -98,9 +103,9 @@ const threeApp = () => {
     return COLOR_TABLE['-']
   }
 
-  const setGeometryVertexColors = (piece, pieceGeometry) => {
-    const clonedPieceGeoemtry = pieceGeometry.clone()
-    const normalAttribute = clonedPieceGeoemtry.getAttribute('normal')
+  const setGeometryVertexColors = (piece) => {
+    const pieceGeoemtry = globals.pieceGeometry.clone()
+    const normalAttribute = pieceGeoemtry.getAttribute('normal')
 
     const colors = []
 
@@ -118,20 +123,25 @@ const threeApp = () => {
       colors.push(color.r, color.g, color.b)
     }
 
-    clonedPieceGeoemtry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
+    pieceGeoemtry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
 
-    return clonedPieceGeoemtry
+    return pieceGeoemtry
   }
 
-  const createUiPieces = (cube, pieceGeometry) => {
-    cube.forEach(piece => {
-      const uiPiece = createUiPiece(piece, pieceGeometry)
+  const recreateUiPieces = () => {
+    globals.cube = L.getSolvedCube(globals.cubeSize)
+    createUiPieces()
+  }
+
+  const createUiPieces = () => {
+    globals.cube.forEach(piece => {
+      const uiPiece = createUiPiece(piece)
       globals.puzzleGroup.add(uiPiece)
     })
   }
 
-  const createUiPiece = (piece, pieceGeometry) => {
-    const pieceGeometryWithColors = setGeometryVertexColors(piece, pieceGeometry)
+  const createUiPiece = piece => {
+    const pieceGeometryWithColors = setGeometryVertexColors(piece)
     const uiPiece = new THREE.Mesh(pieceGeometryWithColors, PIECE_MATERIAL)
     uiPiece.scale.set(0.5, 0.5, 0.5)
     uiPiece.userData = piece.id
@@ -140,7 +150,7 @@ const threeApp = () => {
   }
 
   const resetUiPiece = (uiPiece, piece) => {
-    const isEvenSizedCube = CUBE_SIZE % 2 === 0
+    const isEvenSizedCube = globals.cubeSize % 2 === 0
     const adjustValue = v => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v
     uiPiece.position.x = adjustValue(piece.x)
     uiPiece.position.y = adjustValue(piece.y)
@@ -176,7 +186,7 @@ const threeApp = () => {
   const createAnimationClip = move => {
     const numTurns = move.numTurns
     const t0 = 0
-    const t1 = numTurns * (SPEED_MILLISECONDS / 1000)
+    const t1 = numTurns * (globals.speed / 1000)
     const times = [t0, t1]
     const values = []
     const startQuaternion = new THREE.Quaternion()
@@ -193,10 +203,14 @@ const threeApp = () => {
 
   const animateMoves = (moves, nextMoveIndex = 0) => {
 
+    if (globals.cubeSizeChanged) {
+      return setTimeout(scramble, 0)
+    }
+
     const move = moves[nextMoveIndex]
 
     if (!move) {
-      return setTimeout(scramble, 2000)
+      return setTimeout(scramble, AFTER_SOLVING_DELAY)
     }
 
     const pieces = L.getPieces(globals.cube, move.coordsList)
@@ -212,7 +226,7 @@ const threeApp = () => {
       for (const uiPiece of uiPieces) {
         uiPiece.applyMatrix4(rotationMatrix4)
       }
-      setTimeout(animateMoves, SPEED_MILLISECONDS, moves, nextMoveIndex + 1)
+      setTimeout(animateMoves, globals.speed, moves, nextMoveIndex + 1)
     }
 
     globals.animationMixer.addEventListener('finished', onFinished)
@@ -228,19 +242,33 @@ const threeApp = () => {
   const showSolutionByCheating = randomMoves => {
     const solutionMoves = randomMoves
       .map(move => move.oppositeMoveId)
-      .map(id => L.lookupMoveId(CUBE_SIZE, id))
+      .map(id => L.lookupMoveId(globals.cubeSize, id))
       .reverse()
     console.log(`solution moves: ${solutionMoves.map(move => move.id).join(' ')}`)
     animateMoves(solutionMoves)
   }
 
   const scramble = () => {
-    const randomMoves = U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(CUBE_SIZE))
+
+    if (globals.cubeSizeChanged) {
+      globals.cubeSizeChanged = false
+      globals.puzzleGroup.clear()
+      globals.animationGroup.clear()
+      globals.controls.reset()
+      const cameraX = globals.cubeSize + 1
+      const cameraY = globals.cubeSize + 1
+      const cameraZ = globals.cubeSize * 4
+      globals.camera.position.set(cameraX, cameraY, cameraZ)
+      globals.camera.lookAt(new THREE.Vector3(0, 0, 0))
+      recreateUiPieces()
+    }
+
+    const randomMoves = U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(globals.cubeSize))
     L.removeRedundantMoves(randomMoves)
     console.log(`random moves: ${randomMoves.map(move => move.id).join(' ')}`)
-    globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(CUBE_SIZE))
+    globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(globals.cubeSize))
     resetUiPieces(globals.cube)
-    setTimeout(showSolutionByCheating, DELAY_MS, randomMoves)
+    setTimeout(showSolutionByCheating, BEFORE_SOLVING_DELAY, randomMoves)
   }
 
   const init = async () => {
@@ -293,11 +321,6 @@ const threeApp = () => {
     light6.position.set(-LIGHT_DISTANCE, 0, 0)
     globals.scene.add(light6)
 
-    if (AXES_ENABLED) {
-      const axesHelper = new THREE.AxesHelper(5)
-      globals.scene.add(axesHelper)
-    }
-
     globals.puzzleGroup = new THREE.Group()
     globals.scene.add(globals.puzzleGroup)
 
@@ -315,30 +338,48 @@ const threeApp = () => {
     globals.clock = new THREE.Clock()
     globals.animationMixer = new THREE.AnimationMixer()
 
-    globals.cube = L.getSolvedCube(CUBE_SIZE)
-    const pieceGeometry = await loadGeometry('cube-bevelled.glb')
-    createUiPieces(globals.cube, pieceGeometry)
+    globals.cube = L.getSolvedCube(globals.cubeSize)
+    globals.pieceGeometry = await loadGeometry('cube-bevelled.glb')
+    createUiPieces()
 
     animate()
     scramble()
   }
 
-  const setCubeSize = cubeSize => {
-    // TODO: need to cancel the current 'showSolutionByCheating'
-    // TODO: need to remove all UI pieces from globals.puzzleGroup and globals.animationGroup
-    // TODO: globals.cubeSize = cubeSize
-    // globals.cube = L.getSolvedCube(globals.cubeSize)
-    // createUiPieces(globals.cube, pieceGeometry)
+  const addAxesHelper = () => {
+    globals.axesHelper = new THREE.AxesHelper(5)
+    globals.scene.add(globals.axesHelper)
   }
 
-  const setAutoRotate = autoRotate => {
-    globals.controls.autoRotate = autoRotate
+  const removeAxesHelper = () => {
+    globals.scene.remove(globals.axesHelper)
+    globals.axesHelper = undefined
+  }
+
+  const setCubeSize = value => {
+    globals.cubeSizeChanged = value !== globals.cubeSize
+    globals.cubeSize = value
+  }
+
+  const setSpeed = value => {
+    globals.speed = value
+  }
+
+  const setAutoRotate = value => {
+    globals.controls.autoRotate = value
+  }
+
+  const setAxesEnabled = value => {
+    globals.axesEnabled = value
+    globals.axesEnabled ? addAxesHelper() : removeAxesHelper()
   }
 
   return {
     init,
     setCubeSize,
-    setAutoRotate
+    setSpeed,
+    setAutoRotate,
+    setAxesEnabled
   }
 }
 
