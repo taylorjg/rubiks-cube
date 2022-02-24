@@ -35,23 +35,32 @@ export const useQueryParams = search => {
 
   const [searchParams] = useState(() => new URLSearchParams(search ?? window.location.search))
 
-  const getParam = (name, transform = identity) => {
-    const value = searchParams.get(name)
-    return transform(value)
+  const getParam = (name, defaultValue, transform = identity) => {
+    return searchParams.has(name)
+      ? transform(searchParams.get(name))
+      : defaultValue
   }
 
-  const getString = (name, defaultValue) => getParam(name) ?? defaultValue
-  const getNumber = (name, defaultValue) => searchParams.has(name) ? getParam(name, Number) : defaultValue
-  const getBool = (name, defaultValue) => searchParams.has(name) ? getParam(name, parseBool) : defaultValue
+  const getParams = (name, defaultValue, transform = identity) => {
+    return searchParams.has(name)
+      ? searchParams.getAll(name).map(transform)
+      : defaultValue
+  }
 
-  const getStrings = (name, defaultValue) => searchParams.getAll(name) ?? defaultValue
-  const getNumbers = (name, defaultValue) => searchParams.getAll(name).map(Number) ?? defaultValue
+  const getString = (name, defaultValue) => getParam(name, defaultValue)
+  const getNumber = (name, defaultValue) => getParam(name, defaultValue, Number)
+  const getBool = (name, defaultValue) => getParam(name, defaultValue, parseBool)
+
+  const getStrings = (name, defaultValue) => getParams(name, defaultValue)
+  const getNumbers = (name, defaultValue) => getParams(name, defaultValue, Number)
+  const getBools = (name, defaultValue) => getParams(name, defaultValue, parseBool)
 
   return {
     getString,
     getNumber,
     getBool,
     getStrings,
-    getNumbers
+    getNumbers,
+    getBools
   }
 }

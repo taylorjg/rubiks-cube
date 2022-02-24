@@ -245,15 +245,6 @@ const threeApp = () => {
 
   const init = async () => {
 
-    // if ('serviceWorker' in navigator) {
-    //   try {
-    //     const registration = await navigator.serviceWorker.register('service-worker.js')
-    //     console.log('Successfully registered service worker', registration)
-    //   } catch (error) {
-    //     console.error(`Failed to register service worker: ${error.message}`)
-    //   }
-    // }
-
     const container = document.getElementById('container')
     const w = container.offsetWidth
     const h = container.offsetHeight
@@ -333,7 +324,11 @@ const threeApp = () => {
   }
 
   const setCubeSize = cubeSize => {
+    // TODO: need to cancel the current 'showSolutionByCheating'
+    // TODO: need to remove all UI pieces from globals.puzzleGroup and globals.animationGroup
     // TODO: globals.cubeSize = cubeSize
+    // globals.cube = L.getSolvedCube(globals.cubeSize)
+    // createUiPieces(globals.cube, pieceGeometry)
   }
 
   const setAutoRotate = autoRotate => {
