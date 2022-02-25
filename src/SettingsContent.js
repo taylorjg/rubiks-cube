@@ -1,5 +1,4 @@
-import { useState } from "react"
-import { Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Switch, Typography } from '@mui/material'
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Switch, Typography } from '@mui/material'
 import styled from '@emotion/styled'
 
 const StyledContent = styled.div`
@@ -17,29 +16,24 @@ const StyledControls = styled.div`
   }
 `
 
-const StyledButtons = styled.div`
-  margin-top: 2rem;
-  display: flex;
-  justify-content: flex-end;
-`
-
-const SettingsContent = ({ initialValues, onOK, onCancel }) => {
-
-  const [settings, setSettings] = useState({ ...initialValues })
+const SettingsContent = ({ initialValues, saveSettings, threeAppActions }) => {
 
   const handleChangeCubeSize = event => {
     const cubeSize = Number(event.target.value)
-    setSettings(currentValues => ({ ...currentValues, cubeSize }))
+    saveSettings({ ...initialValues, cubeSize })
+    threeAppActions.setCubeSize(cubeSize)
   }
 
   const handleChangeAutoRotate = event => {
     const autoRotate = event.target.checked
-    setSettings(currentValues => ({ ...currentValues, autoRotate }))
+    saveSettings({ ...initialValues, autoRotate })
+    threeAppActions.setAutoRotate(autoRotate)
   }
 
   const handleChangeAxesEnabled = event => {
     const axesEnabled = event.target.checked
-    setSettings(currentValues => ({ ...currentValues, axesEnabled }))
+    saveSettings({ ...initialValues, axesEnabled })
+    threeAppActions.setAxesEnabled(axesEnabled)
   }
 
   return (
@@ -55,7 +49,7 @@ const SettingsContent = ({ initialValues, onOK, onCancel }) => {
               row
               aria-labelledby="cube-size-label"
               name="cube-size-group"
-              value={settings.cubeSize}
+              value={initialValues.cubeSize}
               onChange={handleChangeCubeSize}
             >
               <FormControlLabel value="2" control={<Radio size="small" />} label="2" />
@@ -70,7 +64,7 @@ const SettingsContent = ({ initialValues, onOK, onCancel }) => {
           <FormControlLabel
             control={
               <Switch
-                checked={settings.autoRotate}
+                checked={initialValues.autoRotate}
                 size="small"
                 onClick={handleChangeAutoRotate}
               />
@@ -83,7 +77,7 @@ const SettingsContent = ({ initialValues, onOK, onCancel }) => {
           <FormControlLabel
             control={
               <Switch
-                checked={settings.axesEnabled}
+                checked={initialValues.axesEnabled}
                 size="small"
                 onClick={handleChangeAxesEnabled}
               />
@@ -92,10 +86,6 @@ const SettingsContent = ({ initialValues, onOK, onCancel }) => {
           />
         </div>
       </StyledControls>
-      <StyledButtons>
-        <Button size="small" onClick={onCancel} style={{ marginRight: ".5rem" }}>Cancel</Button>
-        <Button variant="contained" size="small" onClick={() => onOK(settings)}>OK</Button>
-      </StyledButtons>
     </StyledContent>
   )
 }

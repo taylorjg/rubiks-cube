@@ -36,12 +36,6 @@ const Settings = ({ threeAppActions }) => {
     setSettings({ cubeSize, axesEnabled, autoRotate })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    threeAppActions.setCubeSize(settings.cubeSize)
-    threeAppActions.setAxesEnabled(settings.axesEnabled)
-    threeAppActions.setAutoRotate(settings.autoRotate)
-  }, [settings, threeAppActions])
-
   const openDrawer = () => {
     setIsDrawerOpen(true)
   }
@@ -50,20 +44,15 @@ const Settings = ({ threeAppActions }) => {
     setIsDrawerOpen(false)
   }
 
-  const onOK = (settings) => {
-    setIsDrawerOpen(false)
-    setSettings(settings)
-  }
-
-  const onCancel = () => {
-    setIsDrawerOpen(false)
-  }
-
   return (
     <>
       <StyledSettingsIcon onClick={openDrawer} />
       <Drawer anchor='left' open={isDrawerOpen} onClose={closeDrawer}>
-        <SettingsContent initialValues={settings} onOK={onOK} onCancel={onCancel} />
+        <SettingsContent
+          initialValues={settings}
+          saveSettings={setSettings}
+          threeAppActions={threeAppActions}
+        />
       </Drawer>
     </>
   )
