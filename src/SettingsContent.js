@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Switch, Typography } from '@mui/material'
+import { Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Switch, Typography } from '@mui/material'
 import styled from '@emotion/styled'
 
 const StyledContent = styled.div`
@@ -13,7 +13,7 @@ const StyledControls = styled.div`
   flex-direction: column;
   align-items: flex-start;
   > * {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 `
 
@@ -49,20 +49,20 @@ const SettingsContent = ({ initialValues, onOK, onCancel }) => {
       </Typography>
       <StyledControls>
         <div>
-          <FormControl variant="standard" size="small" sx={{ minWidth: '10rem', my: '1rem' }}>
-            <InputLabel id="cube-size-label">Cube Size</InputLabel>
-            <Select
-              labelId="cube-size-label"
-              id="cube-size"
+          <FormControl sx={{ mt: '2rem' }}>
+            <FormLabel id="cube-size-label">Cube Size</FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="cube-size-label"
+              name="cube-size-group"
               value={settings.cubeSize}
-              label="Cube Size"
               onChange={handleChangeCubeSize}
             >
-              <MenuItem value="2">2</MenuItem>
-              <MenuItem value="3">3</MenuItem>
-              <MenuItem value="4">4</MenuItem>
-              <MenuItem value="5">5</MenuItem>
-            </Select>
+              <FormControlLabel value="2" control={<Radio size="small" />} label="2" />
+              <FormControlLabel value="3" control={<Radio size="small" />} label="3" />
+              <FormControlLabel value="4" control={<Radio size="small" />} label="4" />
+              <FormControlLabel value="5" control={<Radio size="small" />} label="5" />
+            </RadioGroup>
           </FormControl>
         </div>
 
