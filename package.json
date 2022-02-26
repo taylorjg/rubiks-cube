@@ -1,6 +1,6 @@
 {
   "name": "rubiks-cube",
-  "description": "Rubik's Cube",
+  "description": "A three.js visualisation of solving a Rubik's cube",
   "version": "0.0.53",
   "private": true,
   "dependencies": {
