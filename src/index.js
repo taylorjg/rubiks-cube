@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { injectGlobal } from '@emotion/css'
 import { createTheme, ThemeProvider } from '@mui/material'
 import Settings from "./Settings"
+import Version from "./Version"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import threeApp from './three-app'
 
@@ -32,6 +33,7 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={darkTheme}>
       <Settings threeAppActions={threeAppActions} />
+      <Version />
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('container')
