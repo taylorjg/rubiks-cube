@@ -369,6 +369,10 @@ const threeApp = () => {
     globals.controls.autoRotate = value
   }
 
+  const setAutoRotateSpeed = value => {
+    globals.controls.autoRotateSpeed = value
+  }
+
   const setAxesEnabled = value => {
     globals.axesEnabled = value
     globals.axesEnabled ? addAxesHelper() : removeAxesHelper()
@@ -379,6 +383,7 @@ const threeApp = () => {
     setCubeSize,
     setSpeed,
     setAutoRotate,
+    setAutoRotateSpeed,
     setAxesEnabled
   }
 }

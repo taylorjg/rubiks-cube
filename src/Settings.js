@@ -21,19 +21,31 @@ const StyledSettingsIcon = styled(SettingsIcon)`
 const Settings = ({ threeAppActions }) => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const queryParams = useQueryParams()
 
   const [settings, setSettings] = useState({
-    cubeSize: 3,
-    autoRotate: true,
-    axesEnabled: false
+    cubeSize: undefined,
+    autoRotate: undefined,
+    autoRotateSpeed: undefined,
+    axesEnabled: undefined
   })
+
+  const queryParams = useQueryParams()
 
   useEffect(() => {
     const cubeSize = queryParams.getNumber('cubeSize', 3)
     const autoRotate = queryParams.getBool('autoRotate', true)
+    const autoRotateSpeed = queryParams.getNumber('autoRotateSpeed', 1)
     const axesEnabled = queryParams.getBool('axesEnabled', false)
-    setSettings({ cubeSize, axesEnabled, autoRotate })
+    threeAppActions.setCubeSize(cubeSize)
+    threeAppActions.setAutoRotate(autoRotate)
+    threeAppActions.setAutoRotateSpeed(autoRotateSpeed)
+    threeAppActions.setAxesEnabled(axesEnabled)
+    setSettings({
+      cubeSize,
+      autoRotate,
+      autoRotateSpeed,
+      axesEnabled
+    })
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const openDrawer = () => {
