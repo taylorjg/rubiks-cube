@@ -22,31 +22,35 @@ const Settings = ({ threeAppActions }) => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
-  const [settings, setSettings] = useState({
-    cubeSize: undefined,
-    autoRotate: undefined,
-    autoRotateSpeed: undefined,
-    axesEnabled: undefined
-  })
-
   const queryParams = useQueryParams()
 
+  const [settings, setSettings] = useState(() => ({
+    cubeSize: queryParams.getNumber('cubeSize', 3),
+    autoRotate: queryParams.getBool('autoRotate', true),
+    autoRotateSpeed: queryParams.getNumber('autoRotateSpeed', 1),
+    axesEnabled: queryParams.getBool('axesEnabled', false)
+  }))
+
+  const [previousSettings, setPreviousSettings] = useState(() => {
+    const keys = Object.keys(settings)
+    return Object.fromEntries(keys.map(key => [key, undefined]))
+  })
+
   useEffect(() => {
-    const cubeSize = queryParams.getNumber('cubeSize', 3)
-    const autoRotate = queryParams.getBool('autoRotate', true)
-    const autoRotateSpeed = queryParams.getNumber('autoRotateSpeed', 1)
-    const axesEnabled = queryParams.getBool('axesEnabled', false)
-    threeAppActions.setCubeSize(cubeSize)
-    threeAppActions.setAutoRotate(autoRotate)
-    threeAppActions.setAutoRotateSpeed(autoRotateSpeed)
-    threeAppActions.setAxesEnabled(axesEnabled)
-    setSettings({
-      cubeSize,
-      autoRotate,
-      autoRotateSpeed,
-      axesEnabled
-    })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    if (settings.cubeSize !== previousSettings.cubeSize) {
+      threeAppActions.setCubeSize(settings.cubeSize)
+    }
+    if (settings.autoRotate !== previousSettings.autoRotate) {
+      threeAppActions.setAutoRotate(settings.autoRotate)
+    }
+    if (settings.autoRotateSpeed !== previousSettings.autoRotateSpeed) {
+      threeAppActions.setAutoRotateSpeed(settings.autoRotateSpeed)
+    }
+    if (settings.axesEnabled !== previousSettings.axesEnabled) {
+      threeAppActions.setAxesEnabled(settings.axesEnabled)
+    }
+    setPreviousSettings(settings)
+  }, [settings, previousSettings]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const openDrawer = () => {
     setIsDrawerOpen(true)
@@ -60,11 +64,7 @@ const Settings = ({ threeAppActions }) => {
     <>
       <StyledSettingsIcon onClick={openDrawer} />
       <Drawer anchor='left' open={isDrawerOpen} onClose={closeDrawer}>
-        <SettingsContent
-          initialValues={settings}
-          saveSettings={setSettings}
-          threeAppActions={threeAppActions}
-        />
+        <SettingsContent settings={settings} setSettings={setSettings} />
       </Drawer>
     </>
   )
