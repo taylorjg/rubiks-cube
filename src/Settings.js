@@ -26,8 +26,9 @@ const Settings = ({ threeAppActions }) => {
 
   const [settings, setSettings] = useState(() => ({
     cubeSize: queryParams.getNumber('cubeSize', 3),
+    animationSpeed: queryParams.getNumber('animationSpeed', 750),
     autoRotate: queryParams.getBool('autoRotate', true),
-    autoRotateSpeed: queryParams.getNumber('autoRotateSpeed', 1),
+    autoRotateSpeed: queryParams.getNumber('autoRotateSpeed', 1.0),
     axesEnabled: queryParams.getBool('axesEnabled', false)
   }))
 
@@ -39,6 +40,9 @@ const Settings = ({ threeAppActions }) => {
   useEffect(() => {
     if (settings.cubeSize !== previousSettings.cubeSize) {
       threeAppActions.setCubeSize(settings.cubeSize)
+    }
+    if (settings.animationSpeed !== previousSettings.animationSpeed) {
+      threeAppActions.setAnimationSpeed(settings.animationSpeed)
     }
     if (settings.autoRotate !== previousSettings.autoRotate) {
       threeAppActions.setAutoRotate(settings.autoRotate)

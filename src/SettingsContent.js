@@ -28,6 +28,31 @@ const CubeSizeSetting = ({ value, setValue }) => {
   )
 }
 
+const AnimationSpeedSetting = ({ value, setValue }) => {
+
+  const handleChange = event => {
+    setValue(event.target.value)
+  }
+
+  return (
+    <div>
+      <FormControl sx={{ width: '100%' }}>
+        <FormLabel id="animation-speed-label">Animation Speed</FormLabel>
+        <Slider
+          aria-labelledby="animation-speed-label-speed-label"
+          size="small"
+          min={100}
+          max={5000}
+          step={25}
+          value={value}
+          onChange={handleChange}
+          valueLabelDisplay="auto"
+        />
+      </FormControl>
+    </div>
+  )
+}
+
 const AutoRotateSetting = ({ value, setValue }) => {
 
   const handleChange = event => {
@@ -122,6 +147,7 @@ const SettingsContent = ({ settings, setSettings }) => {
     <StyledContent>
       <Typography variant="subtitle1" gutterBottom>Settings</Typography>
       <CubeSizeSetting {...createProps('cubeSize')} />
+      <AnimationSpeedSetting {...createProps('animationSpeed')} />
       <AutoRotateSetting {...createProps('autoRotate')} />
       <AutoRotateSpeedSetting {...createProps('autoRotateSpeed')} />
       <AxesEnabledSetting {...createProps('axesEnabled')} />

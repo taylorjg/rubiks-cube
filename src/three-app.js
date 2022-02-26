@@ -54,14 +54,14 @@ const threeApp = () => {
     animationMixer: undefined,
     cubeSize: 3,
     cubeSizeChanged: true,
-    speed: 750,
+    animationSpeed: 750,
     axesEnabled: false
   }
 
-  globals.speed = queryParamInt('speed', 100, 1000, 750)
+  globals.animationSpeed = queryParamInt('animationSpeed', 100, 1000, 750)
   const NUM_RANDOM_MOVES = queryParamInt('randomMoves', 10, 100, 25)
-  const BEFORE_SOLVING_DELAY = queryParamInt('beforeDelay', 0, 5000, 2000)
-  const AFTER_SOLVING_DELAY = queryParamInt('afterDelay', 0, 5000, 2000)
+  const BEFORE_DELAY = queryParamInt('beforeDelay', 0, 5000, 2000)
+  const AFTER_DELAY = queryParamInt('afterDelay', 0, 5000, 2000)
 
   const makeRotationMatrix4 = rotationMatrix3 => {
     const n11 = rotationMatrix3.get([0, 0])
@@ -186,7 +186,7 @@ const threeApp = () => {
   const createAnimationClip = move => {
     const numTurns = move.numTurns
     const t0 = 0
-    const t1 = numTurns * (globals.speed / 1000)
+    const t1 = numTurns * (globals.animationSpeed / 1000)
     const times = [t0, t1]
     const values = []
     const startQuaternion = new THREE.Quaternion()
@@ -210,7 +210,7 @@ const threeApp = () => {
     const move = moves[nextMoveIndex]
 
     if (!move) {
-      return setTimeout(scramble, AFTER_SOLVING_DELAY)
+      return setTimeout(scramble, AFTER_DELAY)
     }
 
     const pieces = L.getPieces(globals.cube, move.coordsList)
@@ -226,7 +226,7 @@ const threeApp = () => {
       for (const uiPiece of uiPieces) {
         uiPiece.applyMatrix4(rotationMatrix4)
       }
-      setTimeout(animateMoves, globals.speed, moves, nextMoveIndex + 1)
+      animateMoves(moves, nextMoveIndex + 1)
     }
 
     globals.animationMixer.addEventListener('finished', onFinished)
@@ -268,7 +268,7 @@ const threeApp = () => {
     console.log(`random moves: ${randomMoves.map(move => move.id).join(' ')}`)
     globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(globals.cubeSize))
     resetUiPieces(globals.cube)
-    setTimeout(showSolutionByCheating, BEFORE_SOLVING_DELAY, randomMoves)
+    setTimeout(showSolutionByCheating, BEFORE_DELAY, randomMoves)
   }
 
   const init = async () => {
@@ -361,8 +361,8 @@ const threeApp = () => {
     globals.cubeSize = value
   }
 
-  const setSpeed = value => {
-    globals.speed = value
+  const setAnimationSpeed = value => {
+    globals.animationSpeed = value
   }
 
   const setAutoRotate = value => {
@@ -381,7 +381,7 @@ const threeApp = () => {
   return {
     init,
     setCubeSize,
-    setSpeed,
+    setAnimationSpeed,
     setAutoRotate,
     setAutoRotateSpeed,
     setAxesEnabled
