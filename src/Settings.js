@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
-import { Drawer } from '@mui/material'
-import SettingsIcon from '@mui/icons-material/Settings'
-import styled from '@emotion/styled'
-import SettingsContent from './SettingsContent'
-import { useQueryParams } from './useQueryParams'
+import { useEffect, useState } from "react"
+import { Drawer } from "@mui/material"
+import SettingsIcon from "@mui/icons-material/Settings"
+import styled from "@emotion/styled"
+import SettingsContent from "./SettingsContent"
+import { useQueryParams } from "./useQueryParams"
 
 const StyledSettingsIcon = styled(SettingsIcon)`
   color: #ffffff;
@@ -25,11 +25,11 @@ const Settings = ({ threeAppActions }) => {
   const queryParams = useQueryParams()
 
   const [settings, setSettings] = useState(() => ({
-    cubeSize: queryParams.getNumber('cubeSize', 3),
-    animationSpeed: queryParams.getNumber('animationSpeed', 750),
-    autoRotate: queryParams.getBool('autoRotate', true),
-    autoRotateSpeed: queryParams.getNumber('autoRotateSpeed', 1.0),
-    axesEnabled: queryParams.getBool('axesEnabled', false)
+    cubeSize: queryParams.getNumber("cubeSize", 3),
+    animationSpeed: queryParams.getNumber("animationSpeed", 750),
+    autoRotate: queryParams.getBool("autoRotate", true),
+    autoRotateSpeed: queryParams.getNumber("autoRotateSpeed", 1.0),
+    axesEnabled: queryParams.getBool("axesEnabled", false)
   }))
 
   const [previousSettings, setPreviousSettings] = useState(() => {
@@ -67,7 +67,7 @@ const Settings = ({ threeAppActions }) => {
   return (
     <>
       <StyledSettingsIcon onClick={openDrawer} />
-      <Drawer anchor='left' open={isDrawerOpen} onClose={closeDrawer}>
+      <Drawer anchor="left" open={isDrawerOpen} onClose={closeDrawer}>
         <SettingsContent settings={settings} setSettings={setSettings} />
       </Drawer>
     </>

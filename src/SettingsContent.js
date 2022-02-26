@@ -1,5 +1,5 @@
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Slider, Switch, Typography } from '@mui/material'
-import styled from '@emotion/styled'
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material"
+import styled from "@emotion/styled"
 
 const CubeSizeSetting = ({ value, setValue }) => {
 
@@ -9,7 +9,7 @@ const CubeSizeSetting = ({ value, setValue }) => {
 
   return (
     <div>
-      <FormControl sx={{ mt: '2rem' }}>
+      <FormControl sx={{ mt: "2rem" }}>
         <FormLabel id="cube-size-label">Cube Size</FormLabel>
         <RadioGroup
           row
@@ -36,7 +36,7 @@ const AnimationSpeedSetting = ({ value, setValue }) => {
 
   return (
     <div>
-      <FormControl sx={{ width: '100%' }}>
+      <FormControl sx={{ width: "100%" }}>
         <FormLabel id="animation-speed-label">Animation Speed</FormLabel>
         <Slider
           aria-labelledby="animation-speed-label-speed-label"
@@ -44,9 +44,9 @@ const AnimationSpeedSetting = ({ value, setValue }) => {
           min={100}
           max={5000}
           step={25}
+          valueLabelDisplay="auto"
           value={value}
           onChange={handleChange}
-          valueLabelDisplay="auto"
         />
       </FormControl>
     </div>
@@ -61,16 +61,21 @@ const AutoRotateSetting = ({ value, setValue }) => {
 
   return (
     <div>
-      <FormControlLabel
-        control={
-          <Switch
-            checked={value}
-            size="small"
-            onClick={handleChange}
-          />
-        }
-        label="Auto Rotate"
-      />
+      <FormControl>
+        <FormLabel id="auto-rotate-label">Auto Rotate</FormLabel>
+        <FormControlLabel
+          sx={{ mt: ".25rem" }}
+          control={
+            <Switch
+              aria-labelledby="auto-rotate-label"
+              size="small"
+              checked={value}
+              onClick={handleChange}
+            />
+          }
+          label={value ? "On" : "Off"}
+        />
+      </FormControl>
     </div>
   )
 }
@@ -83,7 +88,7 @@ const AutoRotateSpeedSetting = ({ value, setValue }) => {
 
   return (
     <div>
-      <FormControl sx={{ width: '100%' }}>
+      <FormControl sx={{ width: "100%" }}>
         <FormLabel id="auto-rotate-speed-label">Auto Rotate Speed</FormLabel>
         <Slider
           aria-labelledby="auto-rotate-speed-label"
@@ -91,9 +96,9 @@ const AutoRotateSpeedSetting = ({ value, setValue }) => {
           min={0.0}
           max={10.0}
           step={0.1}
+          valueLabelDisplay="auto"
           value={value}
           onChange={handleChange}
-          valueLabelDisplay="auto"
         />
       </FormControl>
     </div>
@@ -108,16 +113,21 @@ const AxesEnabledSetting = ({ value, setValue }) => {
 
   return (
     <div>
-      <FormControlLabel
-        control={
-          <Switch
-            checked={value}
-            size="small"
-            onClick={handleChange}
-          />
-        }
-        label="Show Axes"
-      />
+      <FormControl>
+        <FormLabel id="axes-enabled-label">Show Axes</FormLabel>
+        <FormControlLabel
+          sx={{ mt: ".25rem" }}
+          control={
+            <Switch
+              aria-labelledby="axes-enabled-label"
+              size="small"
+              checked={value}
+              onClick={handleChange}
+            />
+          }
+          label={value ? "On" : "Off"}
+        />
+      </FormControl>
     </div>
   )
 }
@@ -146,11 +156,11 @@ const SettingsContent = ({ settings, setSettings }) => {
   return (
     <StyledContent>
       <Typography variant="subtitle1" gutterBottom>Settings</Typography>
-      <CubeSizeSetting {...createProps('cubeSize')} />
-      <AnimationSpeedSetting {...createProps('animationSpeed')} />
-      <AutoRotateSetting {...createProps('autoRotate')} />
-      <AutoRotateSpeedSetting {...createProps('autoRotateSpeed')} />
-      <AxesEnabledSetting {...createProps('axesEnabled')} />
+      <CubeSizeSetting {...createProps("cubeSize")} />
+      <AnimationSpeedSetting {...createProps("animationSpeed")} />
+      <AutoRotateSetting {...createProps("autoRotate")} />
+      <AutoRotateSpeedSetting {...createProps("autoRotateSpeed")} />
+      <AxesEnabledSetting {...createProps("axesEnabled")} />
     </StyledContent>
   )
 }

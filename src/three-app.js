@@ -1,8 +1,8 @@
-import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import * as L from './logic'
-import * as U from './logic/utils'
+import * as THREE from "three"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import * as L from "./logic"
+import * as U from "./logic/utils"
 
 const url = new URL(document.location)
 const searchParams = url.searchParams
@@ -21,13 +21,13 @@ const queryParamInt = (paramName, min, max, defaultValue) => {
 }
 
 const COLOR_TABLE = {
-  'U': new THREE.Color('blue'),
-  'D': new THREE.Color('green'),
-  'L': new THREE.Color('red'),
-  'R': new THREE.Color('darkorange'),
-  'F': new THREE.Color('yellow'),
-  'B': new THREE.Color('ghostwhite'),
-  '-': new THREE.Color(0x282828)
+  "U": new THREE.Color("blue"),
+  "D": new THREE.Color("green"),
+  "L": new THREE.Color("red"),
+  "R": new THREE.Color("darkorange"),
+  "F": new THREE.Color("yellow"),
+  "B": new THREE.Color("ghostwhite"),
+  "-": new THREE.Color(0x282828)
 }
 
 const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
@@ -58,10 +58,10 @@ const threeApp = () => {
     axesEnabled: false
   }
 
-  globals.animationSpeed = queryParamInt('animationSpeed', 100, 1000, 750)
-  const NUM_RANDOM_MOVES = queryParamInt('randomMoves', 10, 100, 25)
-  const BEFORE_DELAY = queryParamInt('beforeDelay', 0, 5000, 2000)
-  const AFTER_DELAY = queryParamInt('afterDelay', 0, 5000, 2000)
+  globals.animationSpeed = queryParamInt("animationSpeed", 100, 1000, 750)
+  const NUM_RANDOM_MOVES = queryParamInt("randomMoves", 10, 100, 25)
+  const BEFORE_DELAY = queryParamInt("beforeDelay", 0, 5000, 2000)
+  const AFTER_DELAY = queryParamInt("afterDelay", 0, 5000, 2000)
 
   const makeRotationMatrix4 = rotationMatrix3 => {
     const n11 = rotationMatrix3.get([0, 0])
@@ -100,12 +100,12 @@ const threeApp = () => {
     if (U.closeTo(normalX, 1)) return COLOR_TABLE[piece.faces.right]
     if (U.closeTo(normalZ, 1)) return COLOR_TABLE[piece.faces.front]
     if (U.closeTo(normalZ, -1)) return COLOR_TABLE[piece.faces.back]
-    return COLOR_TABLE['-']
+    return COLOR_TABLE["-"]
   }
 
   const setGeometryVertexColors = (piece) => {
     const pieceGeoemtry = globals.pieceGeometry.clone()
-    const normalAttribute = pieceGeoemtry.getAttribute('normal')
+    const normalAttribute = pieceGeoemtry.getAttribute("normal")
 
     const colors = []
 
@@ -123,7 +123,7 @@ const threeApp = () => {
       colors.push(color.r, color.g, color.b)
     }
 
-    pieceGeoemtry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
+    pieceGeoemtry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3))
 
     return pieceGeoemtry
   }
@@ -197,7 +197,7 @@ const threeApp = () => {
     startQuaternion.toArray(values, values.length)
     endQuaternion.toArray(values, values.length)
     const duration = -1
-    const tracks = [new THREE.QuaternionKeyframeTrack('.quaternion', times, values)]
+    const tracks = [new THREE.QuaternionKeyframeTrack(".quaternion", times, values)]
     return new THREE.AnimationClip(move.id, duration, tracks)
   }
 
@@ -218,7 +218,7 @@ const threeApp = () => {
     movePiecesBetweenGroups(uiPieces, globals.puzzleGroup, globals.animationGroup)
 
     const onFinished = () => {
-      globals.animationMixer.removeEventListener('finished', onFinished)
+      globals.animationMixer.removeEventListener("finished", onFinished)
       movePiecesBetweenGroups(uiPieces, globals.animationGroup, globals.puzzleGroup)
       globals.cube = move.makeMove(globals.cube)
       const rotationMatrix3 = move.rotationMatrix3
@@ -229,7 +229,7 @@ const threeApp = () => {
       animateMoves(moves, nextMoveIndex + 1)
     }
 
-    globals.animationMixer.addEventListener('finished', onFinished)
+    globals.animationMixer.addEventListener("finished", onFinished)
 
     const animationClip = createAnimationClip(move)
     const clipAction = globals.animationMixer.clipAction(
@@ -244,7 +244,7 @@ const threeApp = () => {
       .map(move => move.oppositeMoveId)
       .map(id => L.lookupMoveId(globals.cubeSize, id))
       .reverse()
-    console.log(`solution moves: ${solutionMoves.map(move => move.id).join(' ')}`)
+    console.log(`solution moves: ${solutionMoves.map(move => move.id).join(" ")}`)
     animateMoves(solutionMoves)
   }
 
@@ -265,7 +265,7 @@ const threeApp = () => {
 
     const randomMoves = U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(globals.cubeSize))
     L.removeRedundantMoves(randomMoves)
-    console.log(`random moves: ${randomMoves.map(move => move.id).join(' ')}`)
+    console.log(`random moves: ${randomMoves.map(move => move.id).join(" ")}`)
     globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(globals.cubeSize))
     resetUiPieces(globals.cube)
     setTimeout(showSolutionByCheating, BEFORE_DELAY, randomMoves)
@@ -273,14 +273,14 @@ const threeApp = () => {
 
   const init = async () => {
 
-    const container = document.getElementById('container')
+    const container = document.getElementById("container")
     const w = container.offsetWidth
     const h = container.offsetHeight
     globals.renderer = new THREE.WebGLRenderer({ antialias: true })
     globals.renderer.setSize(w, h)
     container.appendChild(globals.renderer.domElement)
 
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       globals.renderer.setSize(container.offsetWidth, container.offsetHeight)
       globals.camera.aspect = container.offsetWidth / container.offsetHeight
       globals.camera.updateProjectionMatrix()
@@ -339,7 +339,7 @@ const threeApp = () => {
     globals.animationMixer = new THREE.AnimationMixer()
 
     globals.cube = L.getSolvedCube(globals.cubeSize)
-    globals.pieceGeometry = await loadGeometry('cube-bevelled.glb')
+    globals.pieceGeometry = await loadGeometry("cube-bevelled.glb")
     createUiPieces()
 
     animate()

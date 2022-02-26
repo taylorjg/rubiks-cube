@@ -1,4 +1,4 @@
-import { matrix, identity } from 'mathjs'
+import { matrix, identity } from "mathjs"
 
 export const Identity = identity(3)
 

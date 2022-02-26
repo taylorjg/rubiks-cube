@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from "@emotion/styled"
 import packageJson from "../package.json"
 
 const StyledVersion = styled.div`

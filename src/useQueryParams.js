@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react"
 
 const parseBool = s => {
 
@@ -6,22 +6,22 @@ const parseBool = s => {
 
   switch (s.toLowerCase()) {
 
-    case '1':
-    case 'true':
-    case 'y':
-    case 'yes':
-    case 'on':
-    case 'enable':
-    case 'enabled':
+    case "1":
+    case "true":
+    case "y":
+    case "yes":
+    case "on":
+    case "enable":
+    case "enabled":
       return true
 
-    case '0':
-    case 'false':
-    case 'n':
-    case 'no':
-    case 'off':
-    case 'disable':
-    case 'disabled':
+    case "0":
+    case "false":
+    case "n":
+    case "no":
+    case "off":
+    case "disable":
+    case "disabled":
       return false
 
     default:

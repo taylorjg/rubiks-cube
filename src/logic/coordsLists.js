@@ -1,4 +1,4 @@
-import * as U from './utils'
+import * as U from "./utils"
 
 export const getCubeDimensions = cubeSize => {
   const isEvenSizedCube = cubeSize % 2 === 0

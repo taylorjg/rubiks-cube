@@ -1,15 +1,15 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { injectGlobal } from '@emotion/css'
-import { createTheme, ThemeProvider } from '@mui/material'
+import React from "react"
+import ReactDOM from "react-dom"
+import { injectGlobal } from "@emotion/css"
+import { createTheme, ThemeProvider } from "@mui/material"
 import Settings from "./Settings"
 import Version from "./Version"
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-import threeApp from './three-app'
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration"
+import threeApp from "./three-app"
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark'
+    mode: "dark"
   }
 })
 
@@ -36,7 +36,7 @@ ReactDOM.render(
       <Version />
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById('container')
+  document.getElementById("container")
 )
 
 // If you want your app to work offline and load faster, you can change

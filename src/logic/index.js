@@ -1,15 +1,15 @@
-import * as math from 'mathjs'
-import * as CL from './coordsLists'
-import * as R from './rotations'
-import * as U from './utils'
+import * as math from "mathjs"
+import * as CL from "./coordsLists"
+import * as R from "./rotations"
+import * as U from "./utils"
 
 const coordsToFaces = (vmin, vmax, x, y, z) => ({
-  up: y === vmax ? 'U' : '-',
-  down: y === vmin ? 'D' : '-',
-  left: x === vmin ? 'L' : '-',
-  right: x === vmax ? 'R' : '-',
-  front: z === vmax ? 'F' : '-',
-  back: z === vmin ? 'B' : '-'
+  up: y === vmax ? "U" : "-",
+  down: y === vmin ? "D" : "-",
+  left: x === vmin ? "L" : "-",
+  right: x === vmax ? "R" : "-",
+  front: z === vmax ? "F" : "-",
+  back: z === vmin ? "B" : "-"
 })
 
 const pieceHasCoords = (piece, coords) =>
