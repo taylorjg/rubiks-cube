@@ -1,7 +1,7 @@
 {
   "name": "rubiks-cube",
   "description": "A three.js visualisation of solving a Rubik's cube",
-  "version": "0.0.53",
+  "version": "0.0.54",
   "private": true,
   "dependencies": {
     "@emotion/css": "^11.7.1",
