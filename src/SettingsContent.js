@@ -39,7 +39,7 @@ const AnimationSpeedSetting = ({ value, setValue }) => {
       <FormControl sx={{ width: "100%" }}>
         <FormLabel id="animation-speed-label">Animation Speed</FormLabel>
         <Slider
-          aria-labelledby="animation-speed-label-speed-label"
+          aria-labelledby="animation-speed-label"
           size="small"
           min={100}
           max={5000}
