@@ -68,7 +68,7 @@ const Settings = ({ threeAppActions }) => {
     <>
       <StyledSettingsIcon onClick={openDrawer} />
       <Drawer anchor="left" open={isDrawerOpen} onClose={closeDrawer}>
-        <SettingsContent settings={settings} setSettings={setSettings} />
+        <SettingsContent settings={settings} setSettings={setSettings} onClose={closeDrawer} />
       </Drawer>
     </>
   )

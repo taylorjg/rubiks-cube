@@ -1,4 +1,5 @@
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material"
+import { Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 import styled from "@emotion/styled"
 
 const CubeSizeSetting = ({ value, setValue }) => {
@@ -132,8 +133,26 @@ const AxesEnabledSetting = ({ value, setValue }) => {
   )
 }
 
-const StyledContent = styled.div`
-  padding: 1rem;
+const StyledSettingsContent = styled.div`
+  margin: 0;
+  padding: 0;
+  min-width: 15rem;
+  width: 100%;
+  height: 100%;
+`
+
+const StyledHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: .5rem .5rem .5rem 1rem;
+  svg {
+    cursor: pointer;
+  }
+`
+
+const StyledBody = styled.div`
+  margin: 1rem;
   display: flex;
   flex-direction: column;
   > * {
@@ -141,7 +160,7 @@ const StyledContent = styled.div`
   }
 `
 
-const SettingsContent = ({ settings, setSettings }) => {
+const SettingsContent = ({ settings, setSettings, onClose }) => {
 
   const createProps = fieldName => {
     return {
@@ -154,14 +173,20 @@ const SettingsContent = ({ settings, setSettings }) => {
   }
 
   return (
-    <StyledContent>
-      <Typography variant="subtitle1" gutterBottom>Settings</Typography>
-      <CubeSizeSetting {...createProps("cubeSize")} />
-      <AnimationSpeedSetting {...createProps("animationSpeed")} />
-      <AutoRotateSetting {...createProps("autoRotate")} />
-      <AutoRotateSpeedSetting {...createProps("autoRotateSpeed")} />
-      <AxesEnabledSetting {...createProps("axesEnabled")} />
-    </StyledContent>
+    <StyledSettingsContent>
+      <StyledHeader>
+        <Typography variant="subtitle1" gutterBottom>Settings</Typography>
+        <CloseIcon onClick={onClose} />
+      </StyledHeader>
+      <Divider />
+      <StyledBody>
+        <CubeSizeSetting {...createProps("cubeSize")} />
+        <AnimationSpeedSetting {...createProps("animationSpeed")} />
+        <AutoRotateSetting {...createProps("autoRotate")} />
+        <AutoRotateSpeedSetting {...createProps("autoRotateSpeed")} />
+        <AxesEnabledSetting {...createProps("axesEnabled")} />
+      </StyledBody>
+    </StyledSettingsContent>
   )
 }
 
