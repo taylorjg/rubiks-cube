@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Drawer } from "@mui/material"
 import SettingsIcon from "@mui/icons-material/Settings"
 import styled from "@emotion/styled"
-import SettingsContent from "./SettingsContent"
+import SettingsPanel from "./SettingsPanel"
 import { useQueryParams } from "./useQueryParams"
 
 const StyledSettingsIcon = styled(SettingsIcon)`
@@ -18,7 +18,7 @@ const StyledSettingsIcon = styled(SettingsIcon)`
   }
 `
 
-const Settings = ({ threeAppActions }) => {
+const SettingsButton = ({ threeAppActions }) => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
@@ -68,10 +68,10 @@ const Settings = ({ threeAppActions }) => {
     <>
       <StyledSettingsIcon onClick={openDrawer} />
       <Drawer anchor="left" open={isDrawerOpen} onClose={closeDrawer}>
-        <SettingsContent settings={settings} setSettings={setSettings} onClose={closeDrawer} />
+        <SettingsPanel settings={settings} setSettings={setSettings} onClose={closeDrawer} />
       </Drawer>
     </>
   )
 }
 
-export default Settings
+export default SettingsButton

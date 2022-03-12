@@ -133,7 +133,7 @@ const AxesEnabledSetting = ({ value, setValue }) => {
   )
 }
 
-const StyledSettingsContent = styled.div`
+const StyledSettingsPanel = styled.div`
   margin: 0;
   padding: 0;
   min-width: 15rem;
@@ -141,7 +141,7 @@ const StyledSettingsContent = styled.div`
   height: 100%;
 `
 
-const StyledHeader = styled.div`
+const StyledSettingsPanelHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -151,7 +151,7 @@ const StyledHeader = styled.div`
   }
 `
 
-const StyledBody = styled.div`
+const StyledSettingsPanelBody = styled.div`
   margin: 1rem;
   display: flex;
   flex-direction: column;
@@ -160,7 +160,7 @@ const StyledBody = styled.div`
   }
 `
 
-const SettingsContent = ({ settings, setSettings, onClose }) => {
+const SettingsPanel = ({ settings, setSettings, onClose }) => {
 
   const createProps = fieldName => {
     return {
@@ -173,21 +173,21 @@ const SettingsContent = ({ settings, setSettings, onClose }) => {
   }
 
   return (
-    <StyledSettingsContent>
-      <StyledHeader>
+    <StyledSettingsPanel>
+      <StyledSettingsPanelHeader>
         <Typography variant="subtitle1" gutterBottom>Settings</Typography>
         <CloseIcon onClick={onClose} />
-      </StyledHeader>
+      </StyledSettingsPanelHeader>
       <Divider />
-      <StyledBody>
+      <StyledSettingsPanelBody>
         <CubeSizeSetting {...createProps("cubeSize")} />
         <AnimationSpeedSetting {...createProps("animationSpeed")} />
         <AutoRotateSetting {...createProps("autoRotate")} />
         <AutoRotateSpeedSetting {...createProps("autoRotateSpeed")} />
         <AxesEnabledSetting {...createProps("axesEnabled")} />
-      </StyledBody>
-    </StyledSettingsContent>
+      </StyledSettingsPanelBody>
+    </StyledSettingsPanel>
   )
 }
 
-export default SettingsContent
+export default SettingsPanel
