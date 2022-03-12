@@ -1,6 +1,6 @@
 import { Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
-import styled from "@emotion/styled"
+import { StyledSettingsPanel, StyledSettingsPanelHeader, StyledSettingsPanelBody} from "./SettingsPanel.styles"
 
 const CubeSizeSetting = ({ value, setValue }) => {
 
@@ -133,36 +133,9 @@ const AxesEnabledSetting = ({ value, setValue }) => {
   )
 }
 
-const StyledSettingsPanel = styled.div`
-  margin: 0;
-  padding: 0;
-  min-width: 15rem;
-  width: 100%;
-  height: 100%;
-`
-
-const StyledSettingsPanelHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: .5rem .5rem .5rem 1rem;
-  svg {
-    cursor: pointer;
-  }
-`
-
-const StyledSettingsPanelBody = styled.div`
-  margin: 1rem;
-  display: flex;
-  flex-direction: column;
-  > * {
-    margin-bottom: 2rem;
-  }
-`
-
 const SettingsPanel = ({ settings, setSettings, onClose }) => {
 
-  const createProps = fieldName => {
+  const createPropsForSetting = fieldName => {
     return {
       value: settings[fieldName],
       setValue: value => setSettings(settings => ({
@@ -180,11 +153,11 @@ const SettingsPanel = ({ settings, setSettings, onClose }) => {
       </StyledSettingsPanelHeader>
       <Divider />
       <StyledSettingsPanelBody>
-        <CubeSizeSetting {...createProps("cubeSize")} />
-        <AnimationSpeedSetting {...createProps("animationSpeed")} />
-        <AutoRotateSetting {...createProps("autoRotate")} />
-        <AutoRotateSpeedSetting {...createProps("autoRotateSpeed")} />
-        <AxesEnabledSetting {...createProps("axesEnabled")} />
+        <CubeSizeSetting {...createPropsForSetting("cubeSize")} />
+        <AnimationSpeedSetting {...createPropsForSetting("animationSpeed")} />
+        <AutoRotateSetting {...createPropsForSetting("autoRotate")} />
+        <AutoRotateSpeedSetting {...createPropsForSetting("autoRotateSpeed")} />
+        <AxesEnabledSetting {...createPropsForSetting("axesEnabled")} />
       </StyledSettingsPanelBody>
     </StyledSettingsPanel>
   )

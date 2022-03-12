@@ -1,22 +1,8 @@
 import { useEffect, useState } from "react"
 import { Drawer } from "@mui/material"
-import SettingsIcon from "@mui/icons-material/Settings"
-import styled from "@emotion/styled"
 import SettingsPanel from "./SettingsPanel"
+import { StyledSettingsIcon } from "./SettingsButton.styles"
 import { useQueryParams } from "./useQueryParams"
-
-const StyledSettingsIcon = styled(SettingsIcon)`
-  color: #ffffff;
-  opacity: .5;
-  position: fixed;
-  top: .5rem;
-  left: .5rem;
-  cursor: pointer;
-  &:hover {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-`
 
 const SettingsButton = ({ threeAppActions }) => {
 
@@ -54,7 +40,7 @@ const SettingsButton = ({ threeAppActions }) => {
       threeAppActions.setAxesEnabled(settings.axesEnabled)
     }
     setPreviousSettings(settings)
-  }, [settings, previousSettings]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [settings, previousSettings, threeAppActions])
 
   const openDrawer = () => {
     setIsDrawerOpen(true)
