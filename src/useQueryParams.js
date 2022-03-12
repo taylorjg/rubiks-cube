@@ -2,6 +2,7 @@ import { useState } from "react"
 
 const parseBool = s => {
 
+  if (s === '') return true
   if (!s) return false
 
   switch (s.toLowerCase()) {
