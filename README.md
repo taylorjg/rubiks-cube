@@ -13,18 +13,18 @@ The following query params can be added:
 
 | Query Param | Description | Values | Default |
 | ----------- | ----------- | ------ | ------- |
-| size        | The size of the cube | 2-5 | 3 |
-| speed       | How quickly to animate the moves | 100-1000 ms | 750 |
-| moves       | The number of random moves used to shuffle the cube | 10-100 | 25 |
-| delay       | Length of delay before starting to 'solve' the cube | 0-5000 ms | 1000 |
-| axes        | Draw the X, Y and Z axes | present = on<br />absent = off | off |
+| cubeSize        | The size of the cube | 2-5 | 3 |
+| animationSpeed  | How quickly to animate the moves | 100-5000 ms | 750 ms |
+| autoRotate      | Auto rotate the cube as it is solving | bool | true |
+| autoRotateSpeed | Speed of auto rotatation (if enabled) | 0-10000 ms | 1000 ms |
+| axesEnabled     | Draw the X, Y and Z axes | bool | false |
 
 ## Examples
 
-* https://taylorjg.github.io/rubiks-cube?speed=250
-* https://taylorjg.github.io/rubiks-cube?speed=250&moves=10&size=2
-* https://taylorjg.github.io/rubiks-cube?speed=250&size=4
-* https://taylorjg.github.io/rubiks-cube?speed=250&size=4&axes
+* https://taylorjg.github.io/rubiks-cube?animationSpeed=250
+* https://taylorjg.github.io/rubiks-cube?animationSpeed=250&cubeSize=2
+* https://taylorjg.github.io/rubiks-cube?animationSpeed=250&cubeSize=4
+* https://taylorjg.github.io/rubiks-cube?animationSpeed=250&cubeSize=4&axesEnabled
 
 # TODO
 
