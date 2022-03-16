@@ -2,7 +2,7 @@
   "name": "rubiks-cube",
   "description": "A three.js visualisation of solving a Rubik's cube",
   "homepage": "https://taylorjg.github.io/rubiks-cube",
-  "version": "0.0.60",
+  "version": "0.0.61",
   "private": true,
   "dependencies": {
     "@emotion/css": "^11.7.1",
