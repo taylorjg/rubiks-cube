@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/rubiks-cube/static/js/main.e639771c.js",
+    "main.js": "/rubiks-cube/static/js/main.b35cb729.js",
     "service-worker.js": "/rubiks-cube/service-worker.js",
     "index.html": "/rubiks-cube/index.html",
-    "main.e639771c.js.map": "/rubiks-cube/static/js/main.e639771c.js.map"
+    "main.b35cb729.js.map": "/rubiks-cube/static/js/main.b35cb729.js.map"
   },
   "entrypoints": [
-    "static/js/main.e639771c.js"
+    "static/js/main.b35cb729.js"
   ]
 }
