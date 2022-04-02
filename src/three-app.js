@@ -277,6 +277,7 @@ const threeApp = () => {
     const w = container.offsetWidth
     const h = container.offsetHeight
     globals.renderer = new THREE.WebGLRenderer({ antialias: true })
+    globals.renderer.setPixelRatio(window.devicePixelRatio)
     globals.renderer.setSize(w, h)
     container.appendChild(globals.renderer.domElement)
 
