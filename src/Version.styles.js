@@ -8,7 +8,6 @@ export const StyledVersion = styled.div`
   font-size: smaller;
   color: #ffffff;
   opacity: .5;
-  cursor: pointer;
   &:hover {
     opacity: 1;
     transform: scale(1.2) translate(-.2rem, -.2rem);

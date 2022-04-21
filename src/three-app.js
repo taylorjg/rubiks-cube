@@ -1,3 +1,4 @@
+import EventEmitter from "events"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
@@ -56,6 +57,30 @@ const threeApp = () => {
     cubeSizeChanged: true,
     animationSpeed: 750,
     axesEnabled: false
+  }
+
+  const SETTINGS_CHANGED_EVENT_NAME = 'settings-changed'
+
+  const eventEmitter = new EventEmitter()
+
+  const addSettingsChangedListener = listener =>
+    eventEmitter.on(SETTINGS_CHANGED_EVENT_NAME, listener)
+
+  const removeSettingsChangedListener = listener =>
+    eventEmitter.off(SETTINGS_CHANGED_EVENT_NAME, listener)
+
+  const getSettings = () => {
+    return {
+      cubeSize: globals.cubeSize,
+      animationSpeed: globals.animationSpeed,
+      autoRotate: globals.controls.autoRotate,
+      autoRotateSpeed: globals.controls.autoRotateSpeed,
+      axesEnabled: globals.axesEnabled
+    }
+  }
+
+  const emitSettingsChanged = () => {
+    eventEmitter.emit(SETTINGS_CHANGED_EVENT_NAME, getSettings())
   }
 
   globals.animationSpeed = queryParamInt("animationSpeed", 100, 1000, 750)
@@ -273,7 +298,7 @@ const threeApp = () => {
 
   const init = async () => {
 
-    const container = document.getElementById("container")
+    const container = document.getElementById("visualisation-container")
     const w = container.offsetWidth
     const h = container.offsetHeight
     globals.renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -360,32 +385,40 @@ const threeApp = () => {
   const setCubeSize = value => {
     globals.cubeSizeChanged = value !== globals.cubeSize
     globals.cubeSize = value
+    emitSettingsChanged()
   }
 
   const setAnimationSpeed = value => {
     globals.animationSpeed = value
+    emitSettingsChanged()
   }
 
   const setAutoRotate = value => {
     globals.controls.autoRotate = value
+    emitSettingsChanged()
   }
 
   const setAutoRotateSpeed = value => {
     globals.controls.autoRotateSpeed = value
+    emitSettingsChanged()
   }
 
   const setAxesEnabled = value => {
     globals.axesEnabled = value
     globals.axesEnabled ? addAxesHelper() : removeAxesHelper()
+    emitSettingsChanged()
   }
 
   return {
     init,
+    addSettingsChangedListener,
+    removeSettingsChangedListener,
     setCubeSize,
     setAnimationSpeed,
     setAutoRotate,
     setAutoRotateSpeed,
-    setAxesEnabled
+    setAxesEnabled,
+    getSettings
   }
 }
 

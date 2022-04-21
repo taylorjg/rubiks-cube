@@ -48,6 +48,8 @@ export const useQueryParams = search => {
       : defaultValue
   }
 
+  const has = name => searchParams.has(name)
+
   const getString = (name, defaultValue) => getParam(name, defaultValue)
   const getNumber = (name, defaultValue) => getParam(name, defaultValue, Number)
   const getBool = (name, defaultValue) => getParam(name, defaultValue, parseBool)
@@ -57,6 +59,7 @@ export const useQueryParams = search => {
   const getBools = (name, defaultValue) => getParams(name, defaultValue, parseBool)
 
   return {
+    has,
     getString,
     getNumber,
     getBool,

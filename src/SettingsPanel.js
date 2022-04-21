@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react"
 import { Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
-import { StyledSettingsPanel, StyledSettingsPanelHeader, StyledSettingsPanelBody} from "./SettingsPanel.styles"
+import { StyledSettingsPanel, StyledSettingsPanelHeader, StyledSettingsPanelBody } from "./SettingsPanel.styles"
 
 const CubeSizeSetting = ({ value, setValue }) => {
 
@@ -133,17 +134,14 @@ const AxesEnabledSetting = ({ value, setValue }) => {
   )
 }
 
-const SettingsPanel = ({ settings, setSettings, onClose }) => {
+const SettingsPanel = ({ threeAppActions, onClose }) => {
 
-  const createPropsForSetting = fieldName => {
-    return {
-      value: settings[fieldName],
-      setValue: value => setSettings(settings => ({
-        ...settings,
-        [fieldName]: value
-      }))
-    }
-  }
+  const [settings, setSettings] = useState(threeAppActions.getSettings)
+
+  useEffect(() => {
+    threeAppActions.addSettingsChangedListener(setSettings)
+    return () => threeAppActions.removeSettingsChangedListener(setSettings)
+  }, [threeAppActions])
 
   return (
     <StyledSettingsPanel>
@@ -153,11 +151,11 @@ const SettingsPanel = ({ settings, setSettings, onClose }) => {
       </StyledSettingsPanelHeader>
       <Divider />
       <StyledSettingsPanelBody>
-        <CubeSizeSetting {...createPropsForSetting("cubeSize")} />
-        <AnimationSpeedSetting {...createPropsForSetting("animationSpeed")} />
-        <AutoRotateSetting {...createPropsForSetting("autoRotate")} />
-        <AutoRotateSpeedSetting {...createPropsForSetting("autoRotateSpeed")} />
-        <AxesEnabledSetting {...createPropsForSetting("axesEnabled")} />
+        <CubeSizeSetting value={settings.cubeSize} setValue={threeAppActions.setCubeSize} />
+        <AnimationSpeedSetting value={settings.animationSpeed} setValue={threeAppActions.setAnimationSpeed} />
+        <AutoRotateSetting value={settings.autoRotate} setValue={threeAppActions.setAutoRotate} />
+        <AutoRotateSpeedSetting value={settings.autoRotateSpeed} setValue={threeAppActions.setAutoRotateSpeed} />
+        <AxesEnabledSetting value={settings.axesEnabled} setValue={threeAppActions.setAxesEnabled} />
       </StyledSettingsPanelBody>
     </StyledSettingsPanel>
   )
