@@ -370,6 +370,17 @@ const threeApp = () => {
 
     animate()
     scramble()
+
+    const onDocumentKeyDownHandler = e => {
+      if (e.altKey || e.ctrlKey || e.metaKey || e.ShiftKey) return
+      switch (e.key) {
+        case 'a': return toggleAxes()
+        case 'r': return toggleAutoRotate()
+        default: return
+      }
+    }
+
+    document.addEventListener('keydown', onDocumentKeyDownHandler)
   }
 
   const addAxesHelper = () => {
@@ -407,6 +418,14 @@ const threeApp = () => {
     globals.axesEnabled = value
     globals.axesEnabled ? addAxesHelper() : removeAxesHelper()
     emitSettingsChanged()
+  }
+
+  const toggleAxes = () => {
+    setAxesEnabled(!globals.axesEnabled)
+  }
+
+  const toggleAutoRotate = () => {
+    setAutoRotate(!globals.controls.autoRotate)
   }
 
   return {
