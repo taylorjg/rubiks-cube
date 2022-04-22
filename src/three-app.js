@@ -374,6 +374,10 @@ const threeApp = () => {
     const onDocumentKeyDownHandler = e => {
       if (e.altKey || e.ctrlKey || e.metaKey || e.ShiftKey) return
       switch (e.key) {
+        case '2': return setCubeSize(2)
+        case '3': return setCubeSize(3)
+        case '4': return setCubeSize(4)
+        case '5': return setCubeSize(5)
         case 'a': return toggleAxes()
         case 'r': return toggleAutoRotate()
         default: return
