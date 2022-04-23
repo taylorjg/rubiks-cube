@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import { StyledSettingsPanel, StyledSettingsPanelHeader, StyledSettingsPanelBody } from "./SettingsPanel.styles"
+import { useThreeAppActions } from "./context"
 
 const CubeSizeSetting = ({ value, setValue }) => {
 
@@ -134,8 +135,9 @@ const AxesEnabledSetting = ({ value, setValue }) => {
   )
 }
 
-const SettingsPanel = ({ threeAppActions, onClose }) => {
+const SettingsPanel = ({ onClose }) => {
 
+  const threeAppActions = useThreeAppActions()
   const [settings, setSettings] = useState(threeAppActions.getSettings)
 
   useEffect(() => {

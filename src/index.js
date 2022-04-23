@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { injectGlobal } from "@emotion/css"
 import { createTheme, ThemeProvider } from "@mui/material"
+import { ThreeAppActionsProvider } from "./context"
 import App from "./App"
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration"
 import threeApp from "./three-app"
@@ -28,7 +29,9 @@ const main = async () => {
   ReactDOM.render(
     <React.StrictMode>
       <ThemeProvider theme={darkTheme}>
-        <App threeAppActions={threeAppActions} />
+        <ThreeAppActionsProvider threeAppActions={threeAppActions}>
+          <App />
+        </ThreeAppActionsProvider>
       </ThemeProvider>
     </React.StrictMode>,
     document.getElementById("react-container")

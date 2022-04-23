@@ -1,26 +1,35 @@
-import { useEffect } from 'react'
-import { useQueryParams } from './useQueryParams'
-import SettingsButton from './SettingsButton'
-import Version from './Version'
+import { useEffect } from "react"
+import { useQueryParams } from "./useQueryParams"
+import { useThreeAppActions } from "./context"
+import SettingsButton from "./SettingsButton"
+import Version from "./Version"
 
-const App = ({ threeAppActions }) => {
+const App = () => {
 
+  const threeAppActions = useThreeAppActions()
   const queryParams = useQueryParams()
 
-  //   animationSpeed: queryParams.getNumber("animationSpeed", 750),
-  //   autoRotate: queryParams.getBool("autoRotate", true),
-  //   autoRotateSpeed: queryParams.getNumber("autoRotateSpeed", 1.0),
-  //   axesEnabled: queryParams.getBool("axesEnabled", false)
-
   useEffect(() => {
-    if (queryParams.has('cubeSize')) {
-      // threeAppActions.setCubeSize(queryParams.getString('cubeSize'))
+    if (queryParams.has("cubeSize")) {
+      threeAppActions.setCubeSize(queryParams.getNumber("cubeSize"))
+    }
+    if (queryParams.has("animationSpeed")) {
+      threeAppActions.setAnimationSpeed(queryParams.getNumber("animationSpeed"))
+    }
+    if (queryParams.has("autoRotate")) {
+      threeAppActions.setAutoRotate(queryParams.getBool("autoRotate"))
+    }
+    if (queryParams.has("autoRotateSpeed")) {
+      threeAppActions.setAutoRotateSpeed(queryParams.getNumber("autoRotateSpeed"))
+    }
+    if (queryParams.has("axesEnabled")) {
+      threeAppActions.setAxesEnabled(queryParams.getBool("axesEnabled"))
     }
   }, [threeAppActions, queryParams])
 
   return (
     <>
-      <SettingsButton threeAppActions={threeAppActions} />
+      <SettingsButton />
       <Version />
     </>
   )

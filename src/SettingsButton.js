@@ -3,7 +3,7 @@ import { Drawer } from "@mui/material"
 import SettingsPanel from "./SettingsPanel"
 import { StyledSettingsIcon } from "./SettingsButton.styles"
 
-const SettingsButton = ({ threeAppActions }) => {
+const SettingsButton = () => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
@@ -19,7 +19,7 @@ const SettingsButton = ({ threeAppActions }) => {
     <>
       <StyledSettingsIcon onClick={openDrawer} />
       <Drawer anchor="left" open={isDrawerOpen} onClose={closeDrawer}>
-        <SettingsPanel threeAppActions={threeAppActions} onClose={closeDrawer} />
+        <SettingsPanel onClose={closeDrawer} />
       </Drawer>
     </>
   )
