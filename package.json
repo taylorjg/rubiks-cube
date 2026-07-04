@@ -22,7 +22,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "open": "open https://taylorjg.github.io/rubiks-cube/"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",

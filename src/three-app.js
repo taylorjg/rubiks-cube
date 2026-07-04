@@ -51,7 +51,7 @@ const threeApp = () => {
     animationGroup: undefined,
     axesHelper: undefined,
     controls: undefined,
-    clock: undefined,
+    timer: undefined,
     animationMixer: undefined,
     cubeSize: 3,
     cubeSizeChanged: true,
@@ -193,10 +193,11 @@ const threeApp = () => {
     })
   }
 
-  const animate = () => {
+  const animate = timestamp => {
     window.requestAnimationFrame(animate)
+    globals.timer.update(timestamp)
     globals.controls.update()
-    const delta = globals.clock.getDelta() * globals.animationMixer.timeScale
+    const delta = globals.timer.getDelta() * globals.animationMixer.timeScale
     globals.animationMixer.update(delta)
     globals.renderer.render(globals.scene, globals.camera)
   }
@@ -320,7 +321,7 @@ const threeApp = () => {
     globals.scene.add(globals.camera)
 
     const LIGHT_COLOR = 0xffffff
-    const LIGHT_INTENSITY = 2
+    const LIGHT_INTENSITY = 2 * Math.PI
     const LIGHT_DISTANCE = 4
 
     const light1 = new THREE.DirectionalLight(LIGHT_COLOR, LIGHT_INTENSITY)
@@ -361,7 +362,8 @@ const threeApp = () => {
     globals.controls.autoRotate = true
     globals.controls.autoRotateSpeed = 1.0
 
-    globals.clock = new THREE.Clock()
+    globals.timer = new THREE.Timer()
+    globals.timer.connect(document)
     globals.animationMixer = new THREE.AnimationMixer()
 
     globals.cube = L.getSolvedCube(globals.cubeSize)
