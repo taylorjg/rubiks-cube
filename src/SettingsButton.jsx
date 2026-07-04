@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Drawer } from "@mui/material"
+import SettingsIcon from "@mui/icons-material/esm/Settings.js"
 import SettingsPanel from "./SettingsPanel"
 import { StyledSettingsIcon } from "./SettingsButton.styles"
 
@@ -17,7 +18,9 @@ const SettingsButton = () => {
 
   return (
     <>
-      <StyledSettingsIcon onClick={openDrawer} />
+      <StyledSettingsIcon onClick={openDrawer}>
+        <SettingsIcon />
+      </StyledSettingsIcon>
       <Drawer anchor="left" open={isDrawerOpen} onClose={closeDrawer}>
         <SettingsPanel onClose={closeDrawer} />
       </Drawer>
