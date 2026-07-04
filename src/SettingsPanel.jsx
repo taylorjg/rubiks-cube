@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material"
-import CloseIcon from "@mui/icons-material/esm/Close.js"
+import CloseIcon from "@mui/icons-material/Close"
 import { StyledSettingsPanel, StyledSettingsPanelHeader, StyledSettingsPanelBody } from "./SettingsPanel.styles"
 import { useThreeAppActions } from "./context"
 

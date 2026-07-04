@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Drawer } from "@mui/material"
-import SettingsIcon from "@mui/icons-material/esm/Settings.js"
+import SettingsIcon from "@mui/icons-material/Settings"
 import SettingsPanel from "./SettingsPanel"
 import { StyledSettingsIcon } from "./SettingsButton.styles"
 
