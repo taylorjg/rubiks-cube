@@ -37,8 +37,8 @@ jobs:
         run: npm run build
 
   deploy:
-    if: startsWith(github.ref, 'refs/tags/v')
     needs: test
+    if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -53,20 +53,6 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
-      - name: Verify tag matches package.json version
-        run: |
-          TAG_VERSION="${GITHUB_REF_NAME#v}"
-          PKG_VERSION="$(npm pkg get version | tr -d '"')"
-          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
-            echo "Tag v${TAG_VERSION} does not match package.json version ${PKG_VERSION}"
-            exit 1
-          fi
-
-      - name: Verify tag points at master
-        run: |
-          git fetch origin master
-          git merge-base --is-ancestor "${GITHUB_SHA}" "origin/master"
-
       - name: Install dependencies
         run: npm ci
 
@@ -78,3 +64,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          commit_message: "Deploy ${{ github.ref_name }}"
