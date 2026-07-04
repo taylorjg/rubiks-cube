@@ -1,5 +1,5 @@
 import React from "react"
-import ReactDOM from "react-dom"
+import { createRoot } from "react-dom/client"
 import { injectGlobal } from "@emotion/css"
 import { createTheme, ThemeProvider } from "@mui/material"
 import { ThreeAppActionsProvider } from "./context"
@@ -26,15 +26,15 @@ injectGlobal`
 const main = async () => {
   const threeAppActions = threeApp()
 
-  ReactDOM.render(
+  const root = createRoot(document.getElementById("react-container"))
+  root.render(
     <React.StrictMode>
       <ThemeProvider theme={darkTheme}>
         <ThreeAppActionsProvider threeAppActions={threeAppActions}>
           <App />
         </ThreeAppActionsProvider>
       </ThemeProvider>
-    </React.StrictMode>,
-    document.getElementById("react-container")
+    </React.StrictMode>
   )
 
   // If you want your app to work offline and load faster, you can change
