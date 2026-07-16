@@ -1,14 +1,8 @@
-name: CI
+name: ci-cd
 
 on:
   push:
-    branches:
-      - master
-    tags:
-      - v*
   pull_request:
-    branches:
-      - master
 
 permissions:
   contents: read
