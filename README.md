@@ -1,3 +1,5 @@
+[![ci-cd](https://github.com/taylorjg/rubiks-cube/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/taylorjg/rubiks-cube/actions/workflows/ci-cd.yml)
+
 # Description
 
 A [three.js](https://threejs.org/) visualisation of solving a Rubik's cube.
