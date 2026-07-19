@@ -39,11 +39,11 @@ describe("notation", () => {
 
   describe("parseMoveToken", () => {
     it("maps face turns to expected move ids", () => {
-      expect(parseMoveToken("R").id).toBe(6)
-      expect(parseMoveToken("R'").id).toBe(8)
+      expect(parseMoveToken("R").id).toBe(8)
+      expect(parseMoveToken("R'").id).toBe(6)
       expect(parseMoveToken("R2").id).toBe(7)
       expect(parseMoveToken("L").id).toBe(0)
-      expect(parseMoveToken("U").id).toBe(15)
+      expect(parseMoveToken("U").id).toBe(17)
       expect(parseMoveToken("D").id).toBe(9)
       expect(parseMoveToken("F").id).toBe(24)
       expect(parseMoveToken("B").id).toBe(20)
@@ -68,7 +68,7 @@ describe("notation", () => {
     })
 
     it("names outer face moves on a 2×2", () => {
-      expect(moveToNotation(lookupMoveId(2, 3), 2)).toBe("R")
+      expect(moveToNotation(lookupMoveId(2, 5), 2)).toBe("R")
       expect(moveToNotation(lookupMoveId(2, 6), 2)).toBe("D")
     })
   })

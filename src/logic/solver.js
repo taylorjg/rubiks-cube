@@ -10,40 +10,6 @@ const loadRubikSolver = async () => {
   return rubikSolver
 }
 
-const toSolverToken = token => {
-  switch (token) {
-    case "R": return "R'"
-    case "R'": return "R"
-    case "U": return "U'"
-    case "U'": return "U"
-    default: return token
-  }
-}
-
-const fromSolverToken = token => {
-  switch (token) {
-    case "R": return "R'"
-    case "R'": return "R"
-    case "U": return "U'"
-    case "U'": return "U"
-    default: return token
-  }
-}
-
-const toSolverAlgorithm = moves =>
-  formatSingmaster(moves)
-    .split(" ")
-    .map(toSolverToken)
-    .join(" ")
-
-const fromSolverAlgorithm = algorithm =>
-  algorithm
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .map(fromSolverToken)
-    .join(" ")
-
 export const initializeSolver = async () => {
   if (initialized) {
     return
@@ -59,10 +25,10 @@ export const solve3x3 = async scrambleMoves => {
     initSolver()
     initialized = true
   }
-  const cubeState = new Cube().move(toSolverAlgorithm(scrambleMoves))
+  const cubeState = new Cube().move(formatSingmaster(scrambleMoves))
   const solution = solve(cubeState)
   if (!solution) {
     throw new Error("Solver returned no solution")
   }
-  return parseSingmaster(fromSolverAlgorithm(solution))
+  return parseSingmaster(solution)
 }

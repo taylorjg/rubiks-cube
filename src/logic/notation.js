@@ -6,10 +6,10 @@ const CUBE_SIZE = 3
 
 // Quarter-turn clockwise move IDs when viewed from outside each face or slice.
 const CLOCKWISE_MOVE_IDS_3 = {
-  U: 15,
+  U: 17,
   D: 9,
   L: 0,
-  R: 6,
+  R: 8,
   F: 24,
   B: 20,
   M: 3,
@@ -221,7 +221,9 @@ const getSliceLabel = (cubeSize, axis, sliceValue, vmin, vmax) => {
   return null
 }
 
-const getClockwiseOffset = label => label === "B" ? 2 : 0
+// Positive-axis outer faces (R, U, B) need the opposite raw rotation for WCA clockwise.
+const getClockwiseOffset = label =>
+  label === "R" || label === "U" || label === "B" ? 2 : 0
 
 const buildMoveNotationLookup = cubeSize => {
   const { values, vmin, vmax } = CL.getCubeDimensions(cubeSize)
