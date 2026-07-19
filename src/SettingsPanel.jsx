@@ -23,7 +23,6 @@ const CubeSizeSetting = ({ value, setValue }) => {
         >
           <FormControlLabel value="2" control={<Radio size="small" />} label="2" />
           <FormControlLabel value="3" control={<Radio size="small" />} label="3" />
-          <FormControlLabel value="4" control={<Radio size="small" />} label="4" />
         </RadioGroup>
       </FormControl>
     </div>

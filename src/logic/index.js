@@ -102,8 +102,7 @@ const makePerCubeSizeDataEntry = cubeSize => {
 
 const PER_CUBE_SIZE_DATA = new Map([
   makePerCubeSizeDataEntry(2),
-  makePerCubeSizeDataEntry(3),
-  makePerCubeSizeDataEntry(4)
+  makePerCubeSizeDataEntry(3)
 ])
 
 export const getSolvedCube = cubeSize => {

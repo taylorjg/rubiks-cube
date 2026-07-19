@@ -427,7 +427,6 @@ const threeApp = () => {
       switch (e.key) {
         case '2': return setCubeSize(2)
         case '3': return setCubeSize(3)
-        case '4': return setCubeSize(4)
         case 'a': return toggleAxes()
         case 'r': return toggleAutoRotate()
         default: return
@@ -449,7 +448,7 @@ const threeApp = () => {
   }
 
   const setCubeSize = value => {
-    if (![2, 3, 4].includes(value)) return
+    if (![2, 3].includes(value)) return
     globals.cubeSizeChanged = value !== globals.cubeSize
     globals.cubeSize = value
     emitSettingsChanged()

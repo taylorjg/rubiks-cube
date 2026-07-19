@@ -15,7 +15,7 @@ The following query params can be added:
 
 | Query Param | Description | Values | Default |
 | ----------- | ----------- | ------ | ------- |
-| cubeSize        | The size of the cube | 2-4 | 3 |
+| cubeSize        | The size of the cube | 2-3 | 3 |
 | animationSpeed  | How quickly to animate the moves | 100-5000 ms | 750 ms |
 | autoRotate      | Auto rotate the cube as it is solving | bool | true |
 | autoRotateSpeed | Speed of auto rotatation (if enabled) | 0-10000 ms | 1000 ms |
@@ -25,8 +25,6 @@ The following query params can be added:
 
 * https://taylorjg.github.io/rubiks-cube?animationSpeed=250
 * https://taylorjg.github.io/rubiks-cube?animationSpeed=250&cubeSize=2
-* https://taylorjg.github.io/rubiks-cube?animationSpeed=250&cubeSize=4
-* https://taylorjg.github.io/rubiks-cube?animationSpeed=250&cubeSize=4&axesEnabled
 
 # TODO
 
