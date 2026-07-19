@@ -34,5 +34,8 @@
     "jsdom": "^29.1.1",
     "vite": "^8.1.5",
     "vitest": "^4.1.10"
+  },
+  "allowScripts": {
+    "fsevents@2.3.3": true
   }
 }
