@@ -1,19 +1,16 @@
 import { formatSingmaster, parseSingmaster } from "./notation.js"
 
-const SOLVED_FACELETS = "UUUUUUUUURRRRRRRRRFFFFFFFFFDDDDDDDDDLLLLLLLLLBBBBBBBBB"
-
-let Cube = null
+let rubikSolver = null
 let initialized = false
 
-const loadCube = async () => {
-  if (!Cube) {
-    const module = await import("./cubejs-shim.js")
-    Cube = module.default
+const loadRubikSolver = async () => {
+  if (!rubikSolver) {
+    rubikSolver = await import("rubik-solver")
   }
-  return Cube
+  return rubikSolver
 }
 
-const toCubejsToken = token => {
+const toSolverToken = token => {
   switch (token) {
     case "R": return "R'"
     case "R'": return "R"
@@ -23,7 +20,7 @@ const toCubejsToken = token => {
   }
 }
 
-const fromCubejsToken = token => {
+const fromSolverToken = token => {
   switch (token) {
     case "R": return "R'"
     case "R'": return "R"
@@ -33,34 +30,39 @@ const fromCubejsToken = token => {
   }
 }
 
-const toCubejsAlgorithm = moves =>
+const toSolverAlgorithm = moves =>
   formatSingmaster(moves)
     .split(" ")
-    .map(toCubejsToken)
+    .map(toSolverToken)
     .join(" ")
 
-const fromCubejsAlgorithm = algorithm =>
+const fromSolverAlgorithm = algorithm =>
   algorithm
     .trim()
     .split(/\s+/)
     .filter(Boolean)
-    .map(fromCubejsToken)
+    .map(fromSolverToken)
     .join(" ")
 
 export const initializeSolver = async () => {
   if (initialized) {
     return
   }
-  const CubeClass = await loadCube()
-  CubeClass.initSolver()
+  const { initSolver } = await loadRubikSolver()
+  initSolver()
   initialized = true
 }
 
 export const solve3x3 = async scrambleMoves => {
-  const CubeClass = await loadCube()
-  await initializeSolver()
-  const cubeState = CubeClass.fromString(SOLVED_FACELETS)
-  cubeState.move(toCubejsAlgorithm(scrambleMoves))
-  const solution = cubeState.solve()
-  return parseSingmaster(fromCubejsAlgorithm(solution))
+  const { Cube, initSolver, solve } = await loadRubikSolver()
+  if (!initialized) {
+    initSolver()
+    initialized = true
+  }
+  const cubeState = new Cube().move(toSolverAlgorithm(scrambleMoves))
+  const solution = solve(cubeState)
+  if (!solution) {
+    throw new Error("Solver returned no solution")
+  }
+  return parseSingmaster(fromSolverAlgorithm(solution))
 }

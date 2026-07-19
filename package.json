@@ -10,11 +10,11 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.2.0",
     "@mui/material": "^9.2.0",
-    "cubejs": "^1.3.2",
     "events": "^3.3.0",
     "mathjs": "^15.2.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "rubik-solver": "^0.1.2",
     "three": "^0.185.1"
   },
   "scripts": {
