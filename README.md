@@ -1,4 +1,4 @@
-[![ci-cd](https://github.com/taylorjg/rubiks-cube/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/taylorjg/rubiks-cube/actions/workflows/ci-cd.yml)
+[![CI/CD](https://github.com/taylorjg/rubiks-cube/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/taylorjg/rubiks-cube/actions/workflows/ci-cd.yml)
 
 # Description
 
@@ -58,25 +58,26 @@ Keyboard shortcuts: **`2`** / **`3`** switch cube size; **`a`** toggles axes; **
 
 ## Examples
 
-- https://taylorjg.github.io/rubiks-cube?animationSpeed=250
-- https://taylorjg.github.io/rubiks-cube?animationSpeed=250&cubeSize=2
-- https://taylorjg.github.io/rubiks-cube?showMoveLabels=true&scrambleMoves=20
+* https://taylorjg.github.io/rubiks-cube?animationSpeed=250
+* https://taylorjg.github.io/rubiks-cube?animationSpeed=250&cubeSize=2
+* https://taylorjg.github.io/rubiks-cube?showMoveLabels=true&scrambleMoves=50
 
 # Links
 
 ## Cube & notation
 
-- [Rubik's Cube — Wikipedia](https://en.wikipedia.org/wiki/Rubik%27s_Cube)
-- [Singmaster notation (WCA)](https://www.worldcubeassociation.org/regulations/#article-12-notation)
-- [Rubik's Cube notation — Ruwix](https://ruwix.com/the-rubiks-cube/notation/)
-- [Advanced Rubik's Cube notation — Ruwix](https://ruwix.com/the-rubiks-cube/notation/advanced/)
+* [Rubik's Cube — Wikipedia](https://en.wikipedia.org/wiki/Rubik%27s_Cube)
+* [Singmaster notation (WCA)](https://www.worldcubeassociation.org/regulations/#article-12-notation)
+* [Rubik's Cube notation — Ruwix](https://ruwix.com/the-rubiks-cube/notation/)
+* [Advanced Rubik's Cube notation — Ruwix](https://ruwix.com/the-rubiks-cube/notation/advanced/)
 
 ## Algorithms & solvers
 
-- [Kociemba's two-phase algorithm](https://kociemba.org/cube.htm)
-- [rubik-solver (npm)](https://www.npmjs.com/package/rubik-solver) — solver used by this project
+* [Kociemba's two-phase algorithm](https://kociemba.org/cube.htm)
+* [rubik-solver (npm)](https://www.npmjs.com/package/rubik-solver) — solver used by this project
 
 ## Visualisation
 
-- [three.js documentation](https://threejs.org/docs/index.html)
-- [AnimationClipCreator examples](https://threejs.org/examples/js/animation/AnimationClipCreator.js) (referenced from the [KeyframeTrack docs](https://threejs.org/docs/index.html#api/animation/KeyframeTrack))
+* [three.js documentation](https://threejs.org/docs/index.html)
+* [KeyframeTrack docs](https://threejs.org/docs/index.html#api/animation/KeyframeTrack)
+* [AnimationClipCreator](https://github.com/mrdoob/three.js/blob/master/examples/jsm/animation/AnimationClipCreator.js)
