@@ -4,6 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import * as L from "./logic"
 import * as N from "./logic/notation"
+import { initializeSolver, solve3x3 } from "./logic/solver"
 import * as U from "./logic/utils"
 
 const url = new URL(document.location)
@@ -275,6 +276,20 @@ const threeApp = () => {
     animateMoves(solutionMoves)
   }
 
+  const showSolution = async randomMoves => {
+    if (globals.cubeSize === 3) {
+      try {
+        const solutionMoves = await solve3x3(globals.cube)
+        console.log(`solution moves: ${N.formatSingmaster(solutionMoves)}`)
+        animateMoves(solutionMoves)
+        return
+      } catch (error) {
+        console.error("Solver failed, falling back to cheat-reverse:", error)
+      }
+    }
+    showSolutionByCheating(randomMoves)
+  }
+
   const scramble = () => {
 
     if (globals.cubeSizeChanged) {
@@ -297,7 +312,7 @@ const threeApp = () => {
     console.log(`random moves: ${globals.cubeSize === 3 ? N.formatSingmaster(randomMoves) : randomMoves.map(move => move.id).join(" ")}`)
     globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(globals.cubeSize))
     resetUiPieces(globals.cube)
-    setTimeout(showSolutionByCheating, BEFORE_DELAY, randomMoves)
+    setTimeout(showSolution, BEFORE_DELAY, randomMoves)
   }
 
   const init = async () => {
@@ -389,6 +404,7 @@ const threeApp = () => {
     }
 
     document.addEventListener('keydown', onDocumentKeyDownHandler)
+    initializeSolver()
   }
 
   const addAxesHelper = () => {
