@@ -1,11 +1,24 @@
 import { useEffect, useState } from "react"
-import { Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Slider, Switch, Typography } from "@mui/material"
+import {
+  Divider,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Slider,
+  Switch,
+  Typography
+} from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
-import { StyledSettingsPanel, StyledSettingsPanelHeader, StyledSettingsPanelBody } from "./SettingsPanel.styles"
+import {
+  StyledSettingsPanel,
+  StyledSettingsPanelHeader,
+  StyledSettingsPanelBody
+} from "./SettingsPanel.styles"
 import { useThreeAppActions } from "./context"
 
 const CubeSizeSetting = ({ value, setValue }) => {
-
   const handleChange = event => {
     setValue(Number(event.target.value))
   }
@@ -21,16 +34,47 @@ const CubeSizeSetting = ({ value, setValue }) => {
           value={value}
           onChange={handleChange}
         >
-          <FormControlLabel value="2" control={<Radio size="small" />} label="2" />
-          <FormControlLabel value="3" control={<Radio size="small" />} label="3" />
+          <FormControlLabel
+            value="2"
+            control={<Radio size="small" />}
+            label="2"
+          />
+          <FormControlLabel
+            value="3"
+            control={<Radio size="small" />}
+            label="3"
+          />
         </RadioGroup>
       </FormControl>
     </div>
   )
 }
 
-const AnimationSpeedSetting = ({ value, setValue }) => {
+const ScrambleMovesSetting = ({ value, setValue }) => {
+  const handleChange = (_event, newValue) => {
+    setValue(newValue)
+  }
 
+  return (
+    <div>
+      <FormControl sx={{ width: "100%" }}>
+        <FormLabel id="scramble-moves-label">Scramble Moves</FormLabel>
+        <Slider
+          aria-labelledby="scramble-moves-label"
+          size="small"
+          min={10}
+          max={100}
+          step={1}
+          valueLabelDisplay="auto"
+          value={value}
+          onChange={handleChange}
+        />
+      </FormControl>
+    </div>
+  )
+}
+
+const AnimationSpeedSetting = ({ value, setValue }) => {
   const handleChange = event => {
     setValue(event.target.value)
   }
@@ -55,7 +99,6 @@ const AnimationSpeedSetting = ({ value, setValue }) => {
 }
 
 const AutoRotateSetting = ({ value, setValue }) => {
-
   const handleChange = event => {
     setValue(event.target.checked)
   }
@@ -82,7 +125,6 @@ const AutoRotateSetting = ({ value, setValue }) => {
 }
 
 const AutoRotateSpeedSetting = ({ value, setValue }) => {
-
   const handleChange = event => {
     setValue(event.target.value)
   }
@@ -107,7 +149,6 @@ const AutoRotateSpeedSetting = ({ value, setValue }) => {
 }
 
 const AxesEnabledSetting = ({ value, setValue }) => {
-
   const handleChange = event => {
     setValue(event.target.checked)
   }
@@ -134,7 +175,6 @@ const AxesEnabledSetting = ({ value, setValue }) => {
 }
 
 const ShowMoveLabelsSetting = ({ value, setValue }) => {
-
   const handleChange = event => {
     setValue(event.target.checked)
   }
@@ -161,7 +201,6 @@ const ShowMoveLabelsSetting = ({ value, setValue }) => {
 }
 
 const SettingsPanel = ({ onClose }) => {
-
   const threeAppActions = useThreeAppActions()
   const [settings, setSettings] = useState(threeAppActions.getSettings)
 
@@ -173,17 +212,41 @@ const SettingsPanel = ({ onClose }) => {
   return (
     <StyledSettingsPanel>
       <StyledSettingsPanelHeader>
-        <Typography variant="subtitle1" gutterBottom>Settings</Typography>
+        <Typography variant="subtitle1" gutterBottom>
+          Settings
+        </Typography>
         <CloseIcon onClick={onClose} />
       </StyledSettingsPanelHeader>
       <Divider />
       <StyledSettingsPanelBody>
-        <CubeSizeSetting value={settings.cubeSize} setValue={threeAppActions.setCubeSize} />
-        <AnimationSpeedSetting value={settings.animationSpeed} setValue={threeAppActions.setAnimationSpeed} />
-        <AutoRotateSetting value={settings.autoRotate} setValue={threeAppActions.setAutoRotate} />
-        <AutoRotateSpeedSetting value={settings.autoRotateSpeed} setValue={threeAppActions.setAutoRotateSpeed} />
-        <AxesEnabledSetting value={settings.axesEnabled} setValue={threeAppActions.setAxesEnabled} />
-        <ShowMoveLabelsSetting value={settings.showMoveLabels} setValue={threeAppActions.setShowMoveLabels} />
+        <CubeSizeSetting
+          value={settings.cubeSize}
+          setValue={threeAppActions.setCubeSize}
+        />
+        <ScrambleMovesSetting
+          value={settings.scrambleMoves}
+          setValue={threeAppActions.setScrambleMoves}
+        />
+        <AnimationSpeedSetting
+          value={settings.animationSpeed}
+          setValue={threeAppActions.setAnimationSpeed}
+        />
+        <AutoRotateSetting
+          value={settings.autoRotate}
+          setValue={threeAppActions.setAutoRotate}
+        />
+        <AutoRotateSpeedSetting
+          value={settings.autoRotateSpeed}
+          setValue={threeAppActions.setAutoRotateSpeed}
+        />
+        <AxesEnabledSetting
+          value={settings.axesEnabled}
+          setValue={threeAppActions.setAxesEnabled}
+        />
+        <ShowMoveLabelsSetting
+          value={settings.showMoveLabels}
+          setValue={threeAppActions.setShowMoveLabels}
+        />
       </StyledSettingsPanelBody>
     </StyledSettingsPanel>
   )

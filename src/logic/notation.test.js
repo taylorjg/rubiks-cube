@@ -17,12 +17,18 @@ const applyAlg = algorithm =>
   makeMoves(parseSingmaster(algorithm), getSolvedCube(3))
 
 describe("notation", () => {
-
   describe("exportFacelets", () => {
     it("returns 54 solved facelets for a solved cube", () => {
       const facelets = exportFacelets(getSolvedCube(3))
       expect(facelets).toHaveLength(54)
-      expect(facelets).toBe("U".repeat(9) + "R".repeat(9) + "F".repeat(9) + "D".repeat(9) + "L".repeat(9) + "B".repeat(9))
+      expect(facelets).toBe(
+        "U".repeat(9) +
+          "R".repeat(9) +
+          "F".repeat(9) +
+          "D".repeat(9) +
+          "L".repeat(9) +
+          "B".repeat(9)
+      )
     })
   })
 
@@ -52,7 +58,21 @@ describe("notation", () => {
 
   describe("moveToSingmaster", () => {
     it("round-trips move tokens", () => {
-      for (const token of ["R", "R'", "R2", "U", "U'", "L", "L'", "F", "F2", "B", "B'", "D", "D2"]) {
+      for (const token of [
+        "R",
+        "R'",
+        "R2",
+        "U",
+        "U'",
+        "L",
+        "L'",
+        "F",
+        "F2",
+        "B",
+        "B'",
+        "D",
+        "D2"
+      ]) {
         const move = parseMoveToken(token)
         expect(moveToSingmaster(move)).toBe(token)
       }
@@ -101,14 +121,26 @@ describe("notation", () => {
 
     it("avoids consecutive moves on the same or opposite face", () => {
       const moves = generateFaceTurnScramble(50)
-      const faces = formatSingmaster(moves).split(" ").map(token => token[0])
+      const faces = formatSingmaster(moves)
+        .split(" ")
+        .map(token => token[0])
 
       for (let index = 1; index < faces.length; index++) {
         const previous = faces[index - 1]
         const current = faces[index]
         expect(current).not.toBe(previous)
-        const opposite = { U: "D", D: "U", L: "R", R: "L", F: "B", B: "F" }[previous]
+        const opposite = { U: "D", D: "U", L: "R", R: "L", F: "B", B: "F" }[
+          previous
+        ]
         expect(current).not.toBe(opposite)
+      }
+    })
+
+    it("avoids consecutive opposite moves", () => {
+      const moves = generateFaceTurnScramble(50)
+
+      for (let index = 1; index < moves.length; index++) {
+        expect(moves[index].id).not.toBe(moves[index - 1].oppositeMoveId)
       }
     })
 
@@ -122,7 +154,9 @@ describe("notation", () => {
   describe("known sequences", () => {
     it("changes facelets after R but returns to solved after four R turns", () => {
       const afterOne = applyAlg("R")
-      expect(exportFacelets(afterOne)).not.toBe(exportFacelets(getSolvedCube(3)))
+      expect(exportFacelets(afterOne)).not.toBe(
+        exportFacelets(getSolvedCube(3))
+      )
 
       const afterFour = applyAlg("R R R R")
       expect(isSolved(afterFour)).toBe(true)

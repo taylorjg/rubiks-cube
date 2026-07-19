@@ -10,7 +10,7 @@ export const StyledSettingsPanelHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: .5rem .5rem .5rem 1rem;
+  margin: 0.5rem 0.5rem 0.5rem 1rem;
   svg {
     cursor: pointer;
   }

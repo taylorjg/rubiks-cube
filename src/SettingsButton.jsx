@@ -5,7 +5,6 @@ import SettingsPanel from "./SettingsPanel"
 import { StyledSettingsIcon } from "./SettingsButton.styles"
 
 const SettingsButton = () => {
-
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   const openDrawer = () => {
@@ -21,7 +20,16 @@ const SettingsButton = () => {
       <StyledSettingsIcon onClick={openDrawer}>
         <SettingsIcon />
       </StyledSettingsIcon>
-      <Drawer anchor="left" open={isDrawerOpen} onClose={closeDrawer}>
+      <Drawer
+        anchor="left"
+        open={isDrawerOpen}
+        onClose={closeDrawer}
+        slotProps={{
+          paper: {
+            sx: { width: 320 }
+          }
+        }}
+      >
         <SettingsPanel onClose={closeDrawer} />
       </Drawer>
     </>

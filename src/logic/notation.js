@@ -46,34 +46,70 @@ const WORLD_NORMAL_TO_LOCAL_FACE = Object.fromEntries(
 // left to right, when looking directly at that face from outside the cube.
 const FACELET_POSITIONS = [
   ...faceCoords("U", [
-    [-1, 1, 1], [0, 1, 1], [1, 1, 1],
-    [-1, 1, 0], [0, 1, 0], [1, 1, 0],
-    [-1, 1, -1], [0, 1, -1], [1, 1, -1]
+    [-1, 1, 1],
+    [0, 1, 1],
+    [1, 1, 1],
+    [-1, 1, 0],
+    [0, 1, 0],
+    [1, 1, 0],
+    [-1, 1, -1],
+    [0, 1, -1],
+    [1, 1, -1]
   ]),
   ...faceCoords("R", [
-    [1, 1, 1], [1, 1, 0], [1, 1, -1],
-    [1, 0, 1], [1, 0, 0], [1, 0, -1],
-    [1, -1, 1], [1, -1, 0], [1, -1, -1]
+    [1, 1, 1],
+    [1, 1, 0],
+    [1, 1, -1],
+    [1, 0, 1],
+    [1, 0, 0],
+    [1, 0, -1],
+    [1, -1, 1],
+    [1, -1, 0],
+    [1, -1, -1]
   ]),
   ...faceCoords("F", [
-    [-1, 1, 1], [0, 1, 1], [1, 1, 1],
-    [-1, 0, 1], [0, 0, 1], [1, 0, 1],
-    [-1, -1, 1], [0, -1, 1], [1, -1, 1]
+    [-1, 1, 1],
+    [0, 1, 1],
+    [1, 1, 1],
+    [-1, 0, 1],
+    [0, 0, 1],
+    [1, 0, 1],
+    [-1, -1, 1],
+    [0, -1, 1],
+    [1, -1, 1]
   ]),
   ...faceCoords("D", [
-    [-1, -1, 1], [0, -1, 1], [1, -1, 1],
-    [-1, -1, 0], [0, -1, 0], [1, -1, 0],
-    [-1, -1, -1], [0, -1, -1], [1, -1, -1]
+    [-1, -1, 1],
+    [0, -1, 1],
+    [1, -1, 1],
+    [-1, -1, 0],
+    [0, -1, 0],
+    [1, -1, 0],
+    [-1, -1, -1],
+    [0, -1, -1],
+    [1, -1, -1]
   ]),
   ...faceCoords("L", [
-    [-1, 1, -1], [-1, 1, 0], [-1, 1, 1],
-    [-1, 0, -1], [-1, 0, 0], [-1, 0, 1],
-    [-1, -1, -1], [-1, -1, 0], [-1, -1, 1]
+    [-1, 1, -1],
+    [-1, 1, 0],
+    [-1, 1, 1],
+    [-1, 0, -1],
+    [-1, 0, 0],
+    [-1, 0, 1],
+    [-1, -1, -1],
+    [-1, -1, 0],
+    [-1, -1, 1]
   ]),
   ...faceCoords("B", [
-    [1, 1, -1], [0, 1, -1], [-1, 1, -1],
-    [1, 0, -1], [0, 0, -1], [-1, 0, -1],
-    [1, -1, -1], [0, -1, -1], [-1, -1, -1]
+    [1, 1, -1],
+    [0, 1, -1],
+    [-1, 1, -1],
+    [1, 0, -1],
+    [0, 0, -1],
+    [-1, 0, -1],
+    [1, -1, -1],
+    [0, -1, -1],
+    [-1, -1, -1]
   ])
 ]
 
@@ -84,12 +120,18 @@ function faceCoords(face, coordsList) {
 
 function faceNameToLocalFace(face) {
   switch (face) {
-    case "U": return "up"
-    case "D": return "down"
-    case "L": return "left"
-    case "R": return "right"
-    case "F": return "front"
-    case "B": return "back"
+    case "U":
+      return "up"
+    case "D":
+      return "down"
+    case "L":
+      return "left"
+    case "R":
+      return "right"
+    case "F":
+      return "front"
+    case "B":
+      return "back"
     default:
       throw new Error(`Unknown face: ${face}`)
   }
@@ -108,7 +150,9 @@ const worldNormalToLocalFace = (piece, outwardNormal) => {
   const key = localNormal.join(",")
   const localFace = WORLD_NORMAL_TO_LOCAL_FACE[key]
   if (!localFace) {
-    throw new Error(`Unable to map world normal ${outwardNormal} to a local face`)
+    throw new Error(
+      `Unable to map world normal ${outwardNormal} to a local face`
+    )
   }
   return localFace
 }
@@ -127,7 +171,9 @@ export const exportFacelets = cube => {
     const localFace = worldNormalToLocalFace(piece, outwardNormal)
     const sticker = piece.faces[localFace]
     if (sticker === "-") {
-      throw new Error(`No sticker on ${localFace} face of piece at (${x}, ${y}, ${z})`)
+      throw new Error(
+        `No sticker on ${localFace} face of piece at (${x}, ${y}, ${z})`
+      )
     }
     return sticker
   }).join("")
@@ -135,14 +181,19 @@ export const exportFacelets = cube => {
 
 export const isSolved = cube => {
   const facelets = exportFacelets(cube)
-  return FACELET_POSITIONS.every(({ coords, outwardNormal }, index) => {
-    const [x, y, z] = coords
-    const expected = outwardNormal[1] === 1 ? "U"
-      : outwardNormal[1] === -1 ? "D"
-      : outwardNormal[0] === -1 ? "L"
-      : outwardNormal[0] === 1 ? "R"
-      : outwardNormal[2] === 1 ? "F"
-      : "B"
+  return FACELET_POSITIONS.every(({ outwardNormal }, index) => {
+    const expected =
+      outwardNormal[1] === 1
+        ? "U"
+        : outwardNormal[1] === -1
+          ? "D"
+          : outwardNormal[0] === -1
+            ? "L"
+            : outwardNormal[0] === 1
+              ? "R"
+              : outwardNormal[2] === 1
+                ? "F"
+                : "B"
     return facelets[index] === expected
   })
 }
@@ -268,15 +319,16 @@ const getMoveNotationLookup = cubeSize => {
 export const moveToNotation = (move, cubeSize) => {
   const notation = getMoveNotationLookup(cubeSize).get(move.id)
   if (!notation) {
-    throw new Error(`Move id ${move.id} has no notation for cube size ${cubeSize}`)
+    throw new Error(
+      `Move id ${move.id} has no notation for cube size ${cubeSize}`
+    )
   }
   return notation
 }
 
 export const moveToSingmaster = move => moveToNotation(move, CUBE_SIZE)
 
-export const formatSingmaster = moves =>
-  moves.map(moveToSingmaster).join(" ")
+export const formatSingmaster = moves => moves.map(moveToSingmaster).join(" ")
 
 export const FACE_TURN_FACES = Object.keys(FACE_CLOCKWISE_MOVE_IDS)
 
@@ -292,14 +344,17 @@ const OPPOSITE_FACE = {
 const QUARTER_TURNS = [1, 2, 3]
 
 export const getRandomFaceMove = () => {
-  const face = FACE_TURN_FACES[Math.floor(Math.random() * FACE_TURN_FACES.length)]
-  const quarterTurns = QUARTER_TURNS[Math.floor(Math.random() * QUARTER_TURNS.length)]
+  const face =
+    FACE_TURN_FACES[Math.floor(Math.random() * FACE_TURN_FACES.length)]
+  const quarterTurns =
+    QUARTER_TURNS[Math.floor(Math.random() * QUARTER_TURNS.length)]
   return lookupMoveId(CUBE_SIZE, lookupFaceMoveId(face, quarterTurns))
 }
 
 export const generateFaceTurnScramble = length => {
   const moves = []
   let lastFace = null
+  let lastMove = null
 
   for (let i = 0; i < length; i++) {
     const excludedFaces = new Set()
@@ -308,11 +363,22 @@ export const generateFaceTurnScramble = length => {
       excludedFaces.add(OPPOSITE_FACE[lastFace])
     }
 
-    const availableFaces = FACE_TURN_FACES.filter(face => !excludedFaces.has(face))
-    const face = availableFaces[Math.floor(Math.random() * availableFaces.length)]
-    const quarterTurns = QUARTER_TURNS[Math.floor(Math.random() * QUARTER_TURNS.length)]
-    moves.push(lookupMoveId(CUBE_SIZE, lookupFaceMoveId(face, quarterTurns)))
+    const availableFaces = FACE_TURN_FACES.filter(
+      face => !excludedFaces.has(face)
+    )
+
+    let move
+    let face
+    do {
+      face = availableFaces[Math.floor(Math.random() * availableFaces.length)]
+      const quarterTurns =
+        QUARTER_TURNS[Math.floor(Math.random() * QUARTER_TURNS.length)]
+      move = lookupMoveId(CUBE_SIZE, lookupFaceMoveId(face, quarterTurns))
+    } while (lastMove && move.id === lastMove.oppositeMoveId)
+
+    moves.push(move)
     lastFace = face
+    lastMove = move
   }
 
   return moves

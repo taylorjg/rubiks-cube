@@ -3,7 +3,6 @@ import { renderHook } from "@testing-library/react"
 import { useQueryParams } from "./useQueryParams"
 
 describe("useQueryParams", () => {
-
   describe("getString", () => {
     it("when param is not present returns default value", () => {
       const { result } = renderHook(() => useQueryParams())
@@ -75,7 +74,9 @@ describe("useQueryParams", () => {
     })
 
     it("when params are present returns their values", () => {
-      const { result } = renderHook(() => useQueryParams("?color=red&color=green"))
+      const { result } = renderHook(() =>
+        useQueryParams("?color=red&color=green")
+      )
       const queryParams = result.current
       const colors = queryParams.getStrings("color")
       expect(colors).toEqual(["red", "green"])
@@ -91,7 +92,9 @@ describe("useQueryParams", () => {
     })
 
     it("when params are present returns their values", () => {
-      const { result } = renderHook(() => useQueryParams("?count=1&count=2&count=3"))
+      const { result } = renderHook(() =>
+        useQueryParams("?count=1&count=2&count=3")
+      )
       const queryParams = result.current
       const counts = queryParams.getNumbers("count")
       expect(counts).toEqual([1, 2, 3])
@@ -107,7 +110,9 @@ describe("useQueryParams", () => {
     })
 
     it("when params are present returns their values", () => {
-      const { result } = renderHook(() => useQueryParams("?flag=1&flag=0&flag=yes&flag=no&flag"))
+      const { result } = renderHook(() =>
+        useQueryParams("?flag=1&flag=0&flag=yes&flag=no&flag")
+      )
       const queryParams = result.current
       const flags = queryParams.getBools("flag")
       expect(flags).toEqual([true, false, true, false, true])
@@ -115,7 +120,9 @@ describe("useQueryParams", () => {
   })
 
   it("mixture of params", () => {
-    const { result } = renderHook(() => useQueryParams("?color=red&lang=en&count=99&flag=1"))
+    const { result } = renderHook(() =>
+      useQueryParams("?color=red&lang=en&count=99&flag=1")
+    )
     const queryParams = result.current
     const color = queryParams.getString("color")
     const lang = queryParams.getString("lang")

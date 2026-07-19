@@ -2,10 +2,10 @@ import styled from "@emotion/styled"
 
 export const StyledSettingsIcon = styled.div`
   color: #ffffff;
-  opacity: .5;
+  opacity: 0.5;
   position: fixed;
-  top: .5rem;
-  left: .5rem;
+  top: 0.5rem;
+  left: 0.5rem;
   cursor: pointer;
   display: flex;
   &:hover {

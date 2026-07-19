@@ -3,7 +3,7 @@ import { matrix, identity } from "mathjs"
 export const Identity = identity(3)
 
 const calcCosSin = degrees => {
-  const radians = degrees * Math.PI / 180
+  const radians = (degrees * Math.PI) / 180
   const cos = Math.trunc(Math.cos(radians))
   const sin = Math.trunc(Math.sin(radians))
   return { cos, sin }

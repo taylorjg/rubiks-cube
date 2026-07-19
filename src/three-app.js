@@ -24,25 +24,24 @@ const queryParamInt = (paramName, min, max, defaultValue) => {
 }
 
 const COLOR_TABLE = {
-  "U": new THREE.Color("blue"),
-  "D": new THREE.Color("green"),
-  "L": new THREE.Color("red"),
-  "R": new THREE.Color("darkorange"),
-  "F": new THREE.Color("yellow"),
-  "B": new THREE.Color("ghostwhite"),
+  U: new THREE.Color("blue"),
+  D: new THREE.Color("green"),
+  L: new THREE.Color("red"),
+  R: new THREE.Color("darkorange"),
+  F: new THREE.Color("yellow"),
+  B: new THREE.Color("ghostwhite"),
   "-": new THREE.Color(0x282828)
 }
 
 const PIECE_MATERIAL = new THREE.MeshPhysicalMaterial({
   vertexColors: true,
-  metalness: .5,
-  roughness: .1,
-  clearcoat: .1,
-  reflectivity: .5
+  metalness: 0.5,
+  roughness: 0.1,
+  clearcoat: 0.1,
+  reflectivity: 0.5
 })
 
 const threeApp = () => {
-
   const globals = {
     pieceGeometry: undefined,
     cube: undefined,
@@ -59,11 +58,12 @@ const threeApp = () => {
     cubeSizeChanged: true,
     animationSpeed: 750,
     axesEnabled: false,
-    showMoveLabels: false
+    showMoveLabels: false,
+    scrambleMoves: 25
   }
 
-  const SETTINGS_CHANGED_EVENT_NAME = 'settings-changed'
-  const MOVE_STEP_CHANGED_EVENT_NAME = 'move-step-changed'
+  const SETTINGS_CHANGED_EVENT_NAME = "settings-changed"
+  const MOVE_STEP_CHANGED_EVENT_NAME = "move-step-changed"
 
   const eventEmitter = new EventEmitter()
 
@@ -97,7 +97,8 @@ const threeApp = () => {
       autoRotate: globals.controls.autoRotate,
       autoRotateSpeed: globals.controls.autoRotateSpeed,
       axesEnabled: globals.axesEnabled,
-      showMoveLabels: globals.showMoveLabels
+      showMoveLabels: globals.showMoveLabels,
+      scrambleMoves: globals.scrambleMoves
     }
   }
 
@@ -106,7 +107,7 @@ const threeApp = () => {
   }
 
   globals.animationSpeed = queryParamInt("animationSpeed", 100, 1000, 750)
-  const NUM_RANDOM_MOVES = queryParamInt("randomMoves", 10, 100, 25)
+  globals.scrambleMoves = queryParamInt("scrambleMoves", 10, 100, 25)
   const BEFORE_DELAY = queryParamInt("beforeDelay", 0, 5000, 2000)
   const AFTER_DELAY = queryParamInt("afterDelay", 0, 5000, 2000)
 
@@ -121,10 +122,23 @@ const threeApp = () => {
     const n32 = rotationMatrix3.get([1, 2])
     const n33 = rotationMatrix3.get([2, 2])
     return new THREE.Matrix4().set(
-      n11, n12, n13, 0,
-      n21, n22, n23, 0,
-      n31, n32, n33, 0,
-      0, 0, 0, 1)
+      n11,
+      n12,
+      n13,
+      0,
+      n21,
+      n22,
+      n23,
+      0,
+      n31,
+      n32,
+      n33,
+      0,
+      0,
+      0,
+      0,
+      1
+    )
   }
 
   const loadGeometry = url =>
@@ -137,7 +151,8 @@ const threeApp = () => {
           resolve(bufferGeometry.toNonIndexed())
         },
         undefined,
-        reject)
+        reject
+      )
     })
 
   const lookupColorForFaceNormal = (piece, normalX, normalY, normalZ) => {
@@ -150,14 +165,17 @@ const threeApp = () => {
     return COLOR_TABLE["-"]
   }
 
-  const setGeometryVertexColors = (piece) => {
+  const setGeometryVertexColors = piece => {
     const pieceGeoemtry = globals.pieceGeometry.clone()
     const normalAttribute = pieceGeoemtry.getAttribute("normal")
 
     const colors = []
 
-    for (let normalIndex = 0; normalIndex < normalAttribute.count; normalIndex += 3) {
-
+    for (
+      let normalIndex = 0;
+      normalIndex < normalAttribute.count;
+      normalIndex += 3
+    ) {
       let arrayIndex = normalIndex * normalAttribute.itemSize
       const normalX = normalAttribute.array[arrayIndex++]
       const normalY = normalAttribute.array[arrayIndex++]
@@ -170,7 +188,10 @@ const threeApp = () => {
       colors.push(color.r, color.g, color.b)
     }
 
-    pieceGeoemtry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3))
+    pieceGeoemtry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(colors, 3)
+    )
 
     return pieceGeoemtry
   }
@@ -198,7 +219,7 @@ const threeApp = () => {
 
   const resetUiPiece = (uiPiece, piece) => {
     const isEvenSizedCube = globals.cubeSize % 2 === 0
-    const adjustValue = v => isEvenSizedCube ? v < 0 ? v + 0.5 : v - 0.5 : v
+    const adjustValue = v => (isEvenSizedCube ? (v < 0 ? v + 0.5 : v - 0.5) : v)
     uiPiece.position.x = adjustValue(piece.x)
     uiPiece.position.y = adjustValue(piece.y)
     uiPiece.position.z = adjustValue(piece.z)
@@ -245,21 +266,26 @@ const threeApp = () => {
     startQuaternion.toArray(values, values.length)
     endQuaternion.toArray(values, values.length)
     const duration = -1
-    const tracks = [new THREE.QuaternionKeyframeTrack(".quaternion", times, values)]
+    const tracks = [
+      new THREE.QuaternionKeyframeTrack(".quaternion", times, values)
+    ]
     return new THREE.AnimationClip(move.id, duration, tracks)
   }
 
-  const animateMoves = (moves, nextMoveIndex = 0) => {
-
+  const animateMoves = (moves, nextMoveIndex = 0, context = {}) => {
     if (globals.cubeSizeChanged) {
       return setTimeout(scramble, 0)
     }
 
+    const { scrambleTotal, onComplete } = context
     const move = moves[nextMoveIndex]
 
     if (!move) {
       if (globals.showMoveLabels) {
         emitMoveStep(null)
+      }
+      if (onComplete) {
+        return onComplete()
       }
       return setTimeout(scramble, AFTER_DELAY)
     }
@@ -268,24 +294,33 @@ const threeApp = () => {
       emitMoveStep({
         step: nextMoveIndex + 1,
         total: moves.length,
-        notation: formatMoveLabel(move)
+        notation: formatMoveLabel(move),
+        scrambleTotal
       })
     }
 
     const pieces = L.getPieces(globals.cube, move.coordsList)
     const uiPieces = pieces.map(findUiPiece)
-    movePiecesBetweenGroups(uiPieces, globals.puzzleGroup, globals.animationGroup)
+    movePiecesBetweenGroups(
+      uiPieces,
+      globals.puzzleGroup,
+      globals.animationGroup
+    )
 
     const onFinished = () => {
       globals.animationMixer.removeEventListener("finished", onFinished)
-      movePiecesBetweenGroups(uiPieces, globals.animationGroup, globals.puzzleGroup)
+      movePiecesBetweenGroups(
+        uiPieces,
+        globals.animationGroup,
+        globals.puzzleGroup
+      )
       globals.cube = move.makeMove(globals.cube)
       const rotationMatrix3 = move.rotationMatrix3
       const rotationMatrix4 = makeRotationMatrix4(rotationMatrix3)
       for (const uiPiece of uiPieces) {
         uiPiece.applyMatrix4(rotationMatrix4)
       }
-      animateMoves(moves, nextMoveIndex + 1)
+      animateMoves(moves, nextMoveIndex + 1, context)
     }
 
     globals.animationMixer.addEventListener("finished", onFinished)
@@ -293,36 +328,45 @@ const threeApp = () => {
     const animationClip = createAnimationClip(move)
     const clipAction = globals.animationMixer.clipAction(
       animationClip,
-      globals.animationGroup)
+      globals.animationGroup
+    )
     clipAction.setLoop(THREE.LoopOnce)
     clipAction.play()
   }
 
-  const showSolutionByCheating = randomMoves => {
-    const solutionMoves = randomMoves
+  const animateSolution = (solutionMoves, scrambleMoves) => {
+    animateMoves(solutionMoves, 0, {
+      scrambleTotal: scrambleMoves.length,
+      onComplete: () => setTimeout(scramble, AFTER_DELAY)
+    })
+  }
+
+  const showSolutionByCheating = scrambleMoves => {
+    const solutionMoves = scrambleMoves
       .map(move => move.oppositeMoveId)
       .map(id => L.lookupMoveId(globals.cubeSize, id))
       .reverse()
-    console.log(`solution moves: ${solutionMoves.map(move => move.id).join(" ")}`)
-    animateMoves(solutionMoves)
+    console.log(
+      `solution moves: ${solutionMoves.map(move => move.id).join(" ")}`
+    )
+    animateSolution(solutionMoves, scrambleMoves)
   }
 
-  const showSolution = async randomMoves => {
+  const showSolution = async scrambleMoves => {
     if (globals.cubeSize === 3) {
       try {
-        const solutionMoves = await solve3x3(randomMoves)
+        const solutionMoves = await solve3x3(scrambleMoves)
         console.log(`solution moves: ${N.formatSingmaster(solutionMoves)}`)
-        animateMoves(solutionMoves)
+        animateSolution(solutionMoves, scrambleMoves)
         return
       } catch (error) {
         console.error("Solver failed, falling back to cheat-reverse:", error)
       }
     }
-    showSolutionByCheating(randomMoves)
+    showSolutionByCheating(scrambleMoves)
   }
 
   const scramble = () => {
-
     if (globals.cubeSizeChanged) {
       globals.cubeSizeChanged = false
       globals.puzzleGroup.clear()
@@ -336,18 +380,19 @@ const threeApp = () => {
       recreateUiPieces()
     }
 
-    const randomMoves = globals.cubeSize === 3
-      ? N.generateFaceTurnScramble(NUM_RANDOM_MOVES)
-      : U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(globals.cubeSize))
-    L.removeRedundantMoves(randomMoves)
-    console.log(`random moves: ${globals.cubeSize === 3 ? N.formatSingmaster(randomMoves) : randomMoves.map(move => move.id).join(" ")}`)
-    globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(globals.cubeSize))
+    const scrambleMoves =
+      globals.cubeSize === 3
+        ? N.generateFaceTurnScramble(globals.scrambleMoves)
+        : L.generateRandomScramble(globals.cubeSize, globals.scrambleMoves)
+    console.log(
+      `random moves: ${globals.cubeSize === 3 ? N.formatSingmaster(scrambleMoves) : scrambleMoves.map(move => move.id).join(" ")}`
+    )
+    globals.cube = L.makeMoves(scrambleMoves, L.getSolvedCube(globals.cubeSize))
     resetUiPieces(globals.cube)
-    setTimeout(showSolution, BEFORE_DELAY, randomMoves)
+    setTimeout(showSolution, BEFORE_DELAY, scrambleMoves)
   }
 
   const init = async () => {
-
     const container = document.getElementById("visualisation-container")
     const w = container.offsetWidth
     const h = container.offsetHeight
@@ -403,7 +448,10 @@ const threeApp = () => {
     globals.animationGroup = new THREE.Group()
     globals.scene.add(globals.animationGroup)
 
-    globals.controls = new OrbitControls(globals.camera, globals.renderer.domElement)
+    globals.controls = new OrbitControls(
+      globals.camera,
+      globals.renderer.domElement
+    )
     globals.controls.minDistance = 5.0
     globals.controls.maxDistance = 40.0
     globals.controls.enableDamping = true
@@ -416,7 +464,9 @@ const threeApp = () => {
     globals.animationMixer = new THREE.AnimationMixer()
 
     globals.cube = L.getSolvedCube(globals.cubeSize)
-    globals.pieceGeometry = await loadGeometry(`${import.meta.env.BASE_URL}cube-bevelled.glb`)
+    globals.pieceGeometry = await loadGeometry(
+      `${import.meta.env.BASE_URL}cube-bevelled.glb`
+    )
     createUiPieces()
 
     animate()
@@ -425,15 +475,20 @@ const threeApp = () => {
     const onDocumentKeyDownHandler = e => {
       if (e.altKey || e.ctrlKey || e.metaKey || e.ShiftKey) return
       switch (e.key) {
-        case '2': return setCubeSize(2)
-        case '3': return setCubeSize(3)
-        case 'a': return toggleAxes()
-        case 'r': return toggleAutoRotate()
-        default: return
+        case "2":
+          return setCubeSize(2)
+        case "3":
+          return setCubeSize(3)
+        case "a":
+          return toggleAxes()
+        case "r":
+          return toggleAutoRotate()
+        default:
+          return
       }
     }
 
-    document.addEventListener('keydown', onDocumentKeyDownHandler)
+    document.addEventListener("keydown", onDocumentKeyDownHandler)
     initializeSolver()
   }
 
@@ -483,6 +538,14 @@ const threeApp = () => {
     emitSettingsChanged()
   }
 
+  const clampScrambleMoves = value =>
+    Math.max(10, Math.min(100, Math.round(Number(value))))
+
+  const setScrambleMoves = value => {
+    globals.scrambleMoves = clampScrambleMoves(value)
+    emitSettingsChanged()
+  }
+
   const toggleAxes = () => {
     setAxesEnabled(!globals.axesEnabled)
   }
@@ -503,6 +566,7 @@ const threeApp = () => {
     setAutoRotateSpeed,
     setAxesEnabled,
     setShowMoveLabels,
+    setScrambleMoves,
     getSettings
   }
 }

@@ -6,7 +6,6 @@ import MoveStep from "./MoveStep"
 import Version from "./Version"
 
 const App = () => {
-
   const threeAppActions = useThreeAppActions()
   const queryParams = useQueryParams()
 
@@ -21,13 +20,18 @@ const App = () => {
       threeAppActions.setAutoRotate(queryParams.getBool("autoRotate"))
     }
     if (queryParams.has("autoRotateSpeed")) {
-      threeAppActions.setAutoRotateSpeed(queryParams.getNumber("autoRotateSpeed"))
+      threeAppActions.setAutoRotateSpeed(
+        queryParams.getNumber("autoRotateSpeed")
+      )
     }
     if (queryParams.has("axesEnabled")) {
       threeAppActions.setAxesEnabled(queryParams.getBool("axesEnabled"))
     }
     if (queryParams.has("showMoveLabels")) {
       threeAppActions.setShowMoveLabels(queryParams.getBool("showMoveLabels"))
+    }
+    if (queryParams.has("scrambleMoves")) {
+      threeAppActions.setScrambleMoves(queryParams.getNumber("scrambleMoves"))
     }
   }, [threeAppActions, queryParams])
 

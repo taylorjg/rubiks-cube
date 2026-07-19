@@ -13,13 +13,10 @@ const coordsToFaces = (vmin, vmax, x, y, z) => ({
 })
 
 const pieceHasCoords = (piece, coords) =>
-  piece.x === coords[0] &&
-  piece.y === coords[1] &&
-  piece.z === coords[2]
+  piece.x === coords[0] && piece.y === coords[1] && piece.z === coords[2]
 
 export const getPieces = (cube, coordsList) =>
-  coordsList.map(coords =>
-    cube.find(piece => pieceHasCoords(piece, coords)))
+  coordsList.map(coords => cube.find(piece => pieceHasCoords(piece, coords)))
 
 const isPieceInCoordsList = (piece, coordsList) =>
   coordsList.findIndex(coords => pieceHasCoords(piece, coords)) >= 0
@@ -37,9 +34,11 @@ const rotatePiece = (piece, rotationMatrix3) => {
 }
 
 const rotatePieces = (coordsList, rotationMatrix3) => cube =>
-  cube.map(piece => isPieceInCoordsList(piece, coordsList)
-    ? rotatePiece(piece, rotationMatrix3)
-    : piece)
+  cube.map(piece =>
+    isPieceInCoordsList(piece, coordsList)
+      ? rotatePiece(piece, rotationMatrix3)
+      : piece
+  )
 
 const makeKvp = (id, oppositeMoveId, rotationMatrix3, coordsList, numTurns) => {
   const key = id
@@ -59,9 +58,27 @@ const makeKvpsForSlice = ([rotationMatrices3, coordsList], index) => {
   const move90Id = baseId
   const move180Id = baseId + 1
   const move270Id = baseId + 2
-  const move90 = makeKvp(move90Id, move270Id, rotationMatrices3[0], coordsList, 1)
-  const move180 = makeKvp(move180Id, move180Id, rotationMatrices3[1], coordsList, 2)
-  const move270 = makeKvp(move270Id, move90Id, rotationMatrices3[2], coordsList, 1)
+  const move90 = makeKvp(
+    move90Id,
+    move270Id,
+    rotationMatrices3[0],
+    coordsList,
+    1
+  )
+  const move180 = makeKvp(
+    move180Id,
+    move180Id,
+    rotationMatrices3[1],
+    coordsList,
+    2
+  )
+  const move270 = makeKvp(
+    move270Id,
+    move90Id,
+    rotationMatrices3[2],
+    coordsList,
+    1
+  )
   return [move90, move180, move270]
 }
 
@@ -74,9 +91,18 @@ const makeMoveIdsToMoves = cubeSize => {
   const { values } = CL.getCubeDimensions(cubeSize)
   const allCoordsList = CL.makeAllCoordsList(cubeSize)
   const slices = [
-    ...values.map(xSlice => [xRotationMatrices3, CL.pitchSliceCoordsList(allCoordsList, xSlice)]),
-    ...values.map(ySlice => [yRotationMatrices3, CL.yawSliceCoordsList(allCoordsList, ySlice)]),
-    ...values.map(zSlice => [zRotationMatrices3, CL.rollSliceCoordsList(allCoordsList, zSlice)])
+    ...values.map(xSlice => [
+      xRotationMatrices3,
+      CL.pitchSliceCoordsList(allCoordsList, xSlice)
+    ]),
+    ...values.map(ySlice => [
+      yRotationMatrices3,
+      CL.yawSliceCoordsList(allCoordsList, ySlice)
+    ]),
+    ...values.map(zSlice => [
+      zRotationMatrices3,
+      CL.rollSliceCoordsList(allCoordsList, zSlice)
+    ])
   ]
   const nestedKvps = slices.map(makeKvpsForSlice)
   return new Map(U.flatten(nestedKvps))
@@ -87,7 +113,9 @@ const makeSolvedCube = cubeSize => {
   const allCoordsList = CL.makeAllCoordsList(cubeSize)
   return allCoordsList.map(([x, y, z], index) => ({
     id: index,
-    x, y, z,
+    x,
+    y,
+    z,
     faces: coordsToFaces(vmin, vmax, x, y, z),
     accTransform3: R.Identity
   }))
@@ -121,21 +149,23 @@ export const getRandomMove = cubeSize => {
   return perCubeSizeData.moves[randomIndex]
 }
 
-export const removeRedundantMoves = moves => {
-  for (; ;) {
-    let removedSomething = false
-    const indexes = U.range(moves.length)
-    for (const index of indexes.slice(1)) {
-      const move = moves[index]
-      const previousMove = moves[index - 1]
-      if (move.id === previousMove.oppositeMoveId) {
-        moves.splice(index, 1)
-        removedSomething = true
-        break
-      }
-    }
-    if (!removedSomething) break
+export const generateRandomScramble = (cubeSize, length) => {
+  const perCubeSizeData = PER_CUBE_SIZE_DATA.get(cubeSize)
+  const allMoves = perCubeSizeData.moves
+  const moves = []
+  let lastMove = null
+
+  for (let i = 0; i < length; i++) {
+    const availableMoves = lastMove
+      ? allMoves.filter(move => move.id !== lastMove.oppositeMoveId)
+      : allMoves
+    const move =
+      availableMoves[Math.floor(Math.random() * availableMoves.length)]
+    moves.push(move)
+    lastMove = move
   }
+
+  return moves
 }
 
 export const makeMoves = (moves, initialCube) =>
