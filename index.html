@@ -1,44 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/rubiks-cube/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A three.js visualisation of solving a Rubik's cube"
+    />
+    <title>Rubik's Cube</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #000000;
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="/rubiks-cube/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="A three.js visualisation of solving a Rubik's cube" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
-  <title>Rubik's Cube</title>
-  <style>
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #000000;
-    }
+      #visualisation-container {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-DK0K4RZB16"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag("js", new Date())
 
-    #visualisation-container {
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      height: 100vh;
-    }
-  </style>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DK0K4RZB16"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+      gtag("config", "G-DK0K4RZB16")
+    </script>
+    <script type="module" crossorigin src="/rubiks-cube/assets/index-CMRyYj1L.js"></script>
+    <link rel="stylesheet" crossorigin href="/rubiks-cube/assets/index-nonBiIEc.css">
+  </head>
 
-    gtag('config', 'G-DK0K4RZB16');
-  </script>
-  <script type="module" crossorigin src="/rubiks-cube/assets/index-COu6kRZT.js"></script>
-</head>
-
-<body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="visualisation-container"></div>
-  <div id="react-container"></div>
-</body>
-
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="visualisation-container"></div>
+    <div id="react-container"></div>
+  </body>
 </html>
