@@ -58,10 +58,12 @@ const threeApp = () => {
     cubeSize: 3,
     cubeSizeChanged: true,
     animationSpeed: 750,
-    axesEnabled: false
+    axesEnabled: false,
+    showMoveLabels: false
   }
 
   const SETTINGS_CHANGED_EVENT_NAME = 'settings-changed'
+  const MOVE_STEP_CHANGED_EVENT_NAME = 'move-step-changed'
 
   const eventEmitter = new EventEmitter()
 
@@ -71,13 +73,31 @@ const threeApp = () => {
   const removeSettingsChangedListener = listener =>
     eventEmitter.off(SETTINGS_CHANGED_EVENT_NAME, listener)
 
+  const addMoveStepChangedListener = listener =>
+    eventEmitter.on(MOVE_STEP_CHANGED_EVENT_NAME, listener)
+
+  const removeMoveStepChangedListener = listener =>
+    eventEmitter.off(MOVE_STEP_CHANGED_EVENT_NAME, listener)
+
+  const emitMoveStep = moveStep =>
+    eventEmitter.emit(MOVE_STEP_CHANGED_EVENT_NAME, moveStep)
+
+  const formatMoveLabel = move => {
+    try {
+      return N.moveToNotation(move, globals.cubeSize)
+    } catch {
+      return `#${move.id}`
+    }
+  }
+
   const getSettings = () => {
     return {
       cubeSize: globals.cubeSize,
       animationSpeed: globals.animationSpeed,
       autoRotate: globals.controls.autoRotate,
       autoRotateSpeed: globals.controls.autoRotateSpeed,
-      axesEnabled: globals.axesEnabled
+      axesEnabled: globals.axesEnabled,
+      showMoveLabels: globals.showMoveLabels
     }
   }
 
@@ -238,7 +258,18 @@ const threeApp = () => {
     const move = moves[nextMoveIndex]
 
     if (!move) {
+      if (globals.showMoveLabels) {
+        emitMoveStep(null)
+      }
       return setTimeout(scramble, AFTER_DELAY)
+    }
+
+    if (globals.showMoveLabels) {
+      emitMoveStep({
+        step: nextMoveIndex + 1,
+        total: moves.length,
+        notation: formatMoveLabel(move)
+      })
     }
 
     const pieces = L.getPieces(globals.cube, move.coordsList)
@@ -279,7 +310,7 @@ const threeApp = () => {
   const showSolution = async randomMoves => {
     if (globals.cubeSize === 3) {
       try {
-        const solutionMoves = await solve3x3(globals.cube)
+        const solutionMoves = await solve3x3(randomMoves)
         console.log(`solution moves: ${N.formatSingmaster(solutionMoves)}`)
         animateMoves(solutionMoves)
         return
@@ -445,6 +476,14 @@ const threeApp = () => {
     emitSettingsChanged()
   }
 
+  const setShowMoveLabels = value => {
+    globals.showMoveLabels = value
+    if (!value) {
+      emitMoveStep(null)
+    }
+    emitSettingsChanged()
+  }
+
   const toggleAxes = () => {
     setAxesEnabled(!globals.axesEnabled)
   }
@@ -457,11 +496,14 @@ const threeApp = () => {
     init,
     addSettingsChangedListener,
     removeSettingsChangedListener,
+    addMoveStepChangedListener,
+    removeMoveStepChangedListener,
     setCubeSize,
     setAnimationSpeed,
     setAutoRotate,
     setAutoRotateSpeed,
     setAxesEnabled,
+    setShowMoveLabels,
     getSettings
   }
 }

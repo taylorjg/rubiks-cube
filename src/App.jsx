@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useQueryParams } from "./useQueryParams"
 import { useThreeAppActions } from "./context"
 import SettingsButton from "./SettingsButton"
+import MoveStep from "./MoveStep"
 import Version from "./Version"
 
 const App = () => {
@@ -25,11 +26,15 @@ const App = () => {
     if (queryParams.has("axesEnabled")) {
       threeAppActions.setAxesEnabled(queryParams.getBool("axesEnabled"))
     }
+    if (queryParams.has("showMoveLabels")) {
+      threeAppActions.setShowMoveLabels(queryParams.getBool("showMoveLabels"))
+    }
   }, [threeAppActions, queryParams])
 
   return (
     <>
       <SettingsButton />
+      <MoveStep />
       <Version />
     </>
   )

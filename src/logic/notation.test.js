@@ -8,6 +8,7 @@ import {
   isSolved,
   lookupFaceMoveId,
   moveToSingmaster,
+  moveToNotation,
   parseMoveToken,
   parseSingmaster
 } from "./notation.js"
@@ -55,6 +56,20 @@ describe("notation", () => {
         const move = parseMoveToken(token)
         expect(moveToSingmaster(move)).toBe(token)
       }
+    })
+  })
+
+  describe("moveToNotation", () => {
+    it("names middle-slice moves on a 3×3", () => {
+      expect(moveToNotation(lookupMoveId(3, 23), 3)).toBe("S'")
+      expect(moveToNotation(lookupMoveId(3, 21), 3)).toBe("S")
+      expect(moveToNotation(lookupMoveId(3, 3), 3)).toBe("M")
+      expect(moveToNotation(lookupMoveId(3, 12), 3)).toBe("E")
+    })
+
+    it("names outer face moves on a 2×2", () => {
+      expect(moveToNotation(lookupMoveId(2, 3), 2)).toBe("R")
+      expect(moveToNotation(lookupMoveId(2, 6), 2)).toBe("D")
     })
   })
 

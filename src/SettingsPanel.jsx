@@ -134,6 +134,33 @@ const AxesEnabledSetting = ({ value, setValue }) => {
   )
 }
 
+const ShowMoveLabelsSetting = ({ value, setValue }) => {
+
+  const handleChange = event => {
+    setValue(event.target.checked)
+  }
+
+  return (
+    <div>
+      <FormControl>
+        <FormLabel id="show-move-labels-label">Show Move Labels</FormLabel>
+        <FormControlLabel
+          sx={{ mt: ".25rem" }}
+          control={
+            <Switch
+              aria-labelledby="show-move-labels-label"
+              size="small"
+              checked={value}
+              onClick={handleChange}
+            />
+          }
+          label={value ? "On" : "Off"}
+        />
+      </FormControl>
+    </div>
+  )
+}
+
 const SettingsPanel = ({ onClose }) => {
 
   const threeAppActions = useThreeAppActions()
@@ -157,6 +184,7 @@ const SettingsPanel = ({ onClose }) => {
         <AutoRotateSetting value={settings.autoRotate} setValue={threeAppActions.setAutoRotate} />
         <AutoRotateSpeedSetting value={settings.autoRotateSpeed} setValue={threeAppActions.setAutoRotateSpeed} />
         <AxesEnabledSetting value={settings.axesEnabled} setValue={threeAppActions.setAxesEnabled} />
+        <ShowMoveLabelsSetting value={settings.showMoveLabels} setValue={threeAppActions.setShowMoveLabels} />
       </StyledSettingsPanelBody>
     </StyledSettingsPanel>
   )

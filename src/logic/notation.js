@@ -1,16 +1,29 @@
 import * as math from "mathjs"
+import * as CL from "./coordsLists.js"
 import { lookupMoveId } from "./index.js"
 
 const CUBE_SIZE = 3
 
-// Quarter-turn clockwise move IDs when viewed from outside each face.
-const FACE_CLOCKWISE_MOVE_IDS = {
+// Quarter-turn clockwise move IDs when viewed from outside each face or slice.
+const CLOCKWISE_MOVE_IDS_3 = {
   U: 15,
   D: 9,
   L: 0,
   R: 6,
   F: 24,
-  B: 20
+  B: 20,
+  M: 3,
+  E: 12,
+  S: 21
+}
+
+const FACE_CLOCKWISE_MOVE_IDS = {
+  U: CLOCKWISE_MOVE_IDS_3.U,
+  D: CLOCKWISE_MOVE_IDS_3.D,
+  L: CLOCKWISE_MOVE_IDS_3.L,
+  R: CLOCKWISE_MOVE_IDS_3.R,
+  F: CLOCKWISE_MOVE_IDS_3.F,
+  B: CLOCKWISE_MOVE_IDS_3.B
 }
 
 const LOCAL_FACE_NORMALS = {
@@ -20,15 +33,6 @@ const LOCAL_FACE_NORMALS = {
   right: [1, 0, 0],
   front: [0, 0, 1],
   back: [0, 0, -1]
-}
-
-const LOCAL_FACE_TO_STICKER = {
-  up: "U",
-  down: "D",
-  left: "L",
-  right: "R",
-  front: "F",
-  back: "B"
 }
 
 const WORLD_NORMAL_TO_LOCAL_FACE = Object.fromEntries(
@@ -121,7 +125,11 @@ export const exportFacelets = cube => {
       throw new Error(`No piece found at (${x}, ${y}, ${z})`)
     }
     const localFace = worldNormalToLocalFace(piece, outwardNormal)
-    return LOCAL_FACE_TO_STICKER[localFace]
+    const sticker = piece.faces[localFace]
+    if (sticker === "-") {
+      throw new Error(`No sticker on ${localFace} face of piece at (${x}, ${y}, ${z})`)
+    }
+    return sticker
   }).join("")
 }
 
@@ -155,7 +163,13 @@ export const lookupFaceMoveId = (face, quarterTurns) => {
     return clockwiseMove.id
   }
   if (normalizedTurns === 2) {
-    return clockwiseMove.id + 1
+    for (const delta of [-1, 1]) {
+      const move = lookupMoveId(CUBE_SIZE, clockwiseMove.id + delta)
+      if (move && move.oppositeMoveId === move.id) {
+        return move.id
+      }
+    }
+    throw new Error(`No half-turn move found for face ${face}`)
   }
   return clockwiseMove.oppositeMoveId
 }
@@ -180,16 +194,84 @@ export const parseSingmaster = algorithm =>
     .filter(Boolean)
     .map(token => parseMoveToken(token))
 
-export const moveToSingmaster = move => {
-  for (const [face, clockwiseMoveId] of Object.entries(FACE_CLOCKWISE_MOVE_IDS)) {
-    if (move.id === clockwiseMoveId) return face
-    if (move.id === clockwiseMoveId + 1) return `${face}2`
-    if (move.id === lookupMoveId(CUBE_SIZE, clockwiseMoveId).oppositeMoveId) {
-      return `${face}'`
+const SLICE_LABELS_3 = {
+  x: { [-1]: "L", 0: "M", 1: "R" },
+  y: { [-1]: "D", 0: "E", 1: "U" },
+  z: { [-1]: "B", 0: "S", 1: "F" }
+}
+
+const getSliceLabel = (cubeSize, axis, sliceValue, vmin, vmax) => {
+  if (cubeSize === 3) {
+    return SLICE_LABELS_3[axis][sliceValue]
+  }
+
+  if (axis === "x") {
+    if (sliceValue === vmin) return "L"
+    if (sliceValue === vmax) return "R"
+  }
+  if (axis === "y") {
+    if (sliceValue === vmin) return "D"
+    if (sliceValue === vmax) return "U"
+  }
+  if (axis === "z") {
+    if (sliceValue === vmin) return "B"
+    if (sliceValue === vmax) return "F"
+  }
+
+  return null
+}
+
+const getClockwiseOffset = label => label === "B" ? 2 : 0
+
+const buildMoveNotationLookup = cubeSize => {
+  const { values, vmin, vmax } = CL.getCubeDimensions(cubeSize)
+  const lookup = new Map()
+  let sliceIndex = 0
+
+  const addSliceGroup = (axis, sliceValues) => {
+    for (const sliceValue of sliceValues) {
+      const label = getSliceLabel(cubeSize, axis, sliceValue, vmin, vmax)
+      if (label) {
+        const baseId = sliceIndex * 3
+        const clockwiseMoveId = baseId + getClockwiseOffset(label)
+        const clockwiseMove = lookupMoveId(cubeSize, clockwiseMoveId)
+        const halfTurnMove = [-1, 1]
+          .map(delta => lookupMoveId(cubeSize, clockwiseMoveId + delta))
+          .filter(Boolean)
+          .find(move => move.oppositeMoveId === move.id)
+        lookup.set(clockwiseMoveId, label)
+        lookup.set(halfTurnMove.id, `${label}2`)
+        lookup.set(clockwiseMove.oppositeMoveId, `${label}'`)
+      }
+      sliceIndex++
     }
   }
-  throw new Error(`Move id ${move.id} is not a 3×3 face turn`)
+
+  addSliceGroup("x", values)
+  addSliceGroup("y", values)
+  addSliceGroup("z", values)
+
+  return lookup
 }
+
+const MOVE_NOTATION_LOOKUPS = new Map()
+
+const getMoveNotationLookup = cubeSize => {
+  if (!MOVE_NOTATION_LOOKUPS.has(cubeSize)) {
+    MOVE_NOTATION_LOOKUPS.set(cubeSize, buildMoveNotationLookup(cubeSize))
+  }
+  return MOVE_NOTATION_LOOKUPS.get(cubeSize)
+}
+
+export const moveToNotation = (move, cubeSize) => {
+  const notation = getMoveNotationLookup(cubeSize).get(move.id)
+  if (!notation) {
+    throw new Error(`Move id ${move.id} has no notation for cube size ${cubeSize}`)
+  }
+  return notation
+}
+
+export const moveToSingmaster = move => moveToNotation(move, CUBE_SIZE)
 
 export const formatSingmaster = moves =>
   moves.map(moveToSingmaster).join(" ")
