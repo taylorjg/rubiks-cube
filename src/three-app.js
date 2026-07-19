@@ -176,10 +176,10 @@ const threeApp = () => {
       normalIndex < normalAttribute.count;
       normalIndex += 3
     ) {
-      let arrayIndex = normalIndex * normalAttribute.itemSize
-      const normalX = normalAttribute.array[arrayIndex++]
-      const normalY = normalAttribute.array[arrayIndex++]
-      const normalZ = normalAttribute.array[arrayIndex++]
+      const baseIndex = normalIndex * normalAttribute.itemSize
+      const normalX = normalAttribute.array[baseIndex]
+      const normalY = normalAttribute.array[baseIndex + 1]
+      const normalZ = normalAttribute.array[baseIndex + 2]
 
       const color = lookupColorForFaceNormal(piece, normalX, normalY, normalZ)
 
