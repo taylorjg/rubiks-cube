@@ -3,6 +3,7 @@ import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import * as L from "./logic"
+import * as N from "./logic/notation"
 import * as U from "./logic/utils"
 
 const url = new URL(document.location)
@@ -289,9 +290,11 @@ const threeApp = () => {
       recreateUiPieces()
     }
 
-    const randomMoves = U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(globals.cubeSize))
+    const randomMoves = globals.cubeSize === 3
+      ? N.generateFaceTurnScramble(NUM_RANDOM_MOVES)
+      : U.range(NUM_RANDOM_MOVES).map(() => L.getRandomMove(globals.cubeSize))
     L.removeRedundantMoves(randomMoves)
-    console.log(`random moves: ${randomMoves.map(move => move.id).join(" ")}`)
+    console.log(`random moves: ${globals.cubeSize === 3 ? N.formatSingmaster(randomMoves) : randomMoves.map(move => move.id).join(" ")}`)
     globals.cube = L.makeMoves(randomMoves, L.getSolvedCube(globals.cubeSize))
     resetUiPieces(globals.cube)
     setTimeout(showSolutionByCheating, BEFORE_DELAY, randomMoves)

@@ -3,6 +3,8 @@ import { getSolvedCube, lookupMoveId, makeMoves } from "./index.js"
 import {
   exportFacelets,
   formatSingmaster,
+  generateFaceTurnScramble,
+  isFaceTurn,
   isSolved,
   lookupFaceMoveId,
   moveToSingmaster,
@@ -72,6 +74,33 @@ describe("notation", () => {
       const moves = parseSingmaster("R2")
       expect(moves).toHaveLength(1)
       expect(moves[0].id).toBe(lookupFaceMoveId("R", 2))
+    })
+  })
+
+  describe("generateFaceTurnScramble", () => {
+    it("generates only face turns", () => {
+      const moves = generateFaceTurnScramble(25)
+      expect(moves).toHaveLength(25)
+      expect(moves.every(isFaceTurn)).toBe(true)
+    })
+
+    it("avoids consecutive moves on the same or opposite face", () => {
+      const moves = generateFaceTurnScramble(50)
+      const faces = formatSingmaster(moves).split(" ").map(token => token[0])
+
+      for (let index = 1; index < faces.length; index++) {
+        const previous = faces[index - 1]
+        const current = faces[index]
+        expect(current).not.toBe(previous)
+        const opposite = { U: "D", D: "U", L: "R", R: "L", F: "B", B: "F" }[previous]
+        expect(current).not.toBe(opposite)
+      }
+    })
+
+    it("produces a non-solved cube for a long scramble", () => {
+      const moves = generateFaceTurnScramble(25)
+      const cube = makeMoves(moves, getSolvedCube(3))
+      expect(isSolved(cube)).toBe(false)
     })
   })
 

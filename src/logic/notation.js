@@ -195,3 +195,50 @@ export const formatSingmaster = moves =>
   moves.map(moveToSingmaster).join(" ")
 
 export const FACE_TURN_FACES = Object.keys(FACE_CLOCKWISE_MOVE_IDS)
+
+const OPPOSITE_FACE = {
+  U: "D",
+  D: "U",
+  L: "R",
+  R: "L",
+  F: "B",
+  B: "F"
+}
+
+const QUARTER_TURNS = [1, 2, 3]
+
+export const getRandomFaceMove = () => {
+  const face = FACE_TURN_FACES[Math.floor(Math.random() * FACE_TURN_FACES.length)]
+  const quarterTurns = QUARTER_TURNS[Math.floor(Math.random() * QUARTER_TURNS.length)]
+  return lookupMoveId(CUBE_SIZE, lookupFaceMoveId(face, quarterTurns))
+}
+
+export const generateFaceTurnScramble = length => {
+  const moves = []
+  let lastFace = null
+
+  for (let i = 0; i < length; i++) {
+    const excludedFaces = new Set()
+    if (lastFace) {
+      excludedFaces.add(lastFace)
+      excludedFaces.add(OPPOSITE_FACE[lastFace])
+    }
+
+    const availableFaces = FACE_TURN_FACES.filter(face => !excludedFaces.has(face))
+    const face = availableFaces[Math.floor(Math.random() * availableFaces.length)]
+    const quarterTurns = QUARTER_TURNS[Math.floor(Math.random() * QUARTER_TURNS.length)]
+    moves.push(lookupMoveId(CUBE_SIZE, lookupFaceMoveId(face, quarterTurns)))
+    lastFace = face
+  }
+
+  return moves
+}
+
+export const isFaceTurn = move => {
+  try {
+    moveToSingmaster(move)
+    return true
+  } catch {
+    return false
+  }
+}
