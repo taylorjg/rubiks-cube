@@ -15,7 +15,7 @@ The following query params can be added:
 
 | Query Param | Description | Values | Default |
 | ----------- | ----------- | ------ | ------- |
-| cubeSize        | The size of the cube | 2-5 | 3 |
+| cubeSize        | The size of the cube | 2-4 | 3 |
 | animationSpeed  | How quickly to animate the moves | 100-5000 ms | 750 ms |
 | autoRotate      | Auto rotate the cube as it is solving | bool | true |
 | autoRotateSpeed | Speed of auto rotatation (if enabled) | 0-10000 ms | 1000 ms |
