@@ -69,7 +69,7 @@ Approximate time for one full 360° orbit:
 
 In general: **orbit period (seconds) ≈ 60 ÷ value**
 
-Keyboard shortcuts: **`2`** / **`3`** switch cube size; **`a`** toggles axes; **`r`** toggles auto-rotate; **`m`** toggles move labels.
+Keyboard shortcuts: **`2`** / **`3`** switch cube size; **`a`** toggles axes; **`r`** toggles auto-rotate; **`m`** toggles move labels; **`f`** toggles fullscreen.
 
 ## Examples
 

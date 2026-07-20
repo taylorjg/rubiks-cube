@@ -6,6 +6,7 @@ import * as L from "./logic"
 import * as N from "./logic/notation"
 import { initializeSolver, solve3x3 } from "./logic/solver"
 import * as U from "./logic/utils"
+import { toggleFullscreen } from "./fullscreen"
 
 const url = new URL(document.location)
 const searchParams = url.searchParams
@@ -485,6 +486,8 @@ const threeApp = () => {
           return toggleAutoRotate()
         case "m":
           return toggleShowMoveLabels()
+        case "f":
+          return toggleFullscreen()
         default:
           return
       }
