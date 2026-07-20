@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useQueryParams } from "./useQueryParams"
 import { useThreeAppActions } from "./context"
 import SettingsButton from "./SettingsButton"
+import FullscreenButton from "./FullscreenButton"
 import MoveStep from "./MoveStep"
 import Version from "./Version"
 
@@ -38,6 +39,7 @@ const App = () => {
   return (
     <>
       <SettingsButton />
+      <FullscreenButton />
       <MoveStep />
       <Version />
     </>
