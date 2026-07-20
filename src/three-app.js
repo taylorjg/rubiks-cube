@@ -56,10 +56,10 @@ const threeApp = () => {
     animationMixer: undefined,
     cubeSize: 3,
     cubeSizeChanged: true,
-    animationSpeed: 750,
+    animationSpeed: 400,
     axesEnabled: false,
-    showMoveLabels: false,
-    scrambleMoves: 25
+    showMoveLabels: true,
+    scrambleMoves: 75
   }
 
   const SETTINGS_CHANGED_EVENT_NAME = "settings-changed"
@@ -106,8 +106,8 @@ const threeApp = () => {
     eventEmitter.emit(SETTINGS_CHANGED_EVENT_NAME, getSettings())
   }
 
-  globals.animationSpeed = queryParamInt("animationSpeed", 100, 1000, 750)
-  globals.scrambleMoves = queryParamInt("scrambleMoves", 10, 100, 25)
+  globals.animationSpeed = queryParamInt("animationSpeed", 100, 1000, 400)
+  globals.scrambleMoves = queryParamInt("scrambleMoves", 10, 100, 75)
   const BEFORE_DELAY = queryParamInt("beforeDelay", 0, 5000, 2000)
   const AFTER_DELAY = queryParamInt("afterDelay", 0, 5000, 2000)
 

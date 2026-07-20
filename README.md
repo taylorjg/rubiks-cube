@@ -45,14 +45,14 @@ The following query params can be added:
 | Query Param     | Description                             | Values      | Default |
 | --------------- | --------------------------------------- | ----------- | ------- |
 | cubeSize        | The size of the cube                    | 2–3         | 3       |
-| animationSpeed  | How quickly to animate the moves        | 100–1000 ms | 750 ms  |
-| scrambleMoves   | Number of scramble moves                | 10–100      | 25      |
+| animationSpeed  | How quickly to animate the moves        | 100–1000 ms | 400 ms  |
+| scrambleMoves   | Number of scramble moves                | 10–100      | 75      |
 | beforeDelay     | Pause after scramble before solving     | 0–5000 ms   | 2000 ms |
 | afterDelay      | Pause after solve before next scramble  | 0–5000 ms   | 2000 ms |
 | autoRotate      | Auto-rotate the cube while solving      | bool        | true    |
 | autoRotateSpeed | Speed of auto-rotation (if enabled)     | 0–10        | 1       |
 | axesEnabled     | Draw the X, Y and Z axes                | bool        | false   |
-| showMoveLabels  | Show current move in the corner overlay | bool        | false   |
+| showMoveLabels  | Show current move in the corner overlay | bool        | true    |
 
 Keyboard shortcuts: **`2`** / **`3`** switch cube size; **`a`** toggles axes; **`r`** toggles auto-rotate.
 
