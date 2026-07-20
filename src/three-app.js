@@ -239,8 +239,8 @@ const threeApp = () => {
   const animate = timestamp => {
     window.requestAnimationFrame(animate)
     globals.timer.update(timestamp)
-    globals.controls.update()
     const delta = globals.timer.getDelta() * globals.animationMixer.timeScale
+    globals.controls.update(delta)
     globals.animationMixer.update(delta)
     globals.renderer.render(globals.scene, globals.camera)
   }
