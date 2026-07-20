@@ -50,11 +50,26 @@ The following query params can be added:
 | beforeDelay     | Pause after scramble before solving     | 0–5000 ms   | 2000 ms |
 | afterDelay      | Pause after solve before next scramble  | 0–5000 ms   | 2000 ms |
 | autoRotate      | Auto-rotate the cube while solving      | bool        | true    |
-| autoRotateSpeed | Speed of auto-rotation (if enabled)     | 0–10        | 1       |
+| autoRotateSpeed | Camera orbit speed (see below)          | 0–10        | 1       |
 | axesEnabled     | Draw the X, Y and Z axes                | bool        | false   |
 | showMoveLabels  | Show current move in the corner overlay | bool        | true    |
 
-Keyboard shortcuts: **`2`** / **`3`** switch cube size; **`a`** toggles axes; **`r`** toggles auto-rotate.
+### autoRotateSpeed
+
+This is a dimensionless multiplier passed to Three.js [OrbitControls](https://threejs.org/docs/#examples/en/controls/OrbitControls) — not radians or degrees per second. It controls how fast the camera orbits the cube when `autoRotate` is enabled.
+
+Approximate time for one full 360° orbit:
+
+| Value | Orbit period |
+| ----- | ------------ |
+| 1 (default) | ~60 s |
+| 2 | ~30 s |
+| 5 | ~12 s |
+| 10 | ~6 s |
+
+In general: **orbit period (seconds) ≈ 60 ÷ value**
+
+Keyboard shortcuts: **`2`** / **`3`** switch cube size; **`a`** toggles axes; **`r`** toggles auto-rotate; **`m`** toggles move labels.
 
 ## Examples
 

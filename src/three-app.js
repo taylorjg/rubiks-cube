@@ -483,6 +483,8 @@ const threeApp = () => {
           return toggleAxes()
         case "r":
           return toggleAutoRotate()
+        case "m":
+          return toggleShowMoveLabels()
         default:
           return
       }
@@ -552,6 +554,10 @@ const threeApp = () => {
 
   const toggleAutoRotate = () => {
     setAutoRotate(!globals.controls.autoRotate)
+  }
+
+  const toggleShowMoveLabels = () => {
+    setShowMoveLabels(!globals.showMoveLabels)
   }
 
   return {
