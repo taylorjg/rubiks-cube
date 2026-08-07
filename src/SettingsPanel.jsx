@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Close as CloseIcon } from "@mui/icons-material"
 import {
   Divider,
   FormControl,
@@ -10,7 +11,6 @@ import {
   Switch,
   Typography
 } from "@mui/material"
-import CloseIcon from "@mui/icons-material/Close"
 import {
   StyledSettingsPanel,
   StyledSettingsPanelHeader,

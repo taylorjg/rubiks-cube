@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
-import FullscreenIcon from "@mui/icons-material/Fullscreen"
-import FullscreenExitIcon from "@mui/icons-material/FullscreenExit"
+import {
+  Fullscreen as FullscreenIcon,
+  FullscreenExit as FullscreenExitIcon,
+} from "@mui/icons-material"
 import { StyledFullscreenIcon } from "./FullscreenButton.styles"
 import { toggleFullscreen } from "./fullscreen"
 
