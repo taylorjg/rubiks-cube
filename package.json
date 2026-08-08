@@ -23,7 +23,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "open": "open https://taylorjg.github.io/rubiks-cube/"

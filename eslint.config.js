@@ -9,7 +9,7 @@ import globals from "globals"
 
 export default fixupConfigRules([
   {
-    ignores: ["dist", "build", "package-lock.json"]
+    ignores: ["dist/**", "node_modules/**"]
   },
   {
     files: ["**/*.{js,jsx,mjs,cjs}"],
