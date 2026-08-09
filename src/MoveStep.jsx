@@ -1,31 +1,31 @@
-import { useEffect, useState } from "react"
-import Typography from "@mui/material/Typography"
-import { useThreeAppActions } from "./context"
+import { useEffect, useState } from "react";
+import Typography from "@mui/material/Typography";
+import { useThreeAppActions } from "./context";
 
-const formatMoveStepLabel = moveStep => {
+const formatMoveStepLabel = (moveStep) => {
   const scramblePart = moveStep.scrambleTotal
     ? ` (${moveStep.scrambleTotal} scramble)`
-    : ""
+    : "";
 
-  return `Step ${moveStep.step} of ${moveStep.total}${scramblePart}: ${moveStep.notation}`
-}
+  return `Step ${moveStep.step} of ${moveStep.total}${scramblePart}: ${moveStep.notation}`;
+};
 
 const MoveStep = () => {
-  const threeAppActions = useThreeAppActions()
-  const [settings, setSettings] = useState(threeAppActions.getSettings)
-  const [moveStep, setMoveStep] = useState(null)
+  const threeAppActions = useThreeAppActions();
+  const [settings, setSettings] = useState(threeAppActions.getSettings);
+  const [moveStep, setMoveStep] = useState(null);
 
   useEffect(() => {
-    threeAppActions.addSettingsChangedListener(setSettings)
-    threeAppActions.addMoveStepChangedListener(setMoveStep)
+    threeAppActions.addSettingsChangedListener(setSettings);
+    threeAppActions.addMoveStepChangedListener(setMoveStep);
     return () => {
-      threeAppActions.removeSettingsChangedListener(setSettings)
-      threeAppActions.removeMoveStepChangedListener(setMoveStep)
-    }
-  }, [threeAppActions])
+      threeAppActions.removeSettingsChangedListener(setSettings);
+      threeAppActions.removeMoveStepChangedListener(setMoveStep);
+    };
+  }, [threeAppActions]);
 
   if (!settings.showMoveLabels || !moveStep) {
-    return null
+    return null;
   }
 
   return (
@@ -40,12 +40,12 @@ const MoveStep = () => {
         letterSpacing: "0.05em",
         pointerEvents: "none",
         userSelect: "none",
-        color: "common.white"
+        color: "common.white",
       }}
     >
       {formatMoveStepLabel(moveStep)}
     </Typography>
-  )
-}
+  );
+};
 
-export default MoveStep
+export default MoveStep;

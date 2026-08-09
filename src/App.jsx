@@ -1,40 +1,42 @@
-import { useEffect } from "react"
-import { useQueryParams } from "./useQueryParams"
-import { useThreeAppActions } from "./context"
-import SettingsButton from "./SettingsButton"
-import FullscreenButton from "./FullscreenButton"
-import MoveStep from "./MoveStep"
-import Version from "./Version"
+import { useEffect } from "react";
+import { useQueryParams } from "./useQueryParams";
+import { useThreeAppActions } from "./context";
+import SettingsButton from "./SettingsButton";
+import FullscreenButton from "./FullscreenButton";
+import MoveStep from "./MoveStep";
+import Version from "./Version";
 
 const App = () => {
-  const threeAppActions = useThreeAppActions()
-  const queryParams = useQueryParams()
+  const threeAppActions = useThreeAppActions();
+  const queryParams = useQueryParams();
 
   useEffect(() => {
     if (queryParams.has("cubeSize")) {
-      threeAppActions.setCubeSize(queryParams.getNumber("cubeSize"))
+      threeAppActions.setCubeSize(queryParams.getNumber("cubeSize"));
     }
     if (queryParams.has("animationSpeed")) {
-      threeAppActions.setAnimationSpeed(queryParams.getNumber("animationSpeed"))
+      threeAppActions.setAnimationSpeed(
+        queryParams.getNumber("animationSpeed")
+      );
     }
     if (queryParams.has("autoRotate")) {
-      threeAppActions.setAutoRotate(queryParams.getBool("autoRotate"))
+      threeAppActions.setAutoRotate(queryParams.getBool("autoRotate"));
     }
     if (queryParams.has("autoRotateSpeed")) {
       threeAppActions.setAutoRotateSpeed(
         queryParams.getNumber("autoRotateSpeed")
-      )
+      );
     }
     if (queryParams.has("axesEnabled")) {
-      threeAppActions.setAxesEnabled(queryParams.getBool("axesEnabled"))
+      threeAppActions.setAxesEnabled(queryParams.getBool("axesEnabled"));
     }
     if (queryParams.has("showMoveLabels")) {
-      threeAppActions.setShowMoveLabels(queryParams.getBool("showMoveLabels"))
+      threeAppActions.setShowMoveLabels(queryParams.getBool("showMoveLabels"));
     }
     if (queryParams.has("scrambleMoves")) {
-      threeAppActions.setScrambleMoves(queryParams.getNumber("scrambleMoves"))
+      threeAppActions.setScrambleMoves(queryParams.getNumber("scrambleMoves"));
     }
-  }, [threeAppActions, queryParams])
+  }, [threeAppActions, queryParams]);
 
   return (
     <>
@@ -43,7 +45,7 @@ const App = () => {
       <MoveStep />
       <Version />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

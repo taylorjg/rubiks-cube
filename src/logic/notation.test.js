@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest"
-import { getSolvedCube, lookupMoveId, makeMoves } from "./index.js"
+import { describe, expect, it } from "vitest";
+import { getSolvedCube, lookupMoveId, makeMoves } from "./index.js";
 import {
   exportFacelets,
   formatSingmaster,
@@ -10,17 +10,17 @@ import {
   moveToSingmaster,
   moveToNotation,
   parseMoveToken,
-  parseSingmaster
-} from "./notation.js"
+  parseSingmaster,
+} from "./notation.js";
 
-const applyAlg = algorithm =>
-  makeMoves(parseSingmaster(algorithm), getSolvedCube(3))
+const applyAlg = (algorithm) =>
+  makeMoves(parseSingmaster(algorithm), getSolvedCube(3));
 
 describe("notation", () => {
   describe("exportFacelets", () => {
     it("returns 54 solved facelets for a solved cube", () => {
-      const facelets = exportFacelets(getSolvedCube(3))
-      expect(facelets).toHaveLength(54)
+      const facelets = exportFacelets(getSolvedCube(3));
+      expect(facelets).toHaveLength(54);
       expect(facelets).toBe(
         "U".repeat(9) +
           "R".repeat(9) +
@@ -28,33 +28,33 @@ describe("notation", () => {
           "D".repeat(9) +
           "L".repeat(9) +
           "B".repeat(9)
-      )
-    })
-  })
+      );
+    });
+  });
 
   describe("isSolved", () => {
     it("returns true for a solved cube", () => {
-      expect(isSolved(getSolvedCube(3))).toBe(true)
-    })
+      expect(isSolved(getSolvedCube(3))).toBe(true);
+    });
 
     it("returns false after a scramble", () => {
-      const cube = applyAlg("R U R' U'")
-      expect(isSolved(cube)).toBe(false)
-    })
-  })
+      const cube = applyAlg("R U R' U'");
+      expect(isSolved(cube)).toBe(false);
+    });
+  });
 
   describe("parseMoveToken", () => {
     it("maps face turns to expected move ids", () => {
-      expect(parseMoveToken("R").id).toBe(8)
-      expect(parseMoveToken("R'").id).toBe(6)
-      expect(parseMoveToken("R2").id).toBe(7)
-      expect(parseMoveToken("L").id).toBe(0)
-      expect(parseMoveToken("U").id).toBe(17)
-      expect(parseMoveToken("D").id).toBe(9)
-      expect(parseMoveToken("F").id).toBe(24)
-      expect(parseMoveToken("B").id).toBe(20)
-    })
-  })
+      expect(parseMoveToken("R").id).toBe(8);
+      expect(parseMoveToken("R'").id).toBe(6);
+      expect(parseMoveToken("R2").id).toBe(7);
+      expect(parseMoveToken("L").id).toBe(0);
+      expect(parseMoveToken("U").id).toBe(17);
+      expect(parseMoveToken("D").id).toBe(9);
+      expect(parseMoveToken("F").id).toBe(24);
+      expect(parseMoveToken("B").id).toBe(20);
+    });
+  });
 
   describe("moveToSingmaster", () => {
     it("round-trips move tokens", () => {
@@ -71,102 +71,105 @@ describe("notation", () => {
         "B",
         "B'",
         "D",
-        "D2"
+        "D2",
       ]) {
-        const move = parseMoveToken(token)
-        expect(moveToSingmaster(move)).toBe(token)
+        const move = parseMoveToken(token);
+        expect(moveToSingmaster(move)).toBe(token);
       }
-    })
-  })
+    });
+  });
 
   describe("moveToNotation", () => {
     it("names middle-slice moves on a 3×3", () => {
-      expect(moveToNotation(lookupMoveId(3, 23), 3)).toBe("S'")
-      expect(moveToNotation(lookupMoveId(3, 21), 3)).toBe("S")
-      expect(moveToNotation(lookupMoveId(3, 3), 3)).toBe("M")
-      expect(moveToNotation(lookupMoveId(3, 12), 3)).toBe("E")
-    })
+      expect(moveToNotation(lookupMoveId(3, 23), 3)).toBe("S'");
+      expect(moveToNotation(lookupMoveId(3, 21), 3)).toBe("S");
+      expect(moveToNotation(lookupMoveId(3, 3), 3)).toBe("M");
+      expect(moveToNotation(lookupMoveId(3, 12), 3)).toBe("E");
+    });
 
     it("names outer face moves on a 2×2", () => {
-      expect(moveToNotation(lookupMoveId(2, 5), 2)).toBe("R")
-      expect(moveToNotation(lookupMoveId(2, 6), 2)).toBe("D")
-    })
-  })
+      expect(moveToNotation(lookupMoveId(2, 5), 2)).toBe("R");
+      expect(moveToNotation(lookupMoveId(2, 6), 2)).toBe("D");
+    });
+  });
 
   describe("parseSingmaster", () => {
     it("parses a standard algorithm", () => {
-      const moves = parseSingmaster("R U R' U'")
-      expect(formatSingmaster(moves)).toBe("R U R' U'")
-    })
+      const moves = parseSingmaster("R U R' U'");
+      expect(formatSingmaster(moves)).toBe("R U R' U'");
+    });
 
     it("returns to solved with inverse algorithms", () => {
-      const scramble = "R U R' U'"
-      const cube = applyAlg(`${scramble} U R U' R'`)
-      expect(isSolved(cube)).toBe(true)
-    })
+      const scramble = "R U R' U'";
+      const cube = applyAlg(`${scramble} U R U' R'`);
+      expect(isSolved(cube)).toBe(true);
+    });
 
     it("handles half-turn notation without duplicating moves", () => {
-      const moves = parseSingmaster("R2")
-      expect(moves).toHaveLength(1)
-      expect(moves[0].id).toBe(lookupFaceMoveId("R", 2))
-    })
-  })
+      const moves = parseSingmaster("R2");
+      expect(moves).toHaveLength(1);
+      expect(moves[0].id).toBe(lookupFaceMoveId("R", 2));
+    });
+  });
 
   describe("generateFaceTurnScramble", () => {
     it("generates only face turns", () => {
-      const moves = generateFaceTurnScramble(25)
-      expect(moves).toHaveLength(25)
-      expect(moves.every(isFaceTurn)).toBe(true)
-    })
+      const moves = generateFaceTurnScramble(25);
+      expect(moves).toHaveLength(25);
+      expect(moves.every(isFaceTurn)).toBe(true);
+    });
 
     it("avoids consecutive moves on the same or opposite face", () => {
-      const moves = generateFaceTurnScramble(50)
+      const moves = generateFaceTurnScramble(50);
       const faces = formatSingmaster(moves)
         .split(" ")
-        .map(token => token[0])
+        .map((token) => token[0]);
 
       for (let index = 1; index < faces.length; index++) {
-        const previous = faces[index - 1]
-        const current = faces[index]
-        expect(current).not.toBe(previous)
+        const previous = faces[index - 1];
+        const current = faces[index];
+        expect(current).not.toBe(previous);
         const opposite = { U: "D", D: "U", L: "R", R: "L", F: "B", B: "F" }[
           previous
-        ]
-        expect(current).not.toBe(opposite)
+        ];
+        expect(current).not.toBe(opposite);
       }
-    })
+    });
 
     it("avoids consecutive opposite moves", () => {
-      const moves = generateFaceTurnScramble(50)
+      const moves = generateFaceTurnScramble(50);
 
       for (let index = 1; index < moves.length; index++) {
-        expect(moves[index].id).not.toBe(moves[index - 1].oppositeMoveId)
+        expect(moves[index].id).not.toBe(moves[index - 1].oppositeMoveId);
       }
-    })
+    });
 
     it("produces a non-solved cube for a long scramble", () => {
-      const moves = generateFaceTurnScramble(25)
-      const cube = makeMoves(moves, getSolvedCube(3))
-      expect(isSolved(cube)).toBe(false)
-    })
-  })
+      const moves = generateFaceTurnScramble(25);
+      const cube = makeMoves(moves, getSolvedCube(3));
+      expect(isSolved(cube)).toBe(false);
+    });
+  });
 
   describe("known sequences", () => {
     it("changes facelets after R but returns to solved after four R turns", () => {
-      const afterOne = applyAlg("R")
+      const afterOne = applyAlg("R");
       expect(exportFacelets(afterOne)).not.toBe(
         exportFacelets(getSolvedCube(3))
-      )
+      );
 
-      const afterFour = applyAlg("R R R R")
-      expect(isSolved(afterFour)).toBe(true)
-    })
+      const afterFour = applyAlg("R R R R");
+      expect(isSolved(afterFour)).toBe(true);
+    });
 
     it("returns to solved after a sune and its inverse", () => {
-      const cube = applyAlg("R U R' U R U2 R'")
-      expect(isSolved(cube)).toBe(false)
-      const solvedAgain = makeMoves(parseSingmaster("R U2 R' U' R U' R'"), cube)
-      expect(isSolved(solvedAgain)).toBe(true)
-    })
-  })
-})
+      const cube = applyAlg("R U R' U R U2 R'");
+      expect(isSolved(cube)).toBe(false);
+      const solvedAgain = makeMoves(
+        parseSingmaster("R U2 R' U' R U' R'"),
+        cube
+      );
+      expect(isSolved(solvedAgain)).toBe(true);
+    });
+  });
+});

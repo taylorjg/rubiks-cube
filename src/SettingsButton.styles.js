@@ -1,4 +1,4 @@
-import styled from "@emotion/styled"
+import styled from "@emotion/styled";
 
 export const StyledSettingsIcon = styled.div`
   color: #ffffff;
@@ -12,4 +12,4 @@ export const StyledSettingsIcon = styled.div`
     opacity: 1;
     transform: scale(1.2);
   }
-`
+`;

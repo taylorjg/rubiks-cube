@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useState } from "react";
 
-const parseBool = s => {
-  if (s === "") return true
-  if (!s) return false
+const parseBool = (s) => {
+  if (s === "") return true;
+  if (!s) return false;
 
   switch (s.toLowerCase()) {
     case "1":
@@ -12,7 +12,7 @@ const parseBool = s => {
     case "on":
     case "enable":
     case "enabled":
-      return true
+      return true;
 
     case "0":
     case "false":
@@ -21,44 +21,45 @@ const parseBool = s => {
     case "off":
     case "disable":
     case "disabled":
-      return false
+      return false;
 
     default:
-      return false
+      return false;
   }
-}
+};
 
-const identity = value => value
+const identity = (value) => value;
 
-export const useQueryParams = search => {
+export const useQueryParams = (search) => {
   const [searchParams] = useState(
     () => new URLSearchParams(search ?? window.location.search)
-  )
+  );
 
   const getParam = (name, defaultValue, transform = identity) => {
     return searchParams.has(name)
       ? transform(searchParams.get(name))
-      : defaultValue
-  }
+      : defaultValue;
+  };
 
   const getParams = (name, defaultValue, transform = identity) => {
     return searchParams.has(name)
       ? searchParams.getAll(name).map(transform)
-      : defaultValue
-  }
+      : defaultValue;
+  };
 
-  const has = name => searchParams.has(name)
+  const has = (name) => searchParams.has(name);
 
-  const getString = (name, defaultValue) => getParam(name, defaultValue)
-  const getNumber = (name, defaultValue) => getParam(name, defaultValue, Number)
+  const getString = (name, defaultValue) => getParam(name, defaultValue);
+  const getNumber = (name, defaultValue) =>
+    getParam(name, defaultValue, Number);
   const getBool = (name, defaultValue) =>
-    getParam(name, defaultValue, parseBool)
+    getParam(name, defaultValue, parseBool);
 
-  const getStrings = (name, defaultValue) => getParams(name, defaultValue)
+  const getStrings = (name, defaultValue) => getParams(name, defaultValue);
   const getNumbers = (name, defaultValue) =>
-    getParams(name, defaultValue, Number)
+    getParams(name, defaultValue, Number);
   const getBools = (name, defaultValue) =>
-    getParams(name, defaultValue, parseBool)
+    getParams(name, defaultValue, parseBool);
 
   return {
     has,
@@ -67,6 +68,6 @@ export const useQueryParams = search => {
     getBool,
     getStrings,
     getNumbers,
-    getBools
-  }
-}
+    getBools,
+  };
+};

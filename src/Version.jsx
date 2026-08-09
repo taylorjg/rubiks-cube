@@ -1,5 +1,5 @@
-import Typography from "@mui/material/Typography"
-import packageJson from "../package.json"
+import Typography from "@mui/material/Typography";
+import packageJson from "../package.json";
 
 const Version = () => {
   return (
@@ -14,13 +14,13 @@ const Version = () => {
         opacity: 0.5,
         "&:hover": {
           opacity: 1,
-          transform: "scale(1.2) translate(-0.2rem, -0.2rem)"
-        }
+          transform: "scale(1.2) translate(-0.2rem, -0.2rem)",
+        },
       }}
     >
       {`version: ${packageJson.version}`}
     </Typography>
-  )
-}
+  );
+};
 
-export default Version
+export default Version;

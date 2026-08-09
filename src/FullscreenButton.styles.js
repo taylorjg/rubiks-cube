@@ -1,4 +1,4 @@
-import styled from "@emotion/styled"
+import styled from "@emotion/styled";
 
 export const StyledFullscreenIcon = styled.button`
   color: #ffffff;
@@ -16,4 +16,4 @@ export const StyledFullscreenIcon = styled.button`
     opacity: 1;
     transform: scale(1.2);
   }
-`
+`;

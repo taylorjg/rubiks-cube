@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { Close as CloseIcon } from "@mui/icons-material"
+import { useEffect, useState } from "react";
+import { Close as CloseIcon } from "@mui/icons-material";
 import {
   Divider,
   FormControl,
@@ -9,19 +9,19 @@ import {
   RadioGroup,
   Slider,
   Switch,
-  Typography
-} from "@mui/material"
+  Typography,
+} from "@mui/material";
 import {
   StyledSettingsPanel,
   StyledSettingsPanelHeader,
-  StyledSettingsPanelBody
-} from "./SettingsPanel.styles"
-import { useThreeAppActions } from "./context"
+  StyledSettingsPanelBody,
+} from "./SettingsPanel.styles";
+import { useThreeAppActions } from "./context";
 
 const CubeSizeSetting = ({ value, setValue }) => {
-  const handleChange = event => {
-    setValue(Number(event.target.value))
-  }
+  const handleChange = (event) => {
+    setValue(Number(event.target.value));
+  };
 
   return (
     <div>
@@ -47,13 +47,13 @@ const CubeSizeSetting = ({ value, setValue }) => {
         </RadioGroup>
       </FormControl>
     </div>
-  )
-}
+  );
+};
 
 const ScrambleMovesSetting = ({ value, setValue }) => {
   const handleChange = (_event, newValue) => {
-    setValue(newValue)
-  }
+    setValue(newValue);
+  };
 
   return (
     <div>
@@ -71,13 +71,13 @@ const ScrambleMovesSetting = ({ value, setValue }) => {
         />
       </FormControl>
     </div>
-  )
-}
+  );
+};
 
 const AnimationSpeedSetting = ({ value, setValue }) => {
-  const handleChange = event => {
-    setValue(event.target.value)
-  }
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
   return (
     <div>
@@ -95,13 +95,13 @@ const AnimationSpeedSetting = ({ value, setValue }) => {
         />
       </FormControl>
     </div>
-  )
-}
+  );
+};
 
 const AutoRotateSetting = ({ value, setValue }) => {
-  const handleChange = event => {
-    setValue(event.target.checked)
-  }
+  const handleChange = (event) => {
+    setValue(event.target.checked);
+  };
 
   return (
     <div>
@@ -121,13 +121,13 @@ const AutoRotateSetting = ({ value, setValue }) => {
         />
       </FormControl>
     </div>
-  )
-}
+  );
+};
 
 const AutoRotateSpeedSetting = ({ value, setValue }) => {
-  const handleChange = event => {
-    setValue(event.target.value)
-  }
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
   return (
     <div>
@@ -145,13 +145,13 @@ const AutoRotateSpeedSetting = ({ value, setValue }) => {
         />
       </FormControl>
     </div>
-  )
-}
+  );
+};
 
 const AxesEnabledSetting = ({ value, setValue }) => {
-  const handleChange = event => {
-    setValue(event.target.checked)
-  }
+  const handleChange = (event) => {
+    setValue(event.target.checked);
+  };
 
   return (
     <div>
@@ -171,13 +171,13 @@ const AxesEnabledSetting = ({ value, setValue }) => {
         />
       </FormControl>
     </div>
-  )
-}
+  );
+};
 
 const ShowMoveLabelsSetting = ({ value, setValue }) => {
-  const handleChange = event => {
-    setValue(event.target.checked)
-  }
+  const handleChange = (event) => {
+    setValue(event.target.checked);
+  };
 
   return (
     <div>
@@ -197,17 +197,17 @@ const ShowMoveLabelsSetting = ({ value, setValue }) => {
         />
       </FormControl>
     </div>
-  )
-}
+  );
+};
 
 const SettingsPanel = ({ onClose }) => {
-  const threeAppActions = useThreeAppActions()
-  const [settings, setSettings] = useState(threeAppActions.getSettings)
+  const threeAppActions = useThreeAppActions();
+  const [settings, setSettings] = useState(threeAppActions.getSettings);
 
   useEffect(() => {
-    threeAppActions.addSettingsChangedListener(setSettings)
-    return () => threeAppActions.removeSettingsChangedListener(setSettings)
-  }, [threeAppActions])
+    threeAppActions.addSettingsChangedListener(setSettings);
+    return () => threeAppActions.removeSettingsChangedListener(setSettings);
+  }, [threeAppActions]);
 
   return (
     <StyledSettingsPanel>
@@ -249,7 +249,7 @@ const SettingsPanel = ({ onClose }) => {
         />
       </StyledSettingsPanelBody>
     </StyledSettingsPanel>
-  )
-}
+  );
+};
 
-export default SettingsPanel
+export default SettingsPanel;

@@ -1,34 +1,34 @@
-import { formatSingmaster, parseSingmaster } from "./notation.js"
+import { formatSingmaster, parseSingmaster } from "./notation.js";
 
-let rubikSolver = null
-let initialized = false
+let rubikSolver = null;
+let initialized = false;
 
 const loadRubikSolver = async () => {
   if (!rubikSolver) {
-    rubikSolver = await import("rubik-solver")
+    rubikSolver = await import("rubik-solver");
   }
-  return rubikSolver
-}
+  return rubikSolver;
+};
 
 export const initializeSolver = async () => {
   if (initialized) {
-    return
+    return;
   }
-  const { initSolver } = await loadRubikSolver()
-  initSolver()
-  initialized = true
-}
+  const { initSolver } = await loadRubikSolver();
+  initSolver();
+  initialized = true;
+};
 
-export const solve3x3 = async scrambleMoves => {
-  const { Cube, initSolver, solve } = await loadRubikSolver()
+export const solve3x3 = async (scrambleMoves) => {
+  const { Cube, initSolver, solve } = await loadRubikSolver();
   if (!initialized) {
-    initSolver()
-    initialized = true
+    initSolver();
+    initialized = true;
   }
-  const cubeState = new Cube().move(formatSingmaster(scrambleMoves))
-  const solution = solve(cubeState)
+  const cubeState = new Cube().move(formatSingmaster(scrambleMoves));
+  const solution = solve(cubeState);
   if (!solution) {
-    throw new Error("Solver returned no solution")
+    throw new Error("Solver returned no solution");
   }
-  return parseSingmaster(solution)
-}
+  return parseSingmaster(solution);
+};

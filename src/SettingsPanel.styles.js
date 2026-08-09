@@ -1,10 +1,10 @@
-import styled from "@emotion/styled"
+import styled from "@emotion/styled";
 
 export const StyledSettingsPanel = styled.div`
   margin: 0;
   padding: 0;
   height: 100%;
-`
+`;
 
 export const StyledSettingsPanelHeader = styled.div`
   display: flex;
@@ -14,7 +14,7 @@ export const StyledSettingsPanelHeader = styled.div`
   svg {
     cursor: pointer;
   }
-`
+`;
 
 export const StyledSettingsPanelBody = styled.div`
   margin: 0rem 1rem;
@@ -23,4 +23,4 @@ export const StyledSettingsPanelBody = styled.div`
   > * {
     margin-bottom: 1.5rem;
   }
-`
+`;

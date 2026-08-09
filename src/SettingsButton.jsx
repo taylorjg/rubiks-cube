@@ -1,19 +1,19 @@
-import { useState } from "react"
-import { Settings as SettingsIcon } from "@mui/icons-material"
-import { Drawer } from "@mui/material"
-import SettingsPanel from "./SettingsPanel"
-import { StyledSettingsIcon } from "./SettingsButton.styles"
+import { useState } from "react";
+import { Settings as SettingsIcon } from "@mui/icons-material";
+import { Drawer } from "@mui/material";
+import SettingsPanel from "./SettingsPanel";
+import { StyledSettingsIcon } from "./SettingsButton.styles";
 
 const SettingsButton = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const openDrawer = () => {
-    setIsDrawerOpen(true)
-  }
+    setIsDrawerOpen(true);
+  };
 
   const closeDrawer = () => {
-    setIsDrawerOpen(false)
-  }
+    setIsDrawerOpen(false);
+  };
 
   return (
     <>
@@ -26,14 +26,14 @@ const SettingsButton = () => {
         onClose={closeDrawer}
         slotProps={{
           paper: {
-            sx: { width: 320 }
-          }
+            sx: { width: 320 },
+          },
         }}
       >
         <SettingsPanel onClose={closeDrawer} />
       </Drawer>
     </>
-  )
-}
+  );
+};
 
-export default SettingsButton
+export default SettingsButton;
