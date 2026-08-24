@@ -47,7 +47,7 @@
     "jsdom": "^30.0.0",
     "prettier": "^3.9.6",
     "vite": "^8.2.2",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "allowScripts": {
     "fsevents@2.3.3": true
