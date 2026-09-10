@@ -16,7 +16,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "rubik-solver": "^0.1.2",
-    "three": "^0.185.1"
+    "three": "^0.186.0"
   },
   "scripts": {
     "dev": "vite",
@@ -47,7 +47,7 @@
     "jsdom": "^30.0.0",
     "prettier": "^3.9.6",
     "vite": "^8.2.2",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "allowScripts": {
     "fsevents@2.3.3": true
