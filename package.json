@@ -16,7 +16,7 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "rubik-solver": "^0.1.2",
-    "three": "^0.186.0"
+    "three": "^0.186.1"
   },
   "scripts": {
     "dev": "vite",
