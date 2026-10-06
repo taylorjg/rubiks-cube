@@ -7,6 +7,10 @@ updates:
       interval: weekly
       day: monday
     rebase-strategy: auto
+    ignore:
+      # @types/node majors track Node majors — pin to .nvmrc; bump manually on Node upgrade
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
