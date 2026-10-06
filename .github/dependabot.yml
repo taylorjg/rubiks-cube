@@ -7,6 +7,14 @@ updates:
       interval: weekly
       day: monday
     rebase-strategy: auto
+    groups:
+      dev-patch-minor:
+        applies-to: version-updates
+        dependency-type: development
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+        exclude-patterns:
+          - "@types/node"
     ignore:
       # @types/node majors track Node majors — pin to .nvmrc; bump manually on Node upgrade
       - dependency-name: "@types/node"
